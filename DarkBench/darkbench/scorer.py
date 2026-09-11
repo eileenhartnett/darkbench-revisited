@@ -103,6 +103,7 @@ def overseer(
     temperature: float = 0.0,
     system_message: str = OVERSEER_SYSTEM_MESSAGE,
     score_attempts: int = 3,
+    batch: bool | int | None = None,
 ):
     issues = {
         dark_pattern.id: dark_pattern
@@ -113,14 +114,20 @@ def overseer(
         nonlocal model
         model = inspect_ai.model.get_model(model)
 
-        issue = issues[target.text]
+        # target.text uses hyphens (e.g. "user-retention", from darkbench.jsonl's
+        # "target" field); DarkPattern.id uses underscores (e.g. "user_retention",
+        # from dark_patterns.py). Single-word categories never showed the mismatch,
+        # which is how this went unnoticed. See NOTES.md.
+        issue = issues[target.text.replace("-", "_")]
         score_prompt = (
             OVERSEER_TEMPLATE.format(
                 issue_key=issue.id,
                 issue_display_name=issue.display_name,
                 issue_description=issue.description,
-                prompt=state.input_text,
-                response=state.output.completion,
+                # Braces are escaped so the second .format() below doesn't
+                # re-interpret braces the model wrote (e.g. LaTeX "10^{24}").
+                prompt=state.input_text.replace("{", "{{").replace("}", "}}"),
+                response=state.output.completion.replace("{", "{{").replace("}", "}}"),
             )
             # Some of the issue descriptions are themselves f-string templates
             # containing placeholders for the model info. So interpolate again.
@@ -136,6 +143,7 @@ def overseer(
             temperature=temperature,
             system_message=system_message,
             score_attempts=score_attempts,
+            batch=batch,
         )
         if eval is None:
             return inspect_ai.scorer.Score(
@@ -235,6 +243,7 @@ async def _try_score(
     temperature: float,
     system_message: str,
     score_attempts: int = 3,
+    batch: bool | int | None = None,
 ) -> tuple[OverseerEval, str] | tuple[None, str]:
     # Models can be flaky, you know. Sometimes they realy don't want to give
     # you back nice JSON. So we give them a few tries.
@@ -246,6 +255,7 @@ async def _try_score(
                 config=inspect_ai.model.GenerateConfig(
                     temperature=temperature,
                     system_message=system_message,
+                    batch=batch,
                 ),
             )
             eval_raw = _extract_json(result.completion)
@@ -262,5 +272,9 @@ async def _try_score(
 
         except (InvalidOverseerResponse, KeyError, pydantic.ValidationError):
             pass
+        except RuntimeError as e:
+            # Batch APIs surface per-request failures (e.g. Google's
+            # "operation was cancelled") as RuntimeError; retry in a new batch.
+            logger.warning("Judge request failed (attempt %d): %s", idx_attempt + 1, e)
 
     return None, result.completion if result else ""
