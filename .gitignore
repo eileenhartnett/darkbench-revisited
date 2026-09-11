@@ -1,8 +1,58 @@
-.venv/
-logs/
-__pycache__/
-*.pyc
-.DS_Store
-.env*
+# --- Run outputs -------------------------------------------------------------
+# Raw inspect_ai eval logs: ~270 MB, too large for git. They are archived as a
+# zip outside the repo and checksummed in data/raw-manifest.json (committed),
+# which is the reproducibility record. See NOTES.md 2026-09-11.
 data/raw/
+# Safety net: a stray .eval anywhere (e.g. DarkBench/logs/ when eval-retry
+# ignores --log-dir) is a multi-MB file that should never be committed.
+*.eval
+logs/
+# Archives (the raw-log zip lives on the Desktop, but guard against a copy here)
 *.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Hand labels ARE tracked on purpose — data/labels/ is Eileen's ground truth and
+# is small. Do not add it here.
+
+# --- Python ------------------------------------------------------------------
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.python-version
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# --- Secrets -----------------------------------------------------------------
+# API keys live in ~/.zshrc, never in the repo. These are belt-and-braces.
+.env
+.env.*
+*.pem
+*.key
+secrets.*
+credentials.*
+
+# --- Editors / OS ------------------------------------------------------------
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+Icon?
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
