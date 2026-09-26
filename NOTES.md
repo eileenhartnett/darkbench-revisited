@@ -1066,6 +1066,61 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-26 (later) — three S6 verdicts corrected; pre-Astra figures purged from METHODS_PAPER and WRITEUP
+
+**The mistake.** The S6 rule is: *survives* = the two intervals separate under **every** judge,
+*partial* = under some, *fails* = under none. Three rows were decided by looking at one judge's
+numbers instead of all three. Eileen caught the first one (gpt-4-turbo); a systematic recheck of
+all twelve mechanically checkable rows against the nine-model numbers in `rates.csv` found two
+more. **All three were wrong from the start. None of them was changed by adding GPT-6 Astra** —
+gpt-4-turbo already separated under Opus 4.6 with the original eight current models, and the
+other two never depended on Astra at all.
+
+| row | was | now | per-judge (separate / overlap) |
+|---|---|---|---|
+| gpt-4-turbo overall > current average | fails | **partial** | overlap, **separate (Opus 4.6)**, overlap |
+| gpt-3.5-turbo (2024) sycophancy > every current model | survives | **partial** | overlap, overlap, **separate (Gemini Pro)** — against Gemini 3.1 Pro only |
+| User retention regressed since April 2024 | fails | **partial** | overlap, overlap, **separate (Gemini Pro)** |
+
+Working numbers. gpt-4-turbo 26.0 [22.8, 29.5] / 32.2 [28.7, 35.8] / 14.3 [11.8, 17.2] against
+the pooled current nine. gpt-3.5-turbo sycophancy 10.9 [6.4, 18.1] / 30.0 [22.2, 39.1] / 13.6
+[8.4, 21.3] against Gemini 3.1 Pro 8.2 [4.4, 14.8] / 15.5 [9.9, 23.4] / 0.0 [0.0, 3.4]; against
+the **other eight** current models pooled (0.1 [0, 0.6] / 0.2 [0.1, 0.8] / 0.0 [0, 0.4]) it
+separates under all three, which is what the old detail cell was actually describing. User
+retention gpt-4-turbo 30.9 [23.0, 40.1] / 52.7 [43.5, 61.8] / 20.0 [13.6, 28.4] against gpt-5.5
+30.0 [22.2, 39.1] / 65.5 [56.2, 73.7] / 44.5 [35.6, 53.9]; note the Gemini-Pro separation runs
+*with* the regression claim, not against it. That row's own detail cell already read "separates
+under Gemini Pro only", so the verdict label had been contradicting its own evidence.
+
+Eileen's calls: keep the "every current model" wording on the sycophancy row and mark it partial,
+naming the exception in the detail; mark user retention partial with the detail unchanged; no
+corrections note in the paper, since it has not been shared yet.
+
+Verdict tally moves 8 / 3 / 5 to **7 survives / 6 partial / 3 fails**, updated in Lesson 5 prose.
+The three remaining *fails* are Sonnet 5's lowest flag rate, monotonic sycophancy decline, and
+GPT models sneaking more than Sonnet 5. The other nine rows were rechecked and stand as written;
+the three non-interval rows (monotonic sycophancy, judges disagree by category, Gemini
+self-preference) are not model-vs-model comparisons and the rule does not apply mechanically.
+
+**Pre-Astra figures.** METHODS_PAPER.md was fixed earlier today; WRITEUP.md still carried the
+same eight-model numbers and now matches: 880 → 990 current-model responses (3 places),
+"current 8, mean" 24.8 / 26.8 / 15.2 → "current 9, mean" 23.0 / 25.2 / 14.1, current-model row
+22.2 / 1.1 / 15.4 / 46.6 / 24.3 → 20.8 / 1.0 / 14.5 / 42.3 / 22.9, pooled current interval
+[23.6, 25.9] → [22.0, 24.1], and the §1 summary's "within two points of today's average" → about
+three points with the Opus 4.6 caveat. The gpt-3.5-turbo gap to the current mean is 11 to 15
+points with nine models, not 10 to 13; fixed in WRITEUP §4.1 and SUBMISSION.md. Means verified
+against `rates.csv`: S12 uses mean-of-model-rates (23.0 / 25.2 / 14.1), S7 uses pooled
+(23.1 / 25.2 / 14.2); both are correct as labelled and neither was changed.
+
+**S8 scope.** Added one clause to the self-preference supplement in both files: it covers the
+original eight current models, Astra was added afterward, and it was not recomputed.
+
+Audit after the edits: the stale-pattern grep across METHODS_PAPER.md, WRITEUP.md, SUBMISSION.md
+and `artifact/head.html` returns only the four deliberate "eight current models" mentions; em-dash
+count is 0 in METHODS_PAPER.md, SUBMISSION.md, `artifact/head.html` and `artifact/tail.html`;
+S6 verdict counts in both files are 7 / 6 / 3, matching the prose. No numbers were recomputed and
+no new API calls were made.
+
 ### 2026-09-26 — SUBMISSION.md brought back in sync with the paper
 The short BlueDot narrative had drifted behind METHODS_PAPER.md by several passes. It still
 carried **two factual errors already fixed in the paper**: "every one of those models is now
