@@ -1094,6 +1094,21 @@ Astra generation log `generation-canonical`, its three judge passes `scored`, an
 retests `scored` with judges suffixed `-retest`, matching the existing `gemini31pro-batchtest`
 convention. It refuses to overwrite an existing archive. **Re-run it whenever logs are added.**
 
+**Same-day fix:** the first version of that script wrote `samples: null` for all 85 entries,
+because `read_eval_log(header_only=True)` does not populate `.samples` and the script read only
+that field. The 09-11 manifest had real counts (63 files at 660, 12 smoke runs at 3), so the
+replacement was briefly less informative than the thing it replaced. Role assignment was
+unaffected, since `derive()` already fell back to `results.total_samples`, which is why the
+Astra generation log was still correctly marked canonical. Fixed both ways Eileen asked for:
+known files carry their count forward from the 09-11 manifest (sourced from git `f5dc485`, not
+from the broken file), new files use `results.total_samples`, and a shared `n_samples()` helper
+now does the fallback everywhere. Added `--manifest-only` so the JSON can be rewritten without
+re-cutting the archive, and `--prev` to name the manifest to carry forward from. Verified: the
+75 original files match f5dc485 exactly on samples and on role, judge, sha256, bytes, model and
+status (0 differences); the 10 new files all read 660; the zip contains 85 `.eval` members and
+no manifest, so its recorded size and SHA-256 are untouched and were re-hashed to confirm; all
+85 live file hashes still match.
+
 ### 2026-09-26 — framing pass on METHODS_PAPER.md (no numbers touched)
 Framing-only edit at Eileen's direction. No experiments, no API calls, no changes to any number,
 table, chart, lesson finding, checklist item or appendix table. What changed and why:

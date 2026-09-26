@@ -1,5 +1,5 @@
 {
-  "created": "2026-09-26T19:23:36+00:00",
+  "created": "2026-09-26T19:39:51+00:00",
   "zip_path": "/Users/eileenhartnett/Desktop/dark-bench-replication-raw-logs-2026-09-26.zip",
   "zip_sha256": "59de193666abbf365b3048002bacbb71df72d2400b4e9db820252906e4c9e8c6",
   "zip_bytes": 331567623,
@@ -20,7 +20,7 @@
       "model": "openai/accounts/fireworks/models/llama-v3-70b-instruct",
       "created": "2026-09-02T02:37:44+00:00",
       "status": "error",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -32,7 +32,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-02T02:53:33+00:00",
       "status": "error",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -44,7 +44,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-02T16:36:51+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -56,7 +56,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-05T16:15:36+00:00",
       "status": "error",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -68,7 +68,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-05T16:21:28+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -80,7 +80,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-05T16:21:28+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -92,7 +92,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-05T16:25:58+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -104,7 +104,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-05T16:25:58+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -116,7 +116,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-05T16:28:12+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -128,7 +128,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k2p6",
       "created": "2026-09-05T16:28:12+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.64",
       "role": "generation-partial",
       "judge": null
@@ -140,7 +140,7 @@
       "model": "anthropic/claude-sonnet-5",
       "created": "2026-09-09T00:53:51+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro-batchtest"
@@ -152,7 +152,7 @@
       "model": "anthropic/claude-sonnet-5",
       "created": "2026-09-09T00:53:51+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -164,7 +164,7 @@
       "model": "anthropic/claude-sonnet-5",
       "created": "2026-09-09T00:53:51+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -176,7 +176,7 @@
       "model": "anthropic/claude-sonnet-5",
       "created": "2026-09-09T01:09:11+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -188,7 +188,7 @@
       "model": "anthropic/claude-sonnet-5",
       "created": "2026-09-09T01:10:09+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -200,7 +200,7 @@
       "model": "anthropic/claude-sonnet-5",
       "created": "2026-09-09T01:10:09+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -212,7 +212,7 @@
       "model": "anthropic/claude-sonnet-5",
       "created": "2026-09-09T01:10:09+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -224,7 +224,7 @@
       "model": "anthropic/claude-sonnet-5",
       "created": "2026-09-09T01:10:09+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -236,7 +236,7 @@
       "model": "google/gemini-3.8-flash",
       "created": "2026-09-09T01:10:11+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -248,7 +248,7 @@
       "model": "google/gemini-3.8-flash",
       "created": "2026-09-09T01:10:47+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro-retest"
@@ -260,7 +260,7 @@
       "model": "google/gemini-3.8-flash",
       "created": "2026-09-09T01:10:47+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -272,7 +272,7 @@
       "model": "google/gemini-3.8-flash",
       "created": "2026-09-09T01:10:47+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55-retest"
@@ -284,7 +284,7 @@
       "model": "google/gemini-3.8-flash",
       "created": "2026-09-09T01:10:47+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -296,7 +296,7 @@
       "model": "google/gemini-3.8-flash",
       "created": "2026-09-09T01:10:47+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46-retest"
@@ -308,7 +308,7 @@
       "model": "google/gemini-3.8-flash",
       "created": "2026-09-09T01:10:47+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -320,7 +320,7 @@
       "model": "google/gemini-3.8-flash",
       "created": "2026-09-09T01:10:47+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -332,7 +332,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:03:15+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -344,7 +344,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k3",
       "created": "2026-09-09T14:03:35+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -356,7 +356,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:05:01+00:00",
       "status": "error",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -368,7 +368,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k3",
       "created": "2026-09-09T14:05:07+00:00",
       "status": "error",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -380,7 +380,7 @@
       "model": "anthropic/claude-opus-5",
       "created": "2026-09-09T14:05:10+00:00",
       "status": "error",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -392,7 +392,7 @@
       "model": "google/gemini-3.1-pro-preview",
       "created": "2026-09-09T14:09:05+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -404,7 +404,7 @@
       "model": "google/gemini-3.1-pro-preview",
       "created": "2026-09-09T14:25:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -416,7 +416,7 @@
       "model": "google/gemini-3.1-pro-preview",
       "created": "2026-09-09T14:25:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -428,7 +428,7 @@
       "model": "google/gemini-3.1-pro-preview",
       "created": "2026-09-09T14:25:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -440,7 +440,7 @@
       "model": "google/gemini-3.1-pro-preview",
       "created": "2026-09-09T14:25:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -452,7 +452,7 @@
       "model": "openai/gpt-5.4-mini-2026-03-17",
       "created": "2026-09-09T14:27:35+00:00",
       "status": "started",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -464,7 +464,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:29:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro-retest"
@@ -476,7 +476,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:29:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -488,7 +488,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:29:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55-retest"
@@ -500,7 +500,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:29:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -512,7 +512,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:29:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46-retest"
@@ -524,7 +524,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:29:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -536,7 +536,7 @@
       "model": "openai/gpt-5.5-2026-04-23",
       "created": "2026-09-09T14:29:01+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -548,7 +548,7 @@
       "model": "openai/gpt-5.4-mini-2026-03-17",
       "created": "2026-09-09T14:29:02+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -560,7 +560,7 @@
       "model": "openai/gpt-5.4-mini-2026-03-17",
       "created": "2026-09-09T14:29:02+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -572,7 +572,7 @@
       "model": "openai/gpt-5.4-mini-2026-03-17",
       "created": "2026-09-09T14:29:02+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -584,7 +584,7 @@
       "model": "openai/gpt-5.4-mini-2026-03-17",
       "created": "2026-09-09T14:29:02+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -596,7 +596,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k3",
       "created": "2026-09-09T15:40:11+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -608,7 +608,7 @@
       "model": "anthropic/claude-opus-5",
       "created": "2026-09-09T15:50:13+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -620,7 +620,7 @@
       "model": "anthropic/claude-opus-5",
       "created": "2026-09-09T15:50:13+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -632,7 +632,7 @@
       "model": "anthropic/claude-opus-5",
       "created": "2026-09-09T15:50:13+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -644,7 +644,7 @@
       "model": "anthropic/claude-opus-5",
       "created": "2026-09-09T15:50:13+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -656,7 +656,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k3",
       "created": "2026-09-09T15:51:48+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -668,7 +668,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k3",
       "created": "2026-09-09T15:51:48+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -680,7 +680,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k3",
       "created": "2026-09-09T15:51:48+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -692,7 +692,7 @@
       "model": "openai/accounts/fireworks/models/kimi-k3",
       "created": "2026-09-09T15:51:48+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -704,7 +704,7 @@
       "model": "openai/accounts/fireworks/models/glm-5p3",
       "created": "2026-09-09T15:51:52+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -716,7 +716,7 @@
       "model": "openai/accounts/fireworks/models/glm-5p3",
       "created": "2026-09-09T16:39:20+00:00",
       "status": "started",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -728,7 +728,7 @@
       "model": "openai/accounts/fireworks/models/glm-5p3",
       "created": "2026-09-09T17:06:07+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -740,7 +740,7 @@
       "model": "openai/accounts/fireworks/models/glm-5p3",
       "created": "2026-09-09T19:59:25+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -752,7 +752,7 @@
       "model": "openai/accounts/fireworks/models/glm-5p3",
       "created": "2026-09-09T19:59:25+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -764,7 +764,7 @@
       "model": "openai/accounts/fireworks/models/glm-5p3",
       "created": "2026-09-09T19:59:25+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -776,7 +776,7 @@
       "model": "openai/accounts/fireworks/models/glm-5p3",
       "created": "2026-09-09T19:59:25+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -788,7 +788,7 @@
       "model": "openai/gpt-4o-2024-08-06",
       "created": "2026-09-10T19:07:53+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -800,7 +800,7 @@
       "model": "openai/gpt-4-turbo-2024-04-09",
       "created": "2026-09-10T19:09:59+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -812,7 +812,7 @@
       "model": "openai/gpt-3.5-turbo-0125",
       "created": "2026-09-10T19:11:31+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 3,
       "inspect_version": "0.3.263",
       "role": "generation-smoke",
       "judge": null
@@ -824,7 +824,7 @@
       "model": "openai/gpt-4o-2024-08-06",
       "created": "2026-09-10T19:11:48+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -836,7 +836,7 @@
       "model": "openai/gpt-4o-2024-08-06",
       "created": "2026-09-10T19:11:48+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -848,7 +848,7 @@
       "model": "openai/gpt-4o-2024-08-06",
       "created": "2026-09-10T19:11:48+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -860,7 +860,7 @@
       "model": "openai/gpt-4o-2024-08-06",
       "created": "2026-09-10T19:11:48+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -872,7 +872,7 @@
       "model": "openai/gpt-4-turbo-2024-04-09",
       "created": "2026-09-10T19:11:53+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -884,7 +884,7 @@
       "model": "openai/gpt-3.5-turbo-0125",
       "created": "2026-09-10T19:11:55+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -896,7 +896,7 @@
       "model": "openai/gpt-3.5-turbo-0125",
       "created": "2026-09-10T19:11:55+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -908,7 +908,7 @@
       "model": "openai/gpt-3.5-turbo-0125",
       "created": "2026-09-10T19:11:55+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -920,7 +920,7 @@
       "model": "openai/gpt-3.5-turbo-0125",
       "created": "2026-09-10T19:11:55+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -932,7 +932,7 @@
       "model": "openai/gpt-4-turbo-2024-04-09",
       "created": "2026-09-10T19:47:45+00:00",
       "status": "started",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-partial",
       "judge": null
@@ -944,7 +944,7 @@
       "model": "openai/gpt-4-turbo-2024-04-09",
       "created": "2026-09-10T23:41:59+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -956,7 +956,7 @@
       "model": "openai/gpt-4-turbo-2024-04-09",
       "created": "2026-09-10T23:41:59+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -968,7 +968,7 @@
       "model": "openai/gpt-4-turbo-2024-04-09",
       "created": "2026-09-10T23:41:59+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -980,7 +980,7 @@
       "model": "openai/gpt-4-turbo-2024-04-09",
       "created": "2026-09-10T23:41:59+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
@@ -992,7 +992,7 @@
       "model": "openai/gpt-6-astra",
       "created": "2026-09-18T23:23:13+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gemini31pro"
@@ -1004,7 +1004,7 @@
       "model": "openai/gpt-6-astra",
       "created": "2026-09-18T23:23:13+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "gpt55"
@@ -1016,7 +1016,7 @@
       "model": "openai/gpt-6-astra",
       "created": "2026-09-18T23:23:13+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "scored",
       "judge": "opus46"
@@ -1028,7 +1028,7 @@
       "model": "openai/gpt-6-astra",
       "created": "2026-09-18T23:23:13+00:00",
       "status": "success",
-      "samples": null,
+      "samples": 660,
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
