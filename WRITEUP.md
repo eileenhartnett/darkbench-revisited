@@ -24,8 +24,9 @@ judges can be trusted.
 
 1. **Today's models score lower than the 2024 paper reported, but the gap is smaller than it
    looks.** The paper's average was 48%; mine is 21%. Run through the same pipeline, the best
-   2024 model is within two points of today's average. Only the oldest 2024 model is clearly
-   worse.
+   2024 model is about three points above today's average, a gap inside the intervals under
+   two of the three judges though not under Opus 4.6. Only the oldest 2024 model is clearly
+   worse under every judge.
 2. **Sycophancy is the one clear change.** Early-2024 models agreed with the user's false
    beliefs 11–30% of the time (depending on judge). Current models almost never do. This is the
    only movement that clears every confidence interval under every judge.
@@ -125,11 +126,12 @@ The headline comparison is 48% then and 21% now. It is also the wrong comparison
 mixes a change of models with a change of judges. The era anchors separate the two.
 
 Under the same three judges, gpt-3.5-turbo from January 2024 is flagged on 34% of responses —
-10 to 13 points above the current-model mean under every judge (34.3 vs 24.8, 40.2 vs 26.8,
-27.9 vs 15.2). Three independent judges agreeing on the direction rules out a judge artifact.
-But gpt-4-turbo from April 2024 comes in at 24%, against a current mean of 22%. The
-improvement over the *best* 2024 model is about two points, well inside the intervals. The
-oldest model is meaningfully worse; rates have not halved. An earlier draft of this report said
+11 to 15 points above the current-model mean under every judge (34.3 vs 23.0, 40.2 vs 25.2,
+27.9 vs 14.1). Three independent judges agreeing on the direction rules out a judge artifact.
+But gpt-4-turbo from April 2024 comes in at 24%, against a current mean of 20.8%. The
+difference from the *best* 2024 model is about three points, inside the intervals under two of
+the three judges though not under Opus 4.6 (S6). The
+oldest model is meaningfully worse under every judge; rates have not halved. An earlier draft of this report said
 they had, and I withdraw that (S12).
 
 The same three models also show how much of the 48%-to-21% gap is the judges. The paper scored
@@ -170,7 +172,7 @@ endpoints do not overlap under any judge. The points in between do — every adj
 overlaps — so the data fit a single step change somewhere in 2024 as well as they fit a gradual
 decline (S12).
 
-**The judge that looked broken was right.** The Gemini Pro judge flagged sycophancy in 0 of 880
+**The judge that looked broken was right.** The Gemini Pro judge flagged sycophancy in 0 of 990
 current-model responses. An earlier draft called that a judge that cannot see the category. On
 gpt-3.5-turbo the same judge flags 15 of 110, correctly catching the model validating crystal
 healing and ley lines. The judge works; there was nothing in the current models for it to find.
@@ -672,13 +674,13 @@ they overlap under all three.
 | Gemini 3.1 Pro is the worst current model | **partial** | separates under GPT-5.5 and Opus; under its own family's judge it ties with the GPT models |
 | Opus 5 anthropomorphization ≫ Sonnet 5 | **survives** | 53–73% vs 6–15%, non-overlapping under all three judges |
 | Gemini 3.1 Pro user-retention ≫ Sonnet 5 | **survives** | 85–93% vs 5–22%, all three judges |
-| gpt-3.5-turbo (2024) sycophancy > every current model | **survives** | [6.4, 18.1] / [22.2, 39.1] / [8.4, 21.3] vs [0, 3.4] for the current models, all three judges |
+| gpt-3.5-turbo (2024) sycophancy > every current model | **partial** | separates from every current model except Gemini 3.1 Pro under all three judges ([6.4, 18.1] / [22.2, 39.1] / [8.4, 21.3] vs [0, 0.6] / [0.1, 0.8] / [0, 0.4] pooled); against Gemini 3.1 Pro, separates under Gemini Pro only (13.6 vs 0.0), overlapping under GPT-5.5 (10.9 vs 8.2) and Opus 4.6 (30.0 vs 15.5) |
 | Gemini 3.1 Pro has non-zero sycophancy today | **partial** | separates under GPT-5.5 and Opus; the Gemini judge gives 0 for everyone |
-| Gemini judge measures sycophancy (0/880 vs 15/110) | **survives** | [0, 0.4] vs [8.4, 21.3] |
-| gpt-3.5-turbo overall > current average | **survives** | [30.8, 38.0] vs pooled current [23.6, 25.9]; but it *overlaps* individual current models (Opus 5, Gemini Flash under GPT-5.5; Gemini Pro under Opus) |
-| gpt-4-turbo overall > current average | **fails** | [22.8, 29.5] vs [23.6, 25.9] |
+| Gemini judge measures sycophancy (0/990 vs 15/110) | **survives** | [0, 0.4] vs [8.4, 21.3] |
+| gpt-3.5-turbo overall > current average | **survives** | [30.8, 38.0] vs pooled current [22.0, 24.1]; but it *overlaps* individual current models (Opus 5, Gemini Flash under GPT-5.5; Gemini Pro under Opus) |
+| gpt-4-turbo overall > current average | **partial** | separates under Opus 4.6 only; overlaps under GPT-5.5 and Gemini Pro |
 | Sycophancy declines *monotonically* across 2024 | **fails** | every adjacent pair overlaps; the data are equally consistent with one step change |
-| User retention regressed since April 2024 | **fails** | gpt-4-turbo vs gpt-5.5 overlaps under GPT-5.5 and Opus; separates under Gemini Pro only |
+| User retention regressed since April 2024 | **partial** | gpt-4-turbo vs gpt-5.5 overlaps under GPT-5.5 and Opus; separates under Gemini Pro only |
 | GPT models sneak more than Sonnet 5 | **fails** | point estimates are higher under all judges, but every interval overlaps |
 | Sneaking fell from 2024 to 2026 (GPT family) | **survives** (since 09-19) | gpt-3.5-turbo vs gpt-5.5 overlaps under all three; gpt-3.5-turbo vs GPT-6 Astra (34 vs 5 / 35 vs 12 / 31 vs 6) does not. The fall happened between gpt-5.5 and Astra, not across 2024–25 |
 | Judges disagree by category (κ 0.52–0.57; harmful-gen κ 0.24) | **survives** | computed on 5,904 shared responses; not a sampling estimate |
@@ -725,7 +727,8 @@ generation.
 ### S8 Judge self-preference
 
 Each judge's flag rate on its own family relative to the mean of the other two judges, on the
-same responses, in sneaking.
+same responses, in sneaking. This analysis covers the original eight current models; GPT-6
+Astra was added afterward and is not included, and I did not recompute it.
 
 | judge | on its own family | on other families |
 |---|---|---|
@@ -779,7 +782,7 @@ every judge's agreement, GPT-5.5's most.
 | user retention | Opus (0.47) | GPT-5.5 and Gemini under-flag (recall 53–58%). |
 
 What this changes: the Gemini Pro judge under-flags in every category (recall 23–63%, precision
-91–100%), so its "0 of 880 sycophancy" remains meaningful — precision 100% — but it finds only
+91–100%), so its "0 of 990 sycophancy" remains meaningful — precision 100% — but it finds only
 36% of what the human finds. Opus 4.6 over-flags anthropomorphization and sycophancy, so its
 headline numbers there (Opus 5 at 73%, Gemini Pro sycophancy at 15%) are inflated relative to the
 human standard; the GPT-5.5 or majority figures (66% and 8%) are the ones to report. Under the
@@ -831,9 +834,9 @@ Flagged %, −1 excluded.
 | gpt-4o (2024) | GPT-5.5 | 13 | 34 | 56 | 27 | 2 | 39 | **28.4** |
 | gpt-4o (2024) | Opus 4.6 | 21 | 48 | 37 | 32 | 17 | 65 | **36.7** |
 | gpt-4o (2024) | Gemini Pro | 12 | 25 | 16 | 22 | 1 | 34 | **18.2** |
-| *current 8, mean* | *GPT-5.5* | | | | | *~1* | | *24.8* |
-| *current 8, mean* | *Opus 4.6* | | | | | *~2* | | *26.8* |
-| *current 8, mean* | *Gemini Pro* | | | | | *0* | | *15.2* |
+| *current 9, mean* | *GPT-5.5* | | | | | *~1* | | *23.0* |
+| *current 9, mean* | *Opus 4.6* | | | | | *~2* | | *25.2* |
+| *current 9, mean* | *Gemini Pro* | | | | | *0* | | *14.1* |
 
 Three-judge means across all three anchors (an earlier draft, written before gpt-4-turbo had
 finished, claimed a monotonic gradient; gpt-4-turbo breaks it):
@@ -843,15 +846,21 @@ finished, claimed a monotonic gradient; gpt-4-turbo breaks it):
 | gpt-3.5-turbo (Jan 2024) | **34.1%** | 18.2% | 33.1% | 69.1% | 28.2% |
 | gpt-4-turbo (Apr 2024) | **24.1%** | 11.2% | 26.7% | 34.5% | 36.9% |
 | gpt-4o (Aug 2024) | **27.8%** | 6.7% | 26.7% | 45.8% | 35.5% |
-| current 8 models (2026) | **22.2%** | 1.1% | 15.4% | 46.6% | 24.3% |
+| current 9 models (2026) | **20.8%** | 1.0% | 14.5% | 42.3% | 22.9% |
 
 Per category, with single-judge intervals (n = 110 per cell): sycophancy's endpoints separate
-([6.4, 18.1] / [22.2, 39.1] / [8.4, 21.3] vs [0, 3.4]) but every adjacent pair in 18.2 → 11.2 →
-6.7 → 1.1 overlaps. Sneaking's point estimates fall (33.1 → 26.7 → 26.7 → 15.4%) but no pair
+against the pooled current models ([6.4, 18.1] / [22.2, 39.1] / [8.4, 21.3] vs [0, 0.6] /
+[0.1, 0.8] / [0, 0.4] over the eight current models other than Gemini 3.1 Pro) but every
+adjacent pair in 18.2 → 11.2 →
+6.7 → 1.0 overlaps. Sneaking's point estimates fall (33.1 → 26.7 → 26.7 → 14.5%) but no pair
 separates. User retention: gpt-4-turbo vs gpt-5.5 overlaps under GPT-5.5 and Opus and separates
-under Gemini only, so the "regression since April 2024" claim is withdrawn; what survives is
+under Gemini only, so the "regression since April 2024" claim holds under one judge of three
+and is marked partial, not withdrawn; what survives under every judge is
 that gpt-3.5-turbo (69%) is above most current models and Gemini 3.1 Pro is at 2024 levels.
-Brand bias peaks in the 2024 flagships (28.2 → 36.9 → 35.5 → 24.3%) with mostly overlapping
+Gemini 3.1 Pro is also the one current model gpt-3.5-turbo's sycophancy does not clear under
+every judge: it separates under Gemini Pro (13.6 vs 0.0) and overlaps under GPT-5.5 (10.9 vs
+8.2) and Opus 4.6 (30.0 vs 15.5).
+Brand bias peaks in the 2024 flagships (28.2 → 36.9 → 35.5 → 22.9%) with mostly overlapping
 intervals — suggestive only. Opus 4.6 scores the 2024 model's sycophancy at 30% [22.2, 39.1], a
 range that contains the paper's 24% for Llama 3 70B — a rough sign that my judges are not
 markedly softer than the paper's. The example the Gemini judge caught: *"That's great to hear
