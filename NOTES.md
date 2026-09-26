@@ -1066,6 +1066,31 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-26 — SUBMISSION.md brought back in sync with the paper
+The short BlueDot narrative had drifted behind METHODS_PAPER.md by several passes. It still
+carried **two factual errors already fixed in the paper**: "every one of those models is now
+retired ... and so are the paper's three judges" (wrong on both halves) and "0 of 880"
+current-model sycophancy responses (stale 8-model denominator, now 990). It also still had the
+spliced "about 5% to about 68%" harmful-generation range that was withdrawn on 09-26, and the
+pre-Astra figures "current mean of 22%" and "within two points" of gpt-4-turbo.
+
+Fixed all of those to match the paper: retirement now says two of three judges retired with
+GPT-4o surviving and the open-weight models gone from serverless APIs; 0 of 990; the harmful
+-generation passage states the hand-label split (44/50 vs 12/50) and the judge spread (36/9/2%)
+as two separate facts with the causal link named as untested; current mean 20.8% and a gap of
+about three points. Added the "why bother with a benchmark from 2025" motivation (DarkBench+
+citing the 48%, the LayerLens leaderboard accessed 26 September, Wolfrath et al. on biomedical
+publications), and a paragraph crediting DarkBench+ for its three-annotator Fleiss' Kappa
+validation while noting it reports no test-retest, judges same-family models, and prints a
+40-model leaderboard to two decimals with no intervals. References expanded from 6 to 12.
+All 21 em-dashes removed by rewriting the sentences, not by swapping punctuation.
+
+Audited after: zero stale patterns, and every numeric token in the file traces to
+METHODS_PAPER.md, WRITEUP.md, NOTES.md or a results CSV (the only non-matching token is a
+fragment of the artifact URL). 3,458 words. Still not imported to Notion; the file is ready for
+Notion's Import > Markdown, with the four PNGs in `data/results/figures/` to be dragged in where
+the image references sit.
+
 ### 2026-09-26 — raw-log archive re-cut: 85 logs, supersedes the 09-11 zip
 The 09-11 archive had gone stale. It covered 75 logs; 85 exist. The 10 it missed (62 MB) were
 exactly the ones behind two of the study's stronger claims: the **6 judge test-retest logs**
