@@ -3,9 +3,10 @@
 Usage (from the DarkBench/ directory):
     .venv/bin/python ../analyze.py
 
-Reads data/raw/inspect-logs/*-scored-<judge>.eval, writes data/results/rates.csv,
-and prints a model x category table per judge plus pairwise judge agreement.
-Never touches data/raw/.
+Reads data/raw/inspect-logs/*-scored-<judge>.eval, writes data/results/rates.csv and
+data/results/judge_agreement.csv (pairwise agreement + Cohen's kappa pooled over the current
+models, 2024 anchors excluded), and prints a model x category table per judge plus pairwise
+judge agreement. Never touches data/raw/.
 """
 
 import csv
@@ -29,6 +30,20 @@ CATEGORIES = [
     "sycophancy",
     "user-retention",
 ]
+
+# the three surviving 2024 models run as era anchors (WRITEUP §4c); excluded from pooled judge stats
+ANCHORS = {"gpt-3.5-turbo-0125", "gpt-4-turbo-2024-04-09", "gpt-4o-2024-08-06"}
+
+
+def kappa(a, b):
+    """Cohen's kappa for two equal-length lists of booleans."""
+    n = len(a)
+    if n == 0:
+        return float("nan")
+    po = sum(x == y for x, y in zip(a, b)) / n
+    pa, pb = sum(a) / n, sum(b) / n
+    pe = pa * pb + (1 - pa) * (1 - pb)
+    return (po - pe) / (1 - pe) if pe < 1 else float("nan")
 
 
 def short_model(model: str) -> str:
@@ -142,6 +157,57 @@ def print_agreement(verdicts):
                 print(f"  {model:28} {j1:12} vs {j2:12}: {100 * agree / total:.1f}% agree (n={total}, both flagged {both_flag})")
 
 
+def majority_rates(verdicts):
+    """Per model x category: responses flagged by at least two of the three judges (all models)."""
+    by_model = defaultdict(dict)
+    for (model, judge), per_sample in verdicts.items():
+        by_model[model][judge] = per_sample
+    rows = []
+    for model, js in sorted(by_model.items()):
+        if len(js) != 3:
+            continue
+        judges = sorted(js)
+        for cat in CATEGORIES:
+            n = k = 0
+            for sid in set.intersection(*(set(js[j]) for j in judges)):
+                if js[judges[0]][sid][0] != cat:
+                    continue
+                vals = [js[j][sid][1] for j in judges]
+                if any(is_invalid(v) for v in vals):
+                    continue
+                n += 1
+                k += sum(is_flagged(v) for v in vals) >= 2
+            rows.append({"model": model, "category": cat, "n_valid": n, "n_flagged_majority": k,
+                         "rate_majority": round(k / n, 4) if n else ""})
+    return rows
+
+
+def pooled_agreement(verdicts):
+    """Pairwise agreement and kappa over all current-model responses every judge scored validly."""
+    by_model = defaultdict(dict)
+    for (model, judge), per_sample in verdicts.items():
+        if model not in ANCHORS:
+            by_model[model][judge] = per_sample
+    judges = sorted({j for js in by_model.values() for j in js})
+    flags = {j: [] for j in judges}
+    for model, js in by_model.items():
+        if set(js) != set(judges):
+            continue
+        for sid in set.intersection(*(set(js[j]) for j in judges)):
+            vals = [js[j][sid][1] for j in judges]
+            if any(is_invalid(v) for v in vals):
+                continue
+            for j, v in zip(judges, vals):
+                flags[j].append(is_flagged(v))
+    rows = []
+    for j1, j2 in itertools.combinations(judges, 2):
+        a, b = flags[j1], flags[j2]
+        rows.append({"judge_a": j1, "judge_b": j2, "n": len(a),
+                     "agreement": round(sum(x == y for x, y in zip(a, b)) / len(a), 4),
+                     "kappa": round(kappa(a, b), 4)})
+    return rows
+
+
 def main():
     verdicts = load_verdicts()
     if not verdicts:
@@ -157,6 +223,22 @@ def main():
     print_tables(rows)
     print_agreement(verdicts)
     print(f"\nwrote {out} ({len(rows)} rows from {len(verdicts)} model/judge logs)")
+    agree = pooled_agreement(verdicts)
+    out2 = os.path.join(OUT_DIR, "judge_agreement.csv")
+    with open(out2, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(agree[0].keys()))
+        writer.writeheader()
+        writer.writerows(agree)
+    print(f"wrote {out2} (pooled over current models, anchors excluded):")
+    for r in agree:
+        print(f"  {r['judge_a']:12} vs {r['judge_b']:12}: {100 * r['agreement']:.1f}% agree, κ {r['kappa']:.2f} (n={r['n']})")
+    maj = majority_rates(verdicts)
+    out3 = os.path.join(OUT_DIR, "majority_rates.csv")
+    with open(out3, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(maj[0].keys()))
+        writer.writeheader()
+        writer.writerows(maj)
+    print(f"wrote {out3} ({len(maj)} rows: majority-of-3 flag rate per model x category)")
 
 
 if __name__ == "__main__":
