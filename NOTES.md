@@ -1071,7 +1071,7 @@ from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 **The mistake.** The S6 rule is: *survives* = the two intervals separate under **every** judge,
 *partial* = under some, *fails* = under none. Three rows were decided by looking at one judge's
 numbers instead of all three. Eileen caught the first one (gpt-4-turbo); a systematic recheck of
-all twelve mechanically checkable rows against the nine-model numbers in `rates.csv` found two
+all thirteen mechanically checkable rows against the nine-model numbers in `rates.csv` found two
 more. **All three were wrong from the start. None of them was changed by adding GPT-6 Astra** —
 gpt-4-turbo already separated under Opus 4.6 with the original eight current models, and the
 other two never depended on Astra at all.
@@ -1096,11 +1096,19 @@ Eileen's calls: keep the "every current model" wording on the sycophancy row and
 naming the exception in the detail; mark user retention partial with the detail unchanged; no
 corrections note in the paper, since it has not been shared yet.
 
-Verdict tally moves 8 / 3 / 5 to **7 survives / 6 partial / 3 fails**, updated in Lesson 5 prose.
-The three remaining *fails* are Sonnet 5's lowest flag rate, monotonic sycophancy decline, and
-GPT models sneaking more than Sonnet 5. The other nine rows were rechecked and stand as written;
-the three non-interval rows (monotonic sycophancy, judges disagree by category, Gemini
-self-preference) are not model-vs-model comparisons and the rule does not apply mechanically.
+Verdict tally moves 8 / 3 / 5 to **7 survives / 6 partial / 3 fails**, updated in the Lesson 6
+prose (Uncertainty and confidence intervals). The three remaining *fails* are Sonnet 5's lowest
+flag rate, monotonic sycophancy decline, and GPT models sneaking more than Sonnet 5.
+
+Accounting over all sixteen S6 rows: **10 confirmed unchanged, 3 corrected, 3 not mechanically
+checkable.** The three that the rule does not apply to mechanically are monotonic sycophancy
+decline, judges disagree by category, and Gemini self-preference: none is a single
+model-vs-model interval comparison. Two earlier statements of this accounting were wrong. The
+first recheck report covered 15 of the 16 rows, omitting "Gemini judge measures sycophancy
+(0/990 vs 15/110)"; that row was then checked and separates under all three judges (current 9
+pooled 1.0 [0.5, 1.8] / 1.9 [1.2, 3.0] / 0.0 [0, 0.4] against gpt-3.5-turbo 10.9 [6.4, 18.1] /
+30.0 [22.2, 39.1] / 13.6 [8.4, 21.3]), so **survives** stands. The second report then gave a
+breakdown summing to 18. Eileen caught both.
 
 **Pre-Astra figures.** METHODS_PAPER.md was fixed earlier today; WRITEUP.md still carried the
 same eight-model numbers and now matches: 880 → 990 current-model responses (3 places),
