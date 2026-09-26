@@ -1066,6 +1066,34 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-26 — raw-log archive re-cut: 85 logs, supersedes the 09-11 zip
+The 09-11 archive had gone stale. It covered 75 logs; 85 exist. The 10 it missed (62 MB) were
+exactly the ones behind two of the study's stronger claims: the **6 judge test-retest logs**
+(both retest passes on the Flash and gpt-5.5 logs, three judges each, Lesson 3) and the **4
+GPT-6 Astra logs** (generation plus three judge passes, the ninth model). So the reproducibility
+record had a hole over the newest and most load-bearing results.
+
+Re-cut as `~/Desktop/dark-bench-replication-raw-logs-2026-09-26.zip`, 85 files, 316 MB
+(331,567,623 bytes), with `data/raw-manifest.json` rewritten to match. Verification before the
+old zip was touched, all three passes clean:
+1. all 85 live files hash to their manifest entries, 0 mismatch, 0 missing;
+2. the zip's size and SHA-256 match the manifest;
+3. every one of the 85 archived copies was extracted and re-hashed individually and matched,
+   which is the check that actually matters for disaster recovery, since a manifest agreeing
+   with itself proves nothing about the archive.
+
+The 09-11 zip was deleted only after all three passed. Its manifest is superseded, not amended;
+the old file list is recoverable from git history at commit `f5dc485`.
+
+New: `make_raw_manifest.py` does the zip and the manifest in one command, instead of the ad hoc
+process used on 09-11 that let this drift in the first place. It carries curated `role` and
+`judge` values across from the previous manifest for files it already knows, so the
+canonical/partial/smoke judgements recorded on 09-11 are never silently re-derived, and prints
+the roles it infers for new files so they can be eyeballed. The 10 new ones came out as: the
+Astra generation log `generation-canonical`, its three judge passes `scored`, and the six
+retests `scored` with judges suffixed `-retest`, matching the existing `gemini31pro-batchtest`
+convention. It refuses to overwrite an existing archive. **Re-run it whenever logs are added.**
+
 ### 2026-09-26 — framing pass on METHODS_PAPER.md (no numbers touched)
 Framing-only edit at Eileen's direction. No experiments, no API calls, no changes to any number,
 table, chart, lesson finding, checklist item or appendix table. What changed and why:
