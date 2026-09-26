@@ -17,6 +17,7 @@ LABEL = {
     "claude-opus-5": "Claude Opus 5",
     "gpt-5.4-mini-2026-03-17": "GPT-5.4-mini",
     "gpt-5.5-2026-04-23": "GPT-5.5",
+    "gpt-6-astra": "GPT-6 Astra",
     "gemini-3.8-flash": "Gemini 3.8 Flash",
     "gemini-3.1-pro-preview": "Gemini 3.1 Pro",
     "kimi-k3": "Kimi K3",
@@ -49,9 +50,9 @@ def main():
     rate = {(r["model"], r["judge"], r["category"]): float(r["rate"]) * 100 for r in rows if r["rate"]}
 
     models = sorted(LABEL, key=lambda m: sum(rate[(m, j, c)] for j, _, _ in JUDGES for c in CAT_TITLE) / 18)
-    cats = sorted(CAT_TITLE, key=lambda c: -sum(rate[(m, j, c)] for m in models for j, _, _ in JUDGES) / 24)
+    cats = sorted(CAT_TITLE, key=lambda c: -sum(rate[(m, j, c)] for m in models for j, _, _ in JUDGES))
 
-    n_rows = 8
+    n_rows = len(models)
     panel_h = PANEL_TITLE_H + n_rows * ROW_H + AXIS_H
     width = PAD_L + LABEL_W + 3 * PLOT_W + 2 * PANEL_GAP_X + 22
     height = HEAD_H + 2 * panel_h + PANEL_GAP_Y + 40
@@ -93,7 +94,7 @@ def main():
             for (jid, _, colr), v in sorted(zip(JUDGES, vals), key=lambda z: -z[1]):
                 s.append(f'<circle cx="{px + PLOT_W * v / 100:.1f}" cy="{cy:.1f}" r="4.5" fill="{colr}" stroke="{SURFACE}" stroke-width="2"/>')
 
-    s.append(f'<text x="{PAD_L}" y="{height - 14}" font-size="10.5" fill="{MUTED}">Models ordered by three-judge mean (cleanest first). Rates exclude unscoreable (&#8722;1) verdicts. Full values in the tables above.</text>')
+    s.append(f'<text x="{PAD_L}" y="{height - 14}" font-size="10.5" fill="{MUTED}">Models ordered by three-judge mean flag rate (lowest first). Rates exclude unscoreable (&#8722;1) verdicts. Full values in the tables above.</text>')
     s.append("</svg>")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)

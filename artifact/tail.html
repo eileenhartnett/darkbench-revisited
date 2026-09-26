@@ -1,0 +1,369 @@
+<script>
+(function(){
+  // ---- render markdown body ----
+  var mdSrc = document.getElementById('content-md').textContent;
+  marked.setOptions({ gfm:true, breaks:false });
+  var html = marked.parse(mdSrc);
+  var content = document.getElementById('content');
+  content.innerHTML = html;
+
+  // wrap tables for horizontal scroll
+  content.querySelectorAll('table').forEach(function(t){
+    var wrap = document.createElement('div');
+    wrap.className = 'table-wrap';
+    t.parentNode.insertBefore(wrap, t);
+    wrap.appendChild(t);
+  });
+
+  // inline the chart SVG in place of the broken relative-path image
+  content.querySelectorAll('img').forEach(function(img){
+    if(/rates\.svg/.test(img.getAttribute('src') || '')){
+      try{
+        var b64 = document.getElementById('chart-svg-b64').textContent.trim();
+        var bin = atob(b64);
+        var bytes = new Uint8Array(bin.length);
+        for(var i=0;i<bin.length;i++){ bytes[i] = bin.charCodeAt(i); }
+        var svgText = new TextDecoder('utf-8').decode(bytes);
+        var fig = document.createElement('figure');
+        fig.style.margin = '0 0 6px';
+        fig.innerHTML = svgText;
+        var svgEl = fig.querySelector('svg');
+        if(svgEl){ svgEl.style.width = '100%'; svgEl.style.height = 'auto'; svgEl.style.display='block'; svgEl.removeAttribute('width'); svgEl.removeAttribute('height'); }
+        img.replaceWith(fig);
+      }catch(e){ /* leave the broken img alt text as a fallback */ }
+    }
+  });
+
+  // colour verdict keywords inside table cells: **survives** / **partial** / **fails**
+  var verdictMap = { survives:'verdict-survives', partial:'verdict-partial', fails:'verdict-fails' };
+  content.querySelectorAll('td').forEach(function(td){
+    Array.from(td.querySelectorAll('strong')).forEach(function(strong){
+      var key = strong.textContent.trim().toLowerCase();
+      if(verdictMap[key]){
+        var chip = document.createElement('span');
+        chip.className = 'verdict-chip ' + verdictMap[key];
+        chip.textContent = strong.textContent;
+        strong.replaceWith(chip);
+      }
+    });
+  });
+  // also catch the per-category usefulness verdicts in §6 (usable / unvalidated / broken / saturated)
+  var wordMap = {
+    'usable':'verdict-survives',
+    'unvalidated':'verdict-partial',
+    'broken as specified':'verdict-fails',
+    'saturated, not discriminating':'verdict-partial'
+  };
+  content.querySelectorAll('td strong').forEach(function(strong){
+    var key = strong.textContent.trim().toLowerCase();
+    if(wordMap[key] && !strong.closest('.verdict-chip')){
+      var chip = document.createElement('span');
+      chip.className = 'verdict-chip ' + wordMap[key];
+      chip.textContent = strong.textContent;
+      strong.replaceWith(chip);
+    }
+  });
+
+  // ---- key-finding callouts: blockquotes that open with **Finding** / **Takeaway** / **Key point**
+  content.querySelectorAll('blockquote').forEach(function(bq){
+    var first = bq.querySelector('p > strong:first-child');
+    if(first && /^(finding|takeaway|key point|in short|bottom line)/i.test(first.textContent.trim())){
+      bq.classList.add('callout');
+    }
+  });
+
+  // ---- section numbers as a muted eyebrow ("4.2", "S7")
+  content.querySelectorAll('h2, h3').forEach(function(h){
+    var m = h.textContent.match(/^((?:Lesson \d+)|(?:Appendix [AB])|(?:S\d+)|(?:A\.\d+)|(?:\d+(?:\.\d+)?))\.?\s+(.*)$/);
+    if(m){
+      h.textContent = '';
+      var num = document.createElement('span'); num.className = 'num'; num.textContent = m[1];
+      h.appendChild(num); h.appendChild(document.createTextNode(m[2]));
+    }
+  });
+
+  // ---- ids for every heading
+  var seen = {};
+  function slugify(s){
+    var base = s.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
+    var slug = base; var n = 1;
+    while(seen[slug]){ slug = base + '-' + (++n); }
+    seen[slug] = true;
+    return slug;
+  }
+  content.querySelectorAll('h2, h3').forEach(function(h){ h.id = slugify(h.textContent); });
+
+  // ---- collapsible supplements: every h3 after the "Supplements" h2 folds into <details>
+  var suppH2 = Array.from(content.querySelectorAll('h2')).find(function(h){ return /supplement/i.test(h.textContent); });
+  if(suppH2){
+    var node = suppH2.nextElementSibling;
+    while(node){
+      if(node.tagName === 'H2') break;
+      if(node.tagName === 'H3'){
+        var det = document.createElement('details'); det.className = 'supp';
+        var sum = document.createElement('summary');
+        Array.from(node.childNodes).forEach(function(c){ sum.appendChild(c.cloneNode(true)); });
+        det.id = node.id; det.appendChild(sum);
+        var body = document.createElement('div'); body.className = 'supp-body'; det.appendChild(body);
+        var next = node.nextElementSibling;
+        node.replaceWith(det);
+        while(next && next.tagName !== 'H3' && next.tagName !== 'H2'){
+          var after = next.nextElementSibling; body.appendChild(next); next = after;
+        }
+        node = next;
+      } else {
+        node = node.nextElementSibling;
+      }
+    }
+  }
+
+  // ---- table of contents: h2 entries grouped into parts; supplements listed beneath their part
+  var tocList = document.getElementById('toc-list');
+  function part(label){ var li = document.createElement('li'); li.className = 'toc-part'; li.textContent = label; tocList.appendChild(li); }
+  function entry(id, text, sub){
+    var li = document.createElement('li'); var a = document.createElement('a');
+    a.href = '#' + id; a.textContent = text; if(sub) a.style.paddingLeft = '22px';
+    li.appendChild(a); tocList.appendChild(li);
+  }
+  var partShown = { report:false, methods:false, supp:false };
+  part('Paper'); partShown.report = true; entry('in-brief', 'Abstract');
+  Array.from(content.querySelectorAll('h2, details.supp')).forEach(function(h){
+    if(h.tagName === 'H2'){
+      var num = (h.querySelector('.num') || {}).textContent || '';
+      var text = h.textContent.replace(num, '').trim();
+      var group = /supplement/i.test(text) ? 'supp' : (/^Appendix A/.test(num) || /^References/.test(text) ? 'methods' : 'report');
+      if(!partShown[group]){ part({ report:'Paper', methods:'Appendix A & references', supp:'Appendix B: supplements' }[group]); partShown[group] = true; }
+      entry(h.id, (num && /^Lesson/.test(num) ? num.replace('Lesson ', '') + '. ' : '') + text);
+    } else {
+      var s = h.querySelector('summary'), n = (s.querySelector('.num') || {}).textContent || '';
+      entry(h.id, n + ' ' + s.textContent.replace(n, '').trim(), true);
+    }
+  });
+  // clicking a TOC link into a collapsed supplement opens it
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest('a'); if(!a) return;
+    var t = document.getElementById(a.getAttribute('href').slice(1));
+    var det = t && (t.tagName === 'DETAILS' ? t : t.closest('details'));
+    if(det) det.open = true;
+  });
+
+  // active-section highlight on scroll
+  var links = Array.from(tocList.querySelectorAll('a'));
+  var targets = links.map(function(a){ var t = document.getElementById(a.getAttribute('href').slice(1)); return t && t.closest('.findings') || t; });
+  function onScroll(){
+    var y = window.scrollY + 120;
+    var activeIdx = 0;
+    for(var i=0;i<targets.length;i++){ if(targets[i] && targets[i].offsetTop <= y) activeIdx = i; }
+    links.forEach(function(a,i){ a.classList.toggle('active', i === activeIdx); });
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+})();
+</script>
+
+<script>
+// ---- data charts: drawn from #chart-data into the [data-chart] placeholders ----
+(function(){
+  var raw = document.getElementById('chart-data');
+  if(!raw) return;
+  var D = JSON.parse(raw.textContent);
+  var NS = 'http://www.w3.org/2000/svg';
+  var GRID = 'var(--line)', AXIS = 'var(--ink-faint)', SURF = 'var(--paper-raised)', ACC = 'var(--accent)';
+
+  function el(tag, attrs, text){
+    var e = document.createElementNS(NS, tag);
+    for(var k in attrs){ if(attrs[k] !== null && attrs[k] !== undefined) e.setAttribute(k, attrs[k]); }
+    if(text !== undefined){ e.textContent = text; }
+    return e;
+  }
+  function svg(w, h){ return el('svg', { viewBox:'0 0 '+w+' '+h, role:'img' }); }
+  function txt(x, y, s, attrs){
+    var a = { x:x, y:y, 'font-size':11, fill:'currentColor' };
+    for(var k in attrs){ a[k] = attrs[k]; }
+    return el('text', a, s);
+  }
+  function tip(node, s){ node.appendChild(el('title', {}, s)); return node; }
+  function figure(host, title, legendItems, svgNode, caption){
+    var fig = document.createElement('figure'); fig.className = 'chart';
+    var h = document.createElement('div'); h.className = 'chart-title'; h.textContent = title; fig.appendChild(h);
+    if(legendItems && legendItems.length){
+      var lg = document.createElement('div'); lg.className = 'legend';
+      legendItems.forEach(function(it){
+        var s = document.createElement('span'); s.textContent = it.label;
+        s.style.setProperty('--sw', it.color); if(it.hollow) s.className = 'hollow';
+        lg.appendChild(s);
+      });
+      fig.appendChild(lg);
+    }
+    fig.appendChild(svgNode);
+    var fc = document.createElement('figcaption'); fc.textContent = caption; fig.appendChild(fc);
+    host.replaceWith(fig);
+  }
+  var judges = D.judges;
+
+  // ---- chart 1: overall flag rate per model, 95% Wilson CI, one row per model, one dot per judge
+  function drawCI(host){
+    var rows = D.ci, LW = 170, PW = 500, RH = 22, TOP = 26, XMAX = 50;
+    var nAnch = rows.filter(function(r){ return r.anchor; }).length;
+    var GAP = 22; // extra space before the anchor block (holds its label)
+    var H = TOP + rows.length * RH + GAP + 30, W = LW + PW + 20;
+    var s = svg(W, H);
+    function x(v){ return LW + PW * v / XMAX; }
+    var plotBot = TOP + rows.length * RH + GAP;
+    for(var t = 0; t <= XMAX; t += 10){
+      s.appendChild(el('line', { x1:x(t), y1:TOP - 6, x2:x(t), y2:plotBot, stroke: t ? GRID : AXIS, 'stroke-width':1 }));
+      s.appendChild(txt(x(t), plotBot + 16, t + '%', { 'text-anchor':'middle', 'font-size':10, fill:AXIS }));
+    }
+    var y = TOP, sepDrawn = false;
+    rows.forEach(function(r){
+      if(r.anchor && !sepDrawn){
+        s.appendChild(el('line', { x1:8, y1:y + 2, x2:W - 8, y2:y + 2, stroke:GRID, 'stroke-dasharray':'3 3' }));
+        s.appendChild(txt(8, y + 14, '2024 anchors, same pipeline', { 'font-size':9.5, fill:AXIS, 'letter-spacing':'0.04em' }));
+        y += GAP; sepDrawn = true;
+      }
+      var cy = y + RH / 2;
+      s.appendChild(txt(LW - 10, cy + 3.8, r.label, { 'text-anchor':'end', fill: r.anchor ? AXIS : 'currentColor', 'font-style': r.anchor ? 'italic' : null }));
+      judges.forEach(function(j, i){
+        var p = r[j.id], off = (i - 1) * 5.5; // three judges stacked a few px apart
+        var g = el('g', { opacity: r.anchor ? 0.7 : 1 });
+        g.appendChild(el('line', { x1:x(p.lo), y1:cy + off, x2:x(p.hi), y2:cy + off, stroke:j.color, 'stroke-width':2, 'stroke-opacity':0.45, 'stroke-linecap':'round' }));
+        g.appendChild(el('circle', { cx:x(p.rate), cy:cy + off, r:3.6, fill:j.color, stroke:SURF, 'stroke-width':1.2 }));
+        g.appendChild(el('rect', { x:x(p.lo) - 4, y:cy + off - 5, width:x(p.hi) - x(p.lo) + 8, height:10, fill:'transparent' }));
+        tip(g, r.label + ' · ' + j.label + ' judge: ' + p.rate + '% [' + p.lo + ', ' + p.hi + '], n=' + p.n);
+        s.appendChild(g);
+      });
+      y += RH;
+    });
+    figure(host, 'Overall flagged rate per model, by judge', judges.map(function(j){ return { label:j.label + ' judge', color:j.color }; }), s,
+      'Dot = share of a model’s 660 responses the judge flagged; bar = Wilson 95% interval at the honest denominator (one judge, n ≈ 660). Where bars overlap, the models are not separable under that judge. Current models ordered by three-judge mean; 2024 anchors ran through the identical pipeline.');
+  }
+
+  // ---- chart 2: each judge against itself (test-retest) vs against the other judges
+  function drawKappa(host){
+    var rows = D.kappa, LW = 150, PW = 480, RH = 36, TOP = 24;
+    var H = TOP + rows.length * RH + 34, W = LW + PW + 70;
+    var s = svg(W, H);
+    function x(v){ return LW + PW * v; }
+    var plotBot = TOP + rows.length * RH;
+    // shaded inter-judge range
+    var lo = D.inter_range[0], hi = D.inter_range[1];
+    s.appendChild(el('rect', { x:x(lo), y:TOP - 8, width:x(hi) - x(lo), height:plotBot - TOP + 8, fill:ACC, 'fill-opacity':0.08 }));
+    s.appendChild(txt((x(lo) + x(hi)) / 2, TOP - 12, 'inter-judge range', { 'text-anchor':'middle', 'font-size':9.5, fill:ACC, 'letter-spacing':'0.04em' }));
+    [0, 0.2, 0.4, 0.6, 0.8, 1].forEach(function(t){
+      s.appendChild(el('line', { x1:x(t), y1:TOP - 4, x2:x(t), y2:plotBot, stroke: t ? GRID : AXIS }));
+      s.appendChild(txt(x(t), plotBot + 18, t.toFixed(1), { 'text-anchor':'middle', 'font-size':10, fill:AXIS }));
+    });
+    s.appendChild(txt(x(1), plotBot + 32, 'Cohen’s κ', { 'text-anchor':'end', 'font-size':10, fill:AXIS }));
+    rows.forEach(function(r, i){
+      var cy = TOP + i * RH + RH / 2, col = r.color || ACC;
+      s.appendChild(txt(LW - 12, cy + 4, r.label, { 'text-anchor':'end' }));
+      if(r.inter !== null){
+        s.appendChild(el('line', { x1:x(r.inter), y1:cy, x2:x(r.self), y2:cy, stroke:col, 'stroke-width':2, 'stroke-opacity':0.5 }));
+        var hollow = el('circle', { cx:x(r.inter), cy:cy, r:5.5, fill:SURF, stroke:col, 'stroke-width':2.2 });
+        tip(hollow, r.label + ' vs the other two judges: κ ' + r.inter.toFixed(2)); s.appendChild(hollow);
+        s.appendChild(txt(x(r.inter) - 10, cy + 4, r.inter.toFixed(2), { 'text-anchor':'end', 'font-size':10, 'font-family':"'IBM Plex Mono', monospace", fill:AXIS }));
+      }
+      var filled = el('circle', { cx:x(r.self), cy:cy, r:5.5, fill:col, stroke:SURF, 'stroke-width':1.5 });
+      tip(filled, r.label + ' vs itself (second pass, same responses): κ ' + r.self.toFixed(2)); s.appendChild(filled);
+      s.appendChild(txt(x(r.self) + 10, cy + 4, r.self.toFixed(2), { 'font-size':10, 'font-family':"'IBM Plex Mono', monospace", fill:'currentColor' }));
+    });
+    figure(host, 'How much of the disagreement is the judge, and how much is the category?',
+      [{ label:'κ against itself (test–retest)', color:ACC }, { label:'κ against the other judges', color:ACC, hollow:true }], s,
+      'Filled dot: the judge re-scoring the same 660 responses a second time (mean over two logs, 1,310–1,320 pairs). Hollow dot: the same judge against the other two, pooled over ' + '5,904 current-model responses. Each judge agrees with itself far more than with its peers, so the κ ≈ 0.5 between judges is a difference in reading, not noise. Majority-of-3 has no “other judges” to compare against; its self-κ sits inside the single-judge range.');
+  }
+
+  // ---- chart 3: 2024 anchors -> 2026, per category, one line per judge with CI whiskers
+  function drawAnchors(host){
+    var A = D.anchors, cats = A.cats, gens = A.gens;
+    var COLS = 3, PW = 190, PH = 120, PADL = 34, PADT = 26, PADB = 30, GX = 26, GY = 22;
+    var ROWS = Math.ceil(cats.length / COLS);
+    var W = PADL + COLS * PW + (COLS - 1) * GX + 10, H = ROWS * (PADT + PH + PADB) + (ROWS - 1) * GY;
+    var s = svg(W, H);
+    cats.forEach(function(c, ci){
+      var col = ci % COLS, row = Math.floor(ci / COLS);
+      var px = PADL + col * (PW + GX), py = row * (PADT + PH + PADB + GY) + PADT;
+      s.appendChild(txt(px, py - 10, c.title, { 'font-size':12, 'font-weight':600, fill:'currentColor' }));
+      function x(gi){ return px + 18 + (PW - 36) * gi / (gens.length - 1); }
+      function y(v){ return py + PH - PH * v / 100; }
+      [0, 25, 50, 75, 100].forEach(function(t){
+        s.appendChild(el('line', { x1:px, y1:y(t), x2:px + PW, y2:y(t), stroke: t ? GRID : AXIS }));
+        if(col === 0) s.appendChild(txt(px - 6, y(t) + 3.5, t + '%', { 'text-anchor':'end', 'font-size':9.5, fill:AXIS }));
+      });
+      gens.forEach(function(g, gi){
+        s.appendChild(txt(x(gi), py + PH + 14, g.label, { 'text-anchor':'middle', 'font-size':9.5, fill:AXIS }));
+      });
+      judges.forEach(function(j, ji){
+        var pts = c.series[j.id], off = (ji - 1) * 3;
+        var d = pts.map(function(p, gi){ return (gi ? 'L' : 'M') + (x(gi) + off).toFixed(1) + ' ' + y(p.rate).toFixed(1); }).join(' ');
+        s.appendChild(el('path', { d:d, fill:'none', stroke:j.color, 'stroke-width':1.6, 'stroke-opacity':0.75 }));
+        pts.forEach(function(p, gi){
+          var g = el('g');
+          g.appendChild(el('line', { x1:x(gi) + off, y1:y(p.lo), x2:x(gi) + off, y2:y(p.hi), stroke:j.color, 'stroke-width':1.6, 'stroke-opacity':0.5, 'stroke-linecap':'round' }));
+          g.appendChild(el('circle', { cx:x(gi) + off, cy:y(p.rate), r:3.2, fill:j.color, stroke:SURF, 'stroke-width':1.2 }));
+          g.appendChild(el('rect', { x:x(gi) + off - 6, y:y(p.hi) - 4, width:12, height:Math.max(8, y(p.lo) - y(p.hi) + 8), fill:'transparent' }));
+          tip(g, c.title + ' · ' + g_label(g, gi) + ' · ' + j.label + ' judge: ' + p.rate + '% [' + p.lo + ', ' + p.hi + '], n=' + p.n);
+          s.appendChild(g);
+        });
+      });
+      function g_label(_, gi){ return gens[gi].id === 'current' ? '2026 current models (' + A.n_current + ')' : gens[gi].id; }
+    });
+    figure(host, 'From the 2024 anchors to today, category by category', judges.map(function(j){ return { label:j.label + ' judge', color:j.color }; }), s,
+      'gpt-3.5-turbo-0125 → gpt-4-turbo-2024-04-09 → gpt-4o-2024-08-06 → the ' + A.n_current + ' current models pooled, all scored by the same three judges. Whiskers are Wilson 95% intervals (n = 110 per anchor point; n ≈ 990 for the pooled 2026 point). Only sycophancy’s endpoints clear the intervals under every judge; the other movements sit inside them.');
+  }
+
+  // ---- hero: the paper's 14 models (its judges) beside my 12 (my judges); the three shared models bridge the two
+  function drawHero(host){
+    var H0 = D.hero, MUTED = 'var(--ink-faint)', RH = 19, LW = 150, GAPCOL = 36;
+    var W = 760, PW = (W - LW * 2 - GAPCOL - 20) / 1; // two columns share one x scale each
+    // layout: two side-by-side panels with their own label column, same x scale 0–70%
+    var colW = (W - GAPCOL) / 2, plotW = colW - LW - 6, XMAX = 70;
+    var rowsL = H0.paper, rowsR = H0.current;
+    var TOP = 34, nRows = Math.max(rowsL.length, rowsR.length);
+    var H = TOP + nRows * RH + 34;
+    var s = svg(W, H);
+    function panel(px, title, sub, rows, avg, avgLabel, isPaper){
+      var x = function(v){ return px + LW + plotW * v / XMAX; };
+      var bot = TOP + rows.length * RH;
+      s.appendChild(txt(px, 12, title, { 'font-size':11.5, 'font-weight':600, fill:'currentColor' }));
+      s.appendChild(txt(px, 25, sub, { 'font-size':9.5, fill:AXIS }));
+      [0, 20, 40, 60].forEach(function(t){
+        s.appendChild(el('line', { x1:x(t), y1:TOP - 4, x2:x(t), y2:bot, stroke: t ? GRID : AXIS }));
+        s.appendChild(txt(x(t), bot + 14, t + '%', { 'text-anchor':'middle', 'font-size':9.5, fill:AXIS }));
+      });
+      // average marker
+      s.appendChild(el('line', { x1:x(avg), y1:TOP - 4, x2:x(avg), y2:bot, stroke:ACC, 'stroke-width':1.5, 'stroke-dasharray':'3 3' }));
+      s.appendChild(txt(x(avg), bot + 26, avgLabel, { 'text-anchor':'middle', 'font-size':9.5, fill:ACC, 'font-weight':600 }));
+      rows.forEach(function(r, i){
+        var cy = TOP + i * RH + RH / 2;
+        var shared = isPaper && r.mine !== null;
+        s.appendChild(txt(px + LW - 8, cy + 3.5, r.label, { 'text-anchor':'end', 'font-size':10.5, fill: shared ? 'currentColor' : (isPaper ? AXIS : 'currentColor'), 'font-weight': shared ? 600 : null }));
+        if(isPaper){
+          var g = el('g');
+          if(shared){
+            g.appendChild(el('line', { x1:x(r.mine), y1:cy, x2:x(r.paper), y2:cy, stroke:ACC, 'stroke-width':1.6, 'stroke-opacity':0.5 }));
+            var mine = el('circle', { cx:x(r.mine), cy:cy, r:4, fill:ACC, stroke:SURF, 'stroke-width':1.2 });
+            tip(mine, r.label + ' under my three 2026 judges: three-judge mean ' + r.mean + '%, majority-of-3 ' + r.majority + '%'); g.appendChild(mine);
+          }
+          var pd = el('circle', { cx:x(r.paper), cy:cy, r:4, fill: shared ? SURF : MUTED, stroke: shared ? ACC : MUTED, 'stroke-width': shared ? 1.8 : 1 });
+          tip(pd, r.label + ' in the paper (2024 judges): ' + r.paper + '%'); g.appendChild(pd);
+          s.appendChild(g);
+        } else {
+          var d = el('circle', { cx:x(r.mine), cy:cy, r:4, fill:ACC, stroke:SURF, 'stroke-width':1.2 });
+          tip(d, r.label + ': three-judge mean ' + r.mean + '%, majority-of-3 ' + r.majority + '%'); s.appendChild(d);
+        }
+      });
+    }
+    panel(0, '2024: the paper’s 14 models', 'scored by the paper’s three judges', rowsL, H0.paper_avg, 'paper average ' + H0.paper_avg + '%', true);
+    panel(colW + GAPCOL, '2026: my 9 models', 'scored by my three judges (' + (H0.stat === 'majority' ? 'majority-of-3 vote' : 'three-judge mean') + ')', rowsR, H0.my_avg, 'my average ' + H0.my_avg + '%', false);
+    figure(host, 'Dark-pattern rate per model, then and now',
+      [{ label:'paper’s score, its judges', color:MUTED }, { label:'my score, my judges', color:ACC }, { label:'same model under my judges', color:ACC, hollow:true }], s,
+      'Share of 660 responses flagged, averaged over categories and judges. The three bold models on the left are 2024 models still available today; the open dot is the paper’s score for them, the filled dot is what my judges gave the very same model. That gap is the part of the 2024→2026 drop that comes from changing judges rather than models.');
+  }
+
+  var drawers = { hero:drawHero, ci:drawCI, kappa:drawKappa, anchors:drawAnchors };
+  document.querySelectorAll('[data-chart]').forEach(function(host){
+    var fn = drawers[host.getAttribute('data-chart')];
+    if(fn){ try{ fn(host); }catch(e){ host.textContent = 'chart failed to render: ' + e.message; } }
+  });
+})();
+</script>

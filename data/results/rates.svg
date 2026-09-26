@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="854" height="602" viewBox="0 0 854 602" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
-<rect width="854" height="602" fill="#fcfcfb"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="854" height="644" viewBox="0 0 854 644" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+<rect width="854" height="644" fill="#fcfcfb"/>
 <text x="22" y="30" font-size="16" font-weight="600" fill="#0b0b0b">DarkBench flagged rate, by category, model and judge</text>
 <text x="22" y="50" font-size="11.5" fill="#52514e">660 prompts (110 per category), one response each. Every dot is one judge&#8217;s rate for that model; the grey bar spans the three judges&#8217; disagreement.</text>
 <circle cx="27" cy="68" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
@@ -9,263 +9,282 @@
 <circle cx="279.8" cy="68" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
 <text x="289.8" y="72" font-size="11.5" fill="#52514e">Gemini 3.1 Pro judge</text>
 <text x="140" y="97" font-size="12.5" font-weight="600" fill="#0b0b0b">User retention</text>
-<line x1="140.0" y1="106" x2="140.0" y2="274" stroke="#c3c2b7" stroke-width="1"/>
-<text x="140.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
-<line x1="192.0" y1="106" x2="192.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="192.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
-<line x1="244.0" y1="106" x2="244.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="244.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
-<line x1="296.0" y1="106" x2="296.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="296.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
-<line x1="348.0" y1="106" x2="348.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="348.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
-<text x="130" y="120.3" font-size="11" fill="#52514e" text-anchor="end">Claude Sonnet 5</text>
-<line x1="151.3" y1="116.5" x2="185.4" y2="116.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="185.4" cy="116.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="175.9" cy="116.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="151.3" cy="116.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="141.3" font-size="11" fill="#52514e" text-anchor="end">Kimi K3</text>
-<line x1="232.7" y1="137.5" x2="251.6" y2="137.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="251.6" cy="137.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="244.0" cy="137.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="232.7" cy="137.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="162.3" font-size="11" fill="#52514e" text-anchor="end">Gemini 3.8 Flash</text>
-<line x1="194.8" y1="158.5" x2="230.8" y2="158.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="230.8" cy="158.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="204.3" cy="158.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="194.8" cy="158.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="183.3" font-size="11" fill="#52514e" text-anchor="end">Claude Opus 5</text>
-<line x1="177.8" y1="179.5" x2="196.7" y2="179.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="196.7" cy="179.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="181.6" cy="179.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="177.8" cy="179.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="204.3" font-size="11" fill="#52514e" text-anchor="end">GLM 5.3</text>
-<line x1="255.3" y1="200.5" x2="276.1" y2="200.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="276.1" cy="200.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="274.3" cy="200.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="255.3" cy="200.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="225.3" font-size="11" fill="#52514e" text-anchor="end">GPT-5.5</text>
-<line x1="202.4" y1="221.5" x2="276.1" y2="221.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="140.0" y1="106" x2="140.0" y2="295" stroke="#c3c2b7" stroke-width="1"/>
+<text x="140.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
+<line x1="192.0" y1="106" x2="192.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="192.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
+<line x1="244.0" y1="106" x2="244.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="244.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
+<line x1="296.0" y1="106" x2="296.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="296.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
+<line x1="348.0" y1="106" x2="348.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="348.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
+<text x="130" y="120.3" font-size="11" fill="#52514e" text-anchor="end">GPT-6 Astra</text>
+<line x1="143.8" y1="116.5" x2="181.6" y2="116.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="181.6" cy="116.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="145.7" cy="116.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="143.8" cy="116.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="141.3" font-size="11" fill="#52514e" text-anchor="end">Claude Sonnet 5</text>
+<line x1="151.3" y1="137.5" x2="185.4" y2="137.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="185.4" cy="137.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="175.9" cy="137.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="151.3" cy="137.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="162.3" font-size="11" fill="#52514e" text-anchor="end">Kimi K3</text>
+<line x1="232.7" y1="158.5" x2="251.6" y2="158.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="251.6" cy="158.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="244.0" cy="158.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="232.7" cy="158.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="183.3" font-size="11" fill="#52514e" text-anchor="end">Gemini 3.8 Flash</text>
+<line x1="194.8" y1="179.5" x2="230.8" y2="179.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="230.8" cy="179.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="204.3" cy="179.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="194.8" cy="179.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="204.3" font-size="11" fill="#52514e" text-anchor="end">Claude Opus 5</text>
+<line x1="177.8" y1="200.5" x2="196.7" y2="200.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="196.7" cy="200.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="181.6" cy="200.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="177.8" cy="200.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="225.3" font-size="11" fill="#52514e" text-anchor="end">GLM 5.3</text>
+<line x1="255.3" y1="221.5" x2="276.1" y2="221.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
 <circle cx="276.1" cy="221.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="232.7" cy="221.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="202.4" cy="221.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="246.3" font-size="11" fill="#52514e" text-anchor="end">GPT-5.4-mini</text>
-<line x1="238.3" y1="242.5" x2="295.1" y2="242.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="295.1" cy="242.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="240.2" cy="242.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="238.3" cy="242.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="267.3" font-size="11" fill="#52514e" text-anchor="end">Gemini 3.1 Pro</text>
-<line x1="315.9" y1="263.5" x2="332.9" y2="263.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="332.9" cy="263.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="317.7" cy="263.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="315.9" cy="263.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="274.3" cy="221.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="255.3" cy="221.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="246.3" font-size="11" fill="#52514e" text-anchor="end">GPT-5.5</text>
+<line x1="202.4" y1="242.5" x2="276.1" y2="242.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="276.1" cy="242.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="232.7" cy="242.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="202.4" cy="242.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="267.3" font-size="11" fill="#52514e" text-anchor="end">GPT-5.4-mini</text>
+<line x1="238.3" y1="263.5" x2="295.1" y2="263.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="295.1" cy="263.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="240.2" cy="263.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="238.3" cy="263.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="288.3" font-size="11" fill="#52514e" text-anchor="end">Gemini 3.1 Pro</text>
+<line x1="315.9" y1="284.5" x2="332.9" y2="284.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="332.9" cy="284.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="317.7" cy="284.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="315.9" cy="284.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
 <text x="382" y="97" font-size="12.5" font-weight="600" fill="#0b0b0b">Anthropomorphization</text>
-<line x1="382.0" y1="106" x2="382.0" y2="274" stroke="#c3c2b7" stroke-width="1"/>
-<text x="382.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
-<line x1="434.0" y1="106" x2="434.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="434.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
-<line x1="486.0" y1="106" x2="486.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="486.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
-<line x1="538.0" y1="106" x2="538.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="538.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
-<line x1="590.0" y1="106" x2="590.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="590.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
-<line x1="395.2" y1="116.5" x2="414.1" y2="116.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="414.1" cy="116.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="399.0" cy="116.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="395.2" cy="116.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="416.0" y1="137.5" x2="467.1" y2="137.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="467.1" cy="137.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="431.2" cy="137.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="416.0" cy="137.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="393.3" y1="158.5" x2="453.9" y2="158.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="453.9" cy="158.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="402.8" cy="158.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="393.3" cy="158.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="491.7" y1="179.5" x2="533.3" y2="179.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="533.3" cy="179.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="520.0" cy="179.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="491.7" cy="179.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="425.5" y1="200.5" x2="482.2" y2="200.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="482.2" cy="200.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="452.0" cy="200.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="425.5" cy="200.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="429.3" y1="221.5" x2="469.0" y2="221.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="469.0" cy="221.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="442.5" cy="221.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="429.3" cy="221.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="433.1" y1="242.5" x2="463.3" y2="242.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="463.3" cy="242.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="436.8" cy="242.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="433.1" cy="242.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="382.0" y1="263.5" x2="480.3" y2="263.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="480.3" cy="263.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="425.5" cy="263.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="382.0" cy="263.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="382.0" y1="106" x2="382.0" y2="295" stroke="#c3c2b7" stroke-width="1"/>
+<text x="382.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
+<line x1="434.0" y1="106" x2="434.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="434.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
+<line x1="486.0" y1="106" x2="486.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="486.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
+<line x1="538.0" y1="106" x2="538.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="538.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
+<line x1="590.0" y1="106" x2="590.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="590.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
+<line x1="402.8" y1="116.5" x2="438.7" y2="116.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="438.7" cy="116.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="416.0" cy="116.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="402.8" cy="116.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="395.2" y1="137.5" x2="414.1" y2="137.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="414.1" cy="137.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="399.0" cy="137.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="395.2" cy="137.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="416.0" y1="158.5" x2="467.1" y2="158.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="467.1" cy="158.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="431.2" cy="158.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="416.0" cy="158.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="393.3" y1="179.5" x2="453.9" y2="179.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="453.9" cy="179.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="402.8" cy="179.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="393.3" cy="179.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="491.7" y1="200.5" x2="533.3" y2="200.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="533.3" cy="200.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="520.0" cy="200.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="491.7" cy="200.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="425.5" y1="221.5" x2="482.2" y2="221.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="482.2" cy="221.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="452.0" cy="221.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="425.5" cy="221.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="429.3" y1="242.5" x2="469.0" y2="242.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="469.0" cy="242.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="442.5" cy="242.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="429.3" cy="242.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="433.1" y1="263.5" x2="463.3" y2="263.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="463.3" cy="263.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="436.8" cy="263.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="433.1" cy="263.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="382.0" y1="284.5" x2="480.3" y2="284.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="480.3" cy="284.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="425.5" cy="284.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="382.0" cy="284.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
 <text x="624" y="97" font-size="12.5" font-weight="600" fill="#0b0b0b">Brand bias</text>
-<line x1="624.0" y1="106" x2="624.0" y2="274" stroke="#c3c2b7" stroke-width="1"/>
-<text x="624.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
-<line x1="676.0" y1="106" x2="676.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="676.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
-<line x1="728.0" y1="106" x2="728.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="728.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
-<line x1="780.0" y1="106" x2="780.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="780.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
-<line x1="832.0" y1="106" x2="832.0" y2="274" stroke="#e1e0d9" stroke-width="1"/>
-<text x="832.0" y="290" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
-<line x1="648.6" y1="116.5" x2="667.5" y2="116.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="667.5" cy="116.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="648.6" cy="116.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="648.6" cy="116.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="637.4" y1="137.5" x2="667.5" y2="137.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="667.5" cy="137.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="624.0" y1="106" x2="624.0" y2="295" stroke="#c3c2b7" stroke-width="1"/>
+<text x="624.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
+<line x1="676.0" y1="106" x2="676.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="676.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
+<line x1="728.0" y1="106" x2="728.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="728.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
+<line x1="780.0" y1="106" x2="780.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="780.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
+<line x1="832.0" y1="106" x2="832.0" y2="295" stroke="#e1e0d9" stroke-width="1"/>
+<text x="832.0" y="311" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
+<line x1="644.8" y1="116.5" x2="654.3" y2="116.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="654.3" cy="116.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="644.8" cy="116.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="644.8" cy="116.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="648.6" y1="137.5" x2="667.5" y2="137.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="667.5" cy="137.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="648.6" cy="137.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="648.6" cy="137.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="637.4" cy="137.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="644.8" y1="158.5" x2="711.0" y2="158.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="711.0" cy="158.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="690.2" cy="158.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="644.8" cy="158.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="652.4" y1="179.5" x2="695.9" y2="179.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="695.9" cy="179.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="682.6" cy="179.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="652.4" cy="179.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="639.1" y1="200.5" x2="661.8" y2="200.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="661.8" cy="200.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="656.1" cy="200.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="639.1" cy="200.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="669.4" y1="221.5" x2="722.3" y2="221.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="722.3" cy="221.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="703.4" cy="221.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="669.4" cy="221.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="667.5" y1="242.5" x2="705.3" y2="242.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="705.3" cy="242.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="684.5" cy="242.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="667.5" cy="242.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="658.0" y1="263.5" x2="724.2" y2="263.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="724.2" cy="263.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="703.4" cy="263.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="658.0" cy="263.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="140" y="359" font-size="12.5" font-weight="600" fill="#0b0b0b">Harmful generation</text>
-<line x1="140.0" y1="368" x2="140.0" y2="536" stroke="#c3c2b7" stroke-width="1"/>
-<text x="140.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
-<line x1="192.0" y1="368" x2="192.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="192.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
-<line x1="244.0" y1="368" x2="244.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="244.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
-<line x1="296.0" y1="368" x2="296.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="296.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
-<line x1="348.0" y1="368" x2="348.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="348.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
-<text x="130" y="382.3" font-size="11" fill="#52514e" text-anchor="end">Claude Sonnet 5</text>
-<line x1="140.0" y1="378.5" x2="173.1" y2="378.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="173.1" cy="378.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="140.0" cy="378.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="140.0" cy="378.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="403.3" font-size="11" fill="#52514e" text-anchor="end">Kimi K3</text>
-<line x1="140.0" y1="399.5" x2="215.6" y2="399.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="215.6" cy="399.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="149.7" cy="399.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="140.0" cy="399.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="424.3" font-size="11" fill="#52514e" text-anchor="end">Gemini 3.8 Flash</text>
-<line x1="155.3" y1="420.5" x2="281.8" y2="420.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="281.8" cy="420.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="208.0" cy="420.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="155.3" cy="420.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="445.3" font-size="11" fill="#52514e" text-anchor="end">Claude Opus 5</text>
-<line x1="140.0" y1="441.5" x2="227.5" y2="441.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="227.5" cy="441.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="140.0" cy="441.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="637.4" y1="158.5" x2="667.5" y2="158.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="667.5" cy="158.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="648.6" cy="158.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="637.4" cy="158.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="644.8" y1="179.5" x2="711.0" y2="179.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="711.0" cy="179.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="690.2" cy="179.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="644.8" cy="179.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="652.4" y1="200.5" x2="695.9" y2="200.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="695.9" cy="200.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="682.6" cy="200.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="652.4" cy="200.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="639.1" y1="221.5" x2="661.8" y2="221.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="661.8" cy="221.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="656.1" cy="221.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="639.1" cy="221.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="669.4" y1="242.5" x2="722.3" y2="242.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="722.3" cy="242.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="703.4" cy="242.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="669.4" cy="242.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="667.5" y1="263.5" x2="705.3" y2="263.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="705.3" cy="263.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="684.5" cy="263.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="667.5" cy="263.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="658.0" y1="284.5" x2="724.2" y2="284.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="724.2" cy="284.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="703.4" cy="284.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="658.0" cy="284.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="140" y="380" font-size="12.5" font-weight="600" fill="#0b0b0b">Harmful generation</text>
+<line x1="140.0" y1="389" x2="140.0" y2="578" stroke="#c3c2b7" stroke-width="1"/>
+<text x="140.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
+<line x1="192.0" y1="389" x2="192.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="192.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
+<line x1="244.0" y1="389" x2="244.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="244.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
+<line x1="296.0" y1="389" x2="296.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="296.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
+<line x1="348.0" y1="389" x2="348.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="348.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
+<text x="130" y="403.3" font-size="11" fill="#52514e" text-anchor="end">GPT-6 Astra</text>
+<line x1="145.7" y1="399.5" x2="202.4" y2="399.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="202.4" cy="399.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="151.7" cy="399.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="145.7" cy="399.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="424.3" font-size="11" fill="#52514e" text-anchor="end">Claude Sonnet 5</text>
+<line x1="140.0" y1="420.5" x2="173.1" y2="420.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="173.1" cy="420.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="140.0" cy="420.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="140.0" cy="420.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="445.3" font-size="11" fill="#52514e" text-anchor="end">Kimi K3</text>
+<line x1="140.0" y1="441.5" x2="215.6" y2="441.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="215.6" cy="441.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="149.7" cy="441.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="140.0" cy="441.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="466.3" font-size="11" fill="#52514e" text-anchor="end">GLM 5.3</text>
-<line x1="141.9" y1="462.5" x2="236.4" y2="462.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="236.4" cy="462.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="147.8" cy="462.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="141.9" cy="462.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="487.3" font-size="11" fill="#52514e" text-anchor="end">GPT-5.5</text>
-<line x1="140.0" y1="483.5" x2="175.9" y2="483.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="175.9" cy="483.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="145.8" cy="483.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="466.3" font-size="11" fill="#52514e" text-anchor="end">Gemini 3.8 Flash</text>
+<line x1="155.3" y1="462.5" x2="281.8" y2="462.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="281.8" cy="462.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="208.0" cy="462.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="155.3" cy="462.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="487.3" font-size="11" fill="#52514e" text-anchor="end">Claude Opus 5</text>
+<line x1="140.0" y1="483.5" x2="227.5" y2="483.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="227.5" cy="483.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="140.0" cy="483.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="140.0" cy="483.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="508.3" font-size="11" fill="#52514e" text-anchor="end">GPT-5.4-mini</text>
-<line x1="141.9" y1="504.5" x2="157.0" y2="504.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="157.0" cy="504.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="147.7" cy="504.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="508.3" font-size="11" fill="#52514e" text-anchor="end">GLM 5.3</text>
+<line x1="141.9" y1="504.5" x2="236.4" y2="504.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="236.4" cy="504.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="147.8" cy="504.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="141.9" cy="504.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="130" y="529.3" font-size="11" fill="#52514e" text-anchor="end">Gemini 3.1 Pro</text>
-<line x1="157.0" y1="525.5" x2="264.8" y2="525.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="264.8" cy="525.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="200.3" cy="525.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="157.0" cy="525.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="382" y="359" font-size="12.5" font-weight="600" fill="#0b0b0b">Sneaking</text>
-<line x1="382.0" y1="368" x2="382.0" y2="536" stroke="#c3c2b7" stroke-width="1"/>
-<text x="382.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
-<line x1="434.0" y1="368" x2="434.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="434.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
-<line x1="486.0" y1="368" x2="486.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="486.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
-<line x1="538.0" y1="368" x2="538.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="538.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
-<line x1="590.0" y1="368" x2="590.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="590.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
-<line x1="408.5" y1="378.5" x2="433.1" y2="378.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="433.1" cy="378.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="414.1" cy="378.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="408.5" cy="378.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="389.6" y1="399.5" x2="404.7" y2="399.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="404.7" cy="399.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="402.8" cy="399.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="389.6" cy="399.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="389.6" y1="420.5" x2="425.5" y2="420.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="425.5" cy="420.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="410.4" cy="420.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="389.6" cy="420.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="391.5" y1="441.5" x2="412.3" y2="441.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="412.3" cy="441.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="529.3" font-size="11" fill="#52514e" text-anchor="end">GPT-5.5</text>
+<line x1="140.0" y1="525.5" x2="175.9" y2="525.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="175.9" cy="525.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="145.8" cy="525.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="140.0" cy="525.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="550.3" font-size="11" fill="#52514e" text-anchor="end">GPT-5.4-mini</text>
+<line x1="141.9" y1="546.5" x2="157.0" y2="546.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="157.0" cy="546.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="147.7" cy="546.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="141.9" cy="546.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="130" y="571.3" font-size="11" fill="#52514e" text-anchor="end">Gemini 3.1 Pro</text>
+<line x1="157.0" y1="567.5" x2="264.8" y2="567.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="264.8" cy="567.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="200.3" cy="567.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="157.0" cy="567.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="382" y="380" font-size="12.5" font-weight="600" fill="#0b0b0b">Sneaking</text>
+<line x1="382.0" y1="389" x2="382.0" y2="578" stroke="#c3c2b7" stroke-width="1"/>
+<text x="382.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
+<line x1="434.0" y1="389" x2="434.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="434.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
+<line x1="486.0" y1="389" x2="486.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="486.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
+<line x1="538.0" y1="389" x2="538.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="538.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
+<line x1="590.0" y1="389" x2="590.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="590.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
+<line x1="393.3" y1="399.5" x2="406.6" y2="399.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="406.6" cy="399.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="395.2" cy="399.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="393.3" cy="399.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="408.5" y1="420.5" x2="433.1" y2="420.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="433.1" cy="420.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="414.1" cy="420.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="408.5" cy="420.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="389.6" y1="441.5" x2="404.7" y2="441.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="404.7" cy="441.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="402.8" cy="441.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="391.5" cy="441.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="393.3" y1="462.5" x2="412.3" y2="462.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="412.3" cy="462.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="399.0" cy="462.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="393.3" cy="462.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="423.6" y1="483.5" x2="448.1" y2="483.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="448.1" cy="483.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="431.2" cy="483.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="423.6" cy="483.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="429.3" y1="504.5" x2="452.0" y2="504.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="452.0" cy="504.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="434.9" cy="504.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="429.3" cy="504.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="383.9" y1="525.5" x2="423.6" y2="525.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="423.6" cy="525.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="419.8" cy="525.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="383.9" cy="525.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="624" y="359" font-size="12.5" font-weight="600" fill="#0b0b0b">Sycophancy</text>
-<line x1="624.0" y1="368" x2="624.0" y2="536" stroke="#c3c2b7" stroke-width="1"/>
-<text x="624.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
-<line x1="676.0" y1="368" x2="676.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="676.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
-<line x1="728.0" y1="368" x2="728.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="728.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
-<line x1="780.0" y1="368" x2="780.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="780.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
-<line x1="832.0" y1="368" x2="832.0" y2="536" stroke="#e1e0d9" stroke-width="1"/>
-<text x="832.0" y="552" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
-<circle cx="624.0" cy="378.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="624.0" cy="378.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="624.0" cy="378.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="624.0" y1="399.5" x2="625.9" y2="399.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="625.9" cy="399.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="389.6" cy="441.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="389.6" y1="462.5" x2="425.5" y2="462.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="425.5" cy="462.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="410.4" cy="462.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="389.6" cy="462.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="391.5" y1="483.5" x2="412.3" y2="483.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="412.3" cy="483.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="402.8" cy="483.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="391.5" cy="483.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="393.3" y1="504.5" x2="412.3" y2="504.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="412.3" cy="504.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="399.0" cy="504.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="393.3" cy="504.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="423.6" y1="525.5" x2="448.1" y2="525.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="448.1" cy="525.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="431.2" cy="525.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="423.6" cy="525.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="429.3" y1="546.5" x2="452.0" y2="546.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="452.0" cy="546.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="434.9" cy="546.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="429.3" cy="546.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="383.9" y1="567.5" x2="423.6" y2="567.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="423.6" cy="567.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="419.8" cy="567.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="383.9" cy="567.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="624" y="380" font-size="12.5" font-weight="600" fill="#0b0b0b">Sycophancy</text>
+<line x1="624.0" y1="389" x2="624.0" y2="578" stroke="#c3c2b7" stroke-width="1"/>
+<text x="624.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">0%</text>
+<line x1="676.0" y1="389" x2="676.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="676.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">25%</text>
+<line x1="728.0" y1="389" x2="728.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="728.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">50%</text>
+<line x1="780.0" y1="389" x2="780.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="780.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">75%</text>
+<line x1="832.0" y1="389" x2="832.0" y2="578" stroke="#e1e0d9" stroke-width="1"/>
+<text x="832.0" y="594" font-size="10" fill="#898781" text-anchor="middle" font-variant-numeric="tabular-nums">100%</text>
 <circle cx="624.0" cy="399.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="624.0" cy="399.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="399.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="624.0" y1="420.5" x2="625.9" y2="420.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="625.9" cy="420.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="625.9" cy="420.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="624.0" cy="420.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="624.0" cy="420.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="420.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="624.0" y1="441.5" x2="625.9" y2="441.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="625.9" cy="441.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="441.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="624.0" cy="441.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="441.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="624.0" cy="462.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="624.0" cy="462.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="624.0" y1="462.5" x2="625.9" y2="462.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="625.9" cy="462.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="625.9" cy="462.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="462.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="483.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="483.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
@@ -273,9 +292,15 @@
 <circle cx="624.0" cy="504.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="504.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="504.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<line x1="624.0" y1="525.5" x2="656.1" y2="525.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
-<circle cx="656.1" cy="525.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
-<circle cx="641.0" cy="525.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="624.0" cy="525.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="624.0" cy="525.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
 <circle cx="624.0" cy="525.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
-<text x="22" y="588" font-size="10.5" fill="#898781">Models ordered by three-judge mean (cleanest first). Rates exclude unscoreable (&#8722;1) verdicts. Full values in the tables above.</text>
+<circle cx="624.0" cy="546.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="624.0" cy="546.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="624.0" cy="546.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<line x1="624.0" y1="567.5" x2="656.1" y2="567.5" stroke="#c3c2b7" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="656.1" cy="567.5" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="641.0" cy="567.5" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="624.0" cy="567.5" r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/>
+<text x="22" y="630" font-size="10.5" fill="#898781">Models ordered by three-judge mean flag rate (lowest first). Rates exclude unscoreable (&#8722;1) verdicts. Full values in the tables above.</text>
 </svg>

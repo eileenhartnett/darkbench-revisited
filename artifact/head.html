@@ -1,0 +1,342 @@
+<title>What a Benchmark Replication Reveals About LLM Evaluation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<style>
+  :root{
+    --paper:#f6f5f1; --paper-raised:#ffffff; --paper-sunken:#eeece4;
+    --ink:#1c1b18; --ink-soft:#5c584e; --ink-faint:#8b8676;
+    --line:#ddd7c9; --line-soft:#e9e4d8;
+    --accent:#33507a; --accent-soft:#e9eef6; --accent-strong:#233a5c;
+    --good:#3f7d5c; --good-soft:#e6f0ea;
+    --warn:#a8791e; --warn-soft:#f7eedb;
+    --bad:#ae5038; --bad-soft:#f6e8e3;
+    --shadow: 0 1px 2px rgba(28,27,24,0.06), 0 6px 20px -8px rgba(28,27,24,0.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#16171a; --paper-raised:#1e2023; --paper-sunken:#111214;
+      --ink:#ece8de; --ink-soft:#a39d8f; --ink-faint:#726d61;
+      --line:#34363a; --line-soft:#2a2c30;
+      --accent:#8fb0e0; --accent-soft:#1f2b3c; --accent-strong:#b7cdec;
+      --good:#79cc9e; --good-soft:#183226;
+      --warn:#e0b567; --warn-soft:#332a17;
+      --bad:#e2917a; --bad-soft:#33201b;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#16171a; --paper-raised:#1e2023; --paper-sunken:#111214;
+    --ink:#ece8de; --ink-soft:#a39d8f; --ink-faint:#726d61;
+    --line:#34363a; --line-soft:#2a2c30;
+    --accent:#8fb0e0; --accent-soft:#1f2b3c; --accent-strong:#b7cdec;
+    --good:#79cc9e; --good-soft:#183226;
+    --warn:#e0b567; --warn-soft:#332a17;
+    --bad:#e2917a; --bad-soft:#33201b;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:16px; line-height:1.6;
+  }
+  ::selection{ background:var(--accent-soft); color:var(--accent-strong); }
+
+  a{ color:var(--accent-strong); text-decoration-color:var(--line); text-underline-offset:2px; }
+  a:hover{ text-decoration-color:currentColor; }
+
+  h1,h2,h3,h4{
+    font-family:'Newsreader', Georgia, serif; font-weight:600;
+    color:var(--ink); text-wrap:balance; line-height:1.22;
+  }
+
+  code, pre, .mono, .kappa, td, th{ font-variant-numeric:tabular-nums; }
+  code{
+    font-family:'IBM Plex Mono', ui-monospace, monospace; font-size:0.86em;
+    background:var(--paper-sunken); border:1px solid var(--line-soft);
+    border-radius:4px; padding:0.1em 0.35em; color:var(--accent-strong);
+  }
+  pre code{ background:none; border:none; padding:0; }
+  pre{
+    background:var(--paper-sunken); border:1px solid var(--line-soft);
+    border-radius:8px; padding:14px 16px; overflow-x:auto;
+  }
+
+  /* ---------- shell ---------- */
+  .shell{
+    display:grid; grid-template-columns:250px minmax(0,1fr); gap:0;
+    max-width:1160px; margin:0 auto;
+  }
+  @media (max-width:920px){ .shell{ grid-template-columns:1fr; } }
+
+  nav.toc{
+    position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto;
+    padding:28px 18px 40px 28px; border-right:1px solid var(--line);
+  }
+  @media (max-width:920px){
+    nav.toc{ position:static; height:auto; border-right:none; border-bottom:1px solid var(--line); padding:18px 24px; }
+  }
+  .toc-brand{
+    font-family:'Newsreader', serif; font-weight:600; font-size:1.05rem;
+    margin-bottom:4px;
+  }
+  .toc-meta{ font-size:0.78rem; color:var(--ink-faint); margin-bottom:22px; }
+  .toc-list{ list-style:none; margin:0; padding:0; font-size:0.87rem; }
+  .toc-list .toc-part{
+    text-transform:uppercase; letter-spacing:0.06em; font-size:0.7rem;
+    color:var(--ink-faint); font-weight:600; margin:16px 0 6px;
+  }
+  .toc-list .toc-part:first-child{ margin-top:0; }
+  .toc-list li a{
+    display:block; padding:5px 0 5px 10px; border-left:2px solid transparent;
+    color:var(--ink-soft); text-decoration:none;
+  }
+  .toc-list li a:hover, .toc-list li a.active{
+    color:var(--ink); border-left-color:var(--accent);
+  }
+  @media (max-width:920px){
+    .toc-list{ columns:2; column-gap:24px; }
+    .toc-list .toc-part{ break-after:avoid; break-inside:avoid; }
+  }
+
+  main{ min-width:0; padding:0 0 100px; }
+  .reading{ max-width:748px; margin:0 auto; padding:0 32px; }
+  @media (max-width:600px){ .reading{ padding:0 20px; } }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:56px 0 30px; }
+  .hero .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size:0.74rem; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--accent-strong); margin-bottom:14px;
+  }
+  .hero h1{ font-size:2.5rem; margin:0 0 14px; letter-spacing:-0.01em; }
+  .hero .subtitle{
+    font-family:'Newsreader', serif; font-size:1.45rem; font-weight:500; color:var(--ink-soft);
+    margin:-6px 0 16px; letter-spacing:-0.005em;
+  }
+  .hero .dek{
+    font-size:1.1rem; color:var(--ink-soft); max-width:640px; margin:0 0 6px;
+    font-family:'Newsreader', serif; font-style:italic; font-weight:500;
+  }
+  .hero .byline{ font-size:0.85rem; color:var(--ink-faint); margin-top:16px; }
+
+  .hero figure.chart{ margin-top:30px; }
+  .stat-strip{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+    border-radius:10px; overflow:hidden; margin:30px 0 8px; box-shadow:var(--shadow);
+  }
+  @media (max-width:600px){ .stat-strip{ grid-template-columns:repeat(2,1fr); } }
+  .stat-strip div{ background:var(--paper-raised); padding:16px 14px; }
+  .stat-strip .n{
+    font-family:'IBM Plex Mono', monospace; font-size:1.5rem; font-weight:600;
+    color:var(--accent-strong); display:block; line-height:1.1;
+  }
+  .stat-strip .l{ font-size:0.74rem; color:var(--ink-faint); margin-top:4px; display:block; }
+
+  /* ---------- executive summary card ---------- */
+  .findings{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
+    padding:26px 28px; margin:36px 0; box-shadow:var(--shadow);
+  }
+  .findings h2{ font-size:1.05rem; margin:0 0 4px; }
+  .findings > p:first-of-type{ color:var(--ink-soft); margin-top:0; }
+  .findings ul{ margin:16px 0 0; padding-left:0; list-style:none; }
+  .findings li{
+    position:relative; padding:10px 0 10px 22px; border-top:1px solid var(--line-soft);
+  }
+  .findings li:first-child{ border-top:none; padding-top:4px; }
+  .findings li::before{
+    content:"·"; position:absolute; left:0; top:10px; color:var(--accent);
+  }
+  .findings .takeaway{
+    margin-top:18px; padding-top:16px; border-top:1px solid var(--line-soft);
+    font-size:0.94rem;
+  }
+  .findings .howto{ margin:16px 0 0; font-size:0.88rem; color:var(--ink-soft); }
+  .findings > p + p{ margin-top:10px; }
+  .findings .takeaway .tag{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:0.68rem;
+    letter-spacing:0.05em; text-transform:uppercase; color:var(--accent-strong);
+    background:var(--accent-soft); border-radius:4px; padding:2px 6px; margin-right:8px;
+    vertical-align:1px;
+  }
+
+  /* ---------- rendered markdown body ---------- */
+  #content{ margin-top:8px; }
+  #content h1{
+    font-size:1.85rem; margin:64px 0 6px; padding-top:20px; border-top:1px solid var(--line);
+  }
+  #content > h1:first-child{ border-top:none; padding-top:0; margin-top:0; }
+  #content h2{ font-size:1.32rem; margin:40px 0 14px; }
+  #content h3{ font-size:1.08rem; margin:28px 0 10px; color:var(--ink); }
+  #content h1 + h2{ margin-top:20px; }
+  #content p{ margin:0 0 15px; }
+  #content ul, #content ol{ margin:0 0 15px; padding-left:1.35em; }
+  #content li{ margin:0 0 7px; }
+  #content li > ul, #content li > ol{ margin-top:7px; }
+  #content strong{ font-weight:600; }
+  #content blockquote{
+    margin:0 0 15px; padding:2px 0 2px 16px; border-left:3px solid var(--accent);
+    color:var(--ink-soft); font-family:'Newsreader', serif; font-size:1rem; font-style:italic;
+  }
+  #content blockquote p{ margin-bottom:6px; }
+  #content hr{ border:none; border-top:1px solid var(--line); margin:0; height:0; }
+  /* the writeup uses doubled hr as section breaks -- collapse visually */
+  #content hr + hr{ display:none; }
+  #content img{ border-radius:10px; border:1px solid var(--line); box-shadow:var(--shadow); }
+  #content em{ color:var(--ink); }
+
+  .table-wrap{ overflow-x:auto; margin:0 0 18px; border:1px solid var(--line); border-radius:8px; }
+  #content table{
+    border-collapse:collapse; width:100%; font-size:0.87rem; min-width:480px;
+  }
+  #content th, #content td{
+    padding:8px 12px; text-align:left; border-bottom:1px solid var(--line-soft);
+    white-space:nowrap;
+  }
+  #content th{
+    background:var(--paper-sunken); font-family:'IBM Plex Mono',monospace; font-weight:600;
+    font-size:0.72rem; text-transform:uppercase; letter-spacing:0.03em; color:var(--ink-soft);
+  }
+  #content td{ font-family:'IBM Plex Mono', monospace; font-size:0.85rem; color:var(--ink);}
+  #content tr:last-child td{ border-bottom:none; }
+  #content tr:hover td{ background:var(--paper-sunken); }
+  #content td:first-child, #content th:first-child{ font-family:'IBM Plex Sans', sans-serif; white-space:normal; min-width:140px; }
+
+  .verdict-chip{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:0.72rem;
+    font-weight:600; padding:2px 8px; border-radius:20px; letter-spacing:0.01em;
+  }
+  .verdict-survives{ background:var(--good-soft); color:var(--good); }
+  .verdict-partial{ background:var(--warn-soft); color:var(--warn); }
+  .verdict-fails{ background:var(--bad-soft); color:var(--bad); }
+
+  /* ---------- section numbering, callouts, collapsible supplements ---------- */
+  #content h2 .num, #content h3 .num, details.supp summary .num, .findings h2 .num{
+    font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:0.72em;
+    color:var(--accent-strong); letter-spacing:0.04em; margin-right:0.6em; vertical-align:0.12em;
+  }
+  #content blockquote.callout{
+    font-family:'IBM Plex Sans', system-ui, sans-serif; font-style:normal; font-size:0.97rem;
+    color:var(--ink); background:var(--accent-soft); border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0; padding:12px 16px; margin:18px 0;
+  }
+  #content blockquote.callout p{ margin:0; }
+  #content blockquote.callout p + p{ margin-top:8px; }
+  #content blockquote.callout strong:first-child{
+    font-family:'IBM Plex Mono', monospace; font-size:0.7rem; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--accent-strong); display:block; margin-bottom:4px;
+  }
+  details.supp{
+    border:1px solid var(--line); border-radius:8px; margin:0 0 10px; background:var(--paper-raised);
+  }
+  details.supp summary{
+    cursor:pointer; list-style:none; padding:11px 14px; font-weight:600; font-size:0.95rem;
+    color:var(--ink); display:flex; align-items:baseline; gap:6px;
+  }
+  details.supp summary::-webkit-details-marker{ display:none; }
+  details.supp summary::before{
+    content:"▸"; color:var(--ink-faint); font-size:0.8em; width:1em; flex:none; transition:transform .15s;
+  }
+  details.supp[open] summary::before{ transform:rotate(90deg); }
+  details.supp summary:hover{ background:var(--paper-sunken); border-radius:8px; }
+  details.supp summary:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; border-radius:8px; }
+  details.supp .supp-body{ padding:4px 14px 12px; border-top:1px solid var(--line-soft); }
+  details.supp .supp-body > :first-child{ margin-top:10px; }
+  #content ul li, #content ol li{ margin-bottom:5px; }
+  #content h2{ margin-top:52px; }
+  #content h3{ margin-top:30px; }
+
+  /* ---------- data charts (drawn by tail.html from #chart-data) ---------- */
+  figure.chart{
+    margin:6px 0 22px; padding:18px 18px 12px; color:var(--ink-soft);
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:10px;
+    box-shadow:var(--shadow); overflow-x:auto;
+  }
+  figure.chart svg{ width:100%; height:auto; display:block; font-family:'IBM Plex Sans', system-ui, sans-serif; }
+  figure.chart .chart-title{
+    font-family:'Newsreader', serif; font-weight:600; font-size:1rem; color:var(--ink); margin:0 0 2px;
+  }
+  figure.chart figcaption{ font-size:0.8rem; color:var(--ink-faint); margin-top:8px; line-height:1.45; }
+  figure.chart .legend{ display:flex; flex-wrap:wrap; gap:14px; font-size:0.78rem; margin:6px 0 10px; }
+  figure.chart .legend span::before{
+    content:""; display:inline-block; width:9px; height:9px; border-radius:50%;
+    background:var(--sw); margin-right:6px; vertical-align:-0.5px;
+  }
+  figure.chart .legend .hollow::before{ background:var(--paper-raised); box-shadow:inset 0 0 0 2px var(--sw); }
+
+  footer.colophon{
+    max-width:748px; margin:60px auto 0; padding:24px 32px 0; border-top:1px solid var(--line);
+    font-size:0.82rem; color:var(--ink-faint);
+  }
+
+  [hidden]{ display:none !important; }
+</style>
+
+<div class="shell">
+  <nav class="toc" id="toc">
+    <div class="toc-brand">What a replication reveals</div>
+    <div class="toc-meta">DarkBench Revisited, as a methods paper</div>
+    <ul class="toc-list" id="toc-list"><!-- built by JS --></ul>
+  </nav>
+
+  <main>
+    <div class="reading">
+      <div class="hero">
+        <div class="kicker">BlueDot Technical AI Safety Project · 2026</div>
+        <h1>What a Benchmark Replication Reveals About LLM Evaluation</h1>
+        <p class="subtitle">Lessons on judge reliability, measurement validity, and evaluating model behavior</p>
+        <p class="byline">Eileen Hartnett</p>
+      </div>
+
+      <section class="findings">
+        <h2 id="in-brief">Abstract</h2>
+        <p>I re-ran DarkBench, a benchmark published at ICLR 2025 that uses 660 prompts to try
+          to make a chatbot manipulate the user, on nine current models and three models from
+          2024, with three current LLM judges. The original tested models from 2024 and scored
+          them with judges from 2024. Rates are lower than the paper reported (21% against 48%), but most
+          of that gap is the judges, not the models: the same 2024 models score about half their
+          published figure under my judges. The one change that survives every check is
+          sycophancy, as DarkBench defines it, which was present in early-2024 models and is
+          absent now.</p>
+        <p>Along the way the study measured things benchmark papers usually do not: how much a
+          judge disagrees with itself (little, κ 0.87 to 0.96), how much judges disagree with each
+          other (a lot, κ 0.52 to 0.57), and whether a human agrees with any of them (partly, and
+          it depends on the category).</p>
+        <p>None of this diminishes DarkBench. It was an early, careful attempt to measure
+          something that matters, and its authors validated their judges against human labels
+          when few did. What has changed since is the science of evaluation itself: the field
+          now knows more about what sways a judged score and what weakens construct validity.
+          This paper turns the replication into eight lessons about those sources of variance
+          and the research-design choices that account for them. The DarkBench numbers are the
+          worked example inside each lesson, not the target. None of the individual lessons is
+          new; each is already established somewhere in the evaluation literature. What this
+          adds is working through all of them on a single benchmark that people are still
+          citing and still running, with real numbers attached to what each one turns up.</p>
+        <div class="takeaway">
+          <span class="tag">Takeaway</span>Before trusting an evaluation that uses LLM judges,
+          test each judge against itself, not only against other judges. Moderate agreement
+          between judges looks the same whether the judges are unreliable or the categories are
+          vague. Only a self-consistency check tells the two apart.
+        </div>
+        <p class="howto">Each lesson has the same four parts: the idea, what happened here, what
+          to look out for, and what I did and did not do about it. The checklist near the end is
+          the part to print. Numbers carry a pointer in brackets to the section of the full
+          writeup (W), the supplement (S), or the CSV they come from. Appendix A is the full
+          methods; Appendix B holds every table.</p>
+      </section>
+
+      <div id="content"><!-- rendered from markdown below --></div>
+
+      <footer class="colophon">
+        Source data, scripts and raw logs: <code>data/results/rates.csv</code>,
+        <code>analyze.py</code>, <code>score_test_retest.py</code>, <code>score_handlabels.py</code>.
+        Every claim attributed to Kran et al. (arXiv:2503.10728, ICLR 2025) was checked directly
+        against the paper PDF on 2026-09-22. Full running log of decisions, corrections and
+        bugs: <code>NOTES.md</code>.
+      </footer>
+    </div>
+  </main>
+</div>

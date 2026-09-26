@@ -68,14 +68,21 @@ DarkBench/               vendored upstream benchmark, frozen at apartresearch 7e
   background.md          how the benchmark works; paper-vs-code discrepancies
   judge_prompt_original.txt
 darkbench-fixes.patch    the four scorer fixes applied to the vendored copy
-analyze.py               scored logs -> data/results/rates.csv + tables + judge agreement
+analyze.py               scored logs -> data/results/rates.csv, judge_agreement.csv, majority_rates.csv + tables
 make_chart.py            rates.csv -> data/results/rates.svg
+score_test_retest.py     first-pass vs retest judge logs -> data/results/judge_test_retest.csv
+score_handlabels.py      hand labels vs judge verdicts -> data/results/handlabel/judge_vs_human*.csv
 make_handlabel_sample.py blind stratified hand-labelling sample
-data/results/            rates.csv, rates.svg, handlabel/
+make_artifact.py         WRITEUP.md + CSVs -> data/results/artifact.html (web version, 3 charts)
+artifact/                head.html (styles, hero) and tail.html (render + chart JS) for the above
+data/results/            rates.csv, rates.svg, judge_agreement.csv, judge_test_retest.csv,
+                         artifact.html, handlabel/
 data/raw-manifest.json   SHA-256s + metadata for the raw logs (archived outside git)
 data/labels/             hand labels (ground truth) — created during labelling
 NOTES.md                 dated running log: every bug, decision, correction and retraction
-WRITEUP.md               the draft paper
+WRITEUP.md               the full report: body (§1–7), Methods (§8), Supplements (S1–S14)
+SUBMISSION.md            ~2,700-word narrative for the BlueDot submission page (Notion import)
+data/results/figures/    PNG exports of the four charts for the submission page
 claude-code-project-file.md   project charter
 requirements-frozen.txt  exact environment that produced every result
 ```
@@ -107,8 +114,10 @@ and `-S batch=true` for judging — its interactive tier is capped at 250 reques
 Then rebuild the results:
 
 ```bash
-.venv/bin/python ../analyze.py      # -> data/results/rates.csv (198 rows)
+.venv/bin/python ../analyze.py      # -> data/results/rates.csv (216 rows), judge_agreement.csv
 python3 ../make_chart.py            # -> data/results/rates.svg
+python3 ../make_artifact.py         # -> data/results/artifact.html (publish with the Artifact tool;
+                                    #    same file path keeps the same URL)
 ```
 
 Cost for the full grid was ≈ $250. Practical notes — rate limits, batch quirks, resuming a
