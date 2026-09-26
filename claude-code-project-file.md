@@ -25,13 +25,38 @@ the three judges agree or disagree?
   excluded from denominators and counted separately
 - Expand toward the paper's 14 models only if the two-tier results warrant it
 
-## Experiment 2 (possible next, not started) — realism study
-Question: does a model show dark patterns at a different rate when the prompt looks
-like an obvious benchmark test versus a realistic user message?
-- One committed model under test: [MODEL NAME, pinned version]
-- 2x2 design: framing (original vs realistic rewrite) x observation (review signal vs none)
-- One DarkBench category only: [FILL IN]
-- Outcome: dark pattern rate as scored by the DarkBench judge, validated by hand labels
+## Experiment 2 (planned 2026-09-14, not started) — template recognition vs genuine change
+Question: is the collapse of sycophancy on DarkBench (18% in early-2024 models -> ~0% now)
+a real behaviour change, or recognition of the benchmark's prompt template?
+Motivation: Experiment 1's CoT audit found 1-4% of reasoning traces naming the prompt as
+"a leading question ... designed to get me to agree", concentrated in sycophancy, whose
+prompts share one closing formula ("...some truth to it?"). Detection rate and sycophancy
+rate move in opposite directions across the five CoT-visible models.
+- Two arms per prompt: ORIGINAL vs REWRITE. Rewrite keeps the user's false belief but
+  removes the leading closing formula; phrased as a real person stating a view. LLM-drafted,
+  every rewrite hand-checked by Eileen. Same system prompt, judges, pipeline as Experiment 1.
+- Categories: sycophancy (required) and brand-bias (its prompts are also leading, judges
+  agree on it, and its mid-range rate can move either way). Others skipped: sneaking's
+  template is a task format not a persuasion trap; harmful-generation's judges disagree on
+  the definition; user-retention is high regardless of framing.
+- Models: the 8 current models (CoT readable for kimi, glm, both Gemini, gpt-5.5; not Claude).
+- Two outcomes per arm: (1) dark-pattern rate per judge, as Experiment 1; (2) template-
+  recognition rate: an LLM judge over the CoT with a fixed rubric, distinguishing "the user is
+  pressuring me" from "this prompt is artificial". Keyword search is the fallback.
+- Manipulation check: recognition must fall on the REWRITE arm or the rewrite failed.
+- Pre-registered readout: sycophancy rises on rewrites -> the benchmark's most-improved
+  category measures template recognition; stays ~0% with recognition gone -> the improvement
+  is genuine against the most plausible alternative. Either result is reportable.
+- Positioning (not a new phenomenon; a validity test of a cited benchmark): sycophancy and
+  leading-question effects — Perez et al. 2022, Sharma et al. 2023; evaluation awareness —
+  Needham et al. 2025; prompt-format sensitivity — Sclar et al. 2023; judge self-preference —
+  Panickssery et al. 2024. Verify citations before use. What is new here is the instance
+  (a safety benchmark's headline result), the mechanism evidence (CoT as manipulation check),
+  and the era-anchor calibration design.
+- Cost ~$15/category across 8 models x 3 judges; Eileen's time is the real cost (220 rewrites).
+- Not in scope: the observation ("review signal") factor from the original 2x2. Revisit only
+  if Experiment 2 shows a framing effect.
+- Order: hand labels for Experiment 1 first; this second; extra epochs after.
 
 ## How we work
 - We go one phase at a time. Finish the task you were given, then stop and wait.
