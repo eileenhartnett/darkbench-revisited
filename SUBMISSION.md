@@ -8,7 +8,7 @@
 
 I re-ran DarkBench, a benchmark for manipulative chatbot behaviour published at ICLR 2025 that tested 2024 models with 2024 judges, on nine current frontier models using three current LLM judges, and put the judges themselves under test. Dark-pattern rates are lower than the paper reported (21% vs 48%), but most of that gap disappears when three surviving 2024 models are run through the identical 2026 pipeline: under my judges they score about half their published figures, and the best of them lands about three points above today's average. The one change that clears every confidence interval is sycophancy, as DarkBench defines it, which was present in early-2024 models and is gone now. The methodological result matters more than the leaderboard: three careful LLM judges agree with each other at κ ≈ 0.5 but with *themselves* at κ 0.87 to 0.96, so the disagreement is about what the categories mean, not judge noise, and two of the six categories cannot be scored consistently as written.
 
-![Dark-pattern rate per model, then and now. Left: the paper's 14 models under its 2024 judges. Right: my 9 models under my 2026 judges. The three bold models on the left are still available; the open dot is the paper's score for them, the filled dot is the same model under my judges.](figures/hero.png)
+![Dark-pattern rate per model, then and now. Left: the paper's 14 models under its 2024 judges. Right: my 9 models under my 2026 judges. The three bold models on the left are still available; the open dot is the paper's score for them, the filled dot is the same model under my judges.](data/results/figures/hero.png)
 
 ### Background
 
@@ -32,7 +32,7 @@ Every figure below uses Wilson 95% confidence intervals at the honest denominato
 
 ### The Rates Are Lower, But the Anchors Shrink the Story
 
-![Overall flagged rate per model with 95% intervals, one dot per judge. The three 2024 anchors, scored by the same judges, sit at the bottom.](figures/ci.png)
+![Overall flagged rate per model with 95% intervals, one dot per judge. The three 2024 anchors, scored by the same judges, sit at the bottom.](data/results/figures/ci.png)
 
 The headline comparison is 48% then, 21% now. It is also the wrong comparison. The three 2024 models that are still served score 61%, 48% and 55% in the paper; under my judges the identical models score 34%, 24% and 28%. Roughly half of each published figure disappears just by changing who does the judging, before any model has changed. Under the same three judges, gpt-3.5-turbo from January 2024 is flagged on 34% of responses, 11 to 15 points above the current-model mean under every judge, so the direction is not a judge artifact. But gpt-4-turbo from April 2024 comes in at 24%, against a current mean of 20.8%. The gap to the *best* 2024 model is about three points, inside the intervals under two of the three judges though not under Opus 4.6. What survives under every judge is that the oldest model is meaningfully worse, not that rates halved.
 
@@ -42,7 +42,7 @@ The largest single movement in the study is within one family and one generation
 
 ### Sycophancy Is the One Change That Clears the Intervals
 
-![From the 2024 anchors to the pooled 2026 models, per category, with 95% intervals. Only sycophancy's endpoints separate under every judge.](figures/anchors.png)
+![From the 2024 anchors to the pooled 2026 models, per category, with 95% intervals. Only sycophancy's endpoints separate under every judge.](data/results/figures/anchors.png)
 
 Tracing each category from gpt-3.5-turbo through gpt-4-turbo and gpt-4o to the pooled current models, only one line clearly falls: sycophancy, from 11 to 30% (depending on judge) to near zero. Every current model except Gemini 3.1 Pro scores 0–1% under all three judges. The endpoints do not overlap under any judge. The path between them does, since every adjacent pair of points overlaps, so the data are equally consistent with a single step change somewhere in 2024 as with a gradual decline.
 
@@ -52,7 +52,7 @@ Two qualifications. Sycophancy has not vanished everywhere: Gemini 3.1 Pro still
 
 ### The Judges Disagree With Each Other, Not With Themselves
 
-![Each judge's agreement with itself on a second pass (filled) versus with the other two judges (hollow). The shaded band is the inter-judge range.](figures/kappa.png)
+![Each judge's agreement with itself on a second pass (filled) versus with the other two judges (hollow). The shaded band is the inter-judge range.](data/results/figures/kappa.png)
 
 Pooled over 5,904 current-model responses, the three judges agree pairwise at 83–86%, Cohen's κ 0.52 to 0.57, "moderate", far above chance and well short of interchangeable. The disagreement is category-shaped: κ 0.60 on user retention, 0.24 on harmful generation. The obvious explanation is that LLM judges are noisy. The test–retest says otherwise. Re-scoring the same responses a second time, each judge agrees with itself at κ 0.87–0.96, reproduced to the second decimal across two different models' outputs. Temperature-0 judges are not deterministic, since Opus and Gemini each flipped about 2% of verdicts, but that effect is an order of magnitude smaller than the gap between judges. What the judges disagree about is what the categories mean.
 
@@ -62,14 +62,14 @@ The original paper did validate its own judges against 1,680 human labels, at κ
 
 Worth crediting where the follow-up work does better: DarkBench+ uses three independent human annotators, reports agreement between those humans with Fleiss' Kappa, and validates roughly 23% of its dataset by stratified sampling. That is the validation design this study recommends and does not itself meet. It does not, however, report any test-retest figure for its judges, and its annotators sit in the same families as many of the models they grade, with GPT-4o judging GPT models, Gemini judging Gemini and GLM judging GLM, with no check for the effect. Its leaderboard of nearly 40 models is also reported to two decimal places with no confidence intervals, at roughly 100 items per cell.
 
-### Two Categories Are Not Measurable As Defined
+### Two Categories Cannot Be Scored Consistently As Written
 
 | Category | Verdict | Basis |
 |---|---|---|
 | User retention | **Usable** | Majority-vote κ ≈ 0.70–0.84 against hand labels; large, robust model differences |
 | Anthropomorphization | **Usable** | Majority-vote κ 0.83; the Opus 5 finding clears every interval |
-| Sycophancy | **Saturated** | Judge is fine (κ 0.85); the category no longer separates current models |
-| Harmful generation | **Broken as specified** | No judge exceeds κ 0.40 under either reading the definition supports |
+| Sycophancy | **Maxed out, no longer useful** | Judge is fine (κ 0.85); the category no longer separates current models |
+| Harmful generation | **Ambiguous as written** | No judge exceeds κ 0.40 under either reading the definition supports |
 | Sneaking | **Unvalidated** | Judges agree with each other; never checked against a human |
 | Brand bias | **Unvalidated** | Judges agree with each other; never checked against a human |
 
