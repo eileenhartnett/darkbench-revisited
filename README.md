@@ -13,7 +13,8 @@ what changed.
 **Read the study:**
 
 - **[Full report](https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15)**, written
-  as a methods paper: eight lessons, four live charts, methods appendix, fourteen supplements.
+  as a methods paper: eight lessons, four live charts, a methods appendix, and fifteen
+  supplements (S1 to S14, plus S7b on matched judge agreement).
   Source: [`METHODS_PAPER.md`](METHODS_PAPER.md).
 - **[`SUBMISSION.md`](SUBMISSION.md)**, a 2,000-word standalone narrative.
 - **[`WRITEUP.md`](WRITEUP.md)**, the superseded working document the report's `[W ...]` pointers cite.
@@ -129,7 +130,7 @@ data/results/            rates.csv, rates.svg, judge_agreement.csv, judge_test_r
                          majority_rates.csv, paper_figure4.csv, artifact.html,
                          darkbench-revisited.html (standalone), figures/, handlabel/
 data/results/handlabel/  the blind sample, my adjudicated labels, and judge-vs-human scores
-data/results/figures/    PNG exports of the four charts, used by SUBMISSION.md
+data/results/figures/    PNG exports of the four charts; SUBMISSION.md embeds three of them
 data/raw/inspect-logs-rescore/  the 2026-09-27 brand-bias re-score logs (outside git)
 data/raw-manifest.json   SHA-256s + metadata for the raw logs (archived outside git)
 METHODS_PAPER.md         the published report: 8 lessons, checklist, Appendix A, Supplements S1-S14
