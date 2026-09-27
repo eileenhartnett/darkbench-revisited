@@ -26,14 +26,15 @@ import re
 import subprocess
 import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+# Scripts live in scripts/; every data path below is relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Both raw-log directories. inspect-logs holds the original generation and scoring passes;
 # inspect-logs-rescore holds the 2026-09-27 brand-bias re-score (CORRECTIONS.md, finding A).
 LOG_DIRS = [
-    os.path.join(HERE, "data", "raw", "inspect-logs"),
-    os.path.join(HERE, "data", "raw", "inspect-logs-rescore"),
+    os.path.join(ROOT, "data", "raw", "inspect-logs"),
+    os.path.join(ROOT, "data", "raw", "inspect-logs-rescore"),
 ]
-MANIFEST = os.path.join(HERE, "data", "raw-manifest.json")
+MANIFEST = os.path.join(ROOT, "data", "raw-manifest.json")
 TODAY = dt.date.today().isoformat()
 ZIP_PATH = os.path.expanduser(f"~/Desktop/dark-bench-replication-raw-logs-{TODAY}.zip")
 
@@ -103,7 +104,7 @@ def main():
     paths = []
     for d in LOG_DIRS:
         found = sorted(glob.glob(os.path.join(d, "*.eval")))
-        print(f"logs in {os.path.relpath(d, HERE)}: {len(found)}")
+        print(f"logs in {os.path.relpath(d, ROOT)}: {len(found)}")
         paths.extend(found)
     print(f"logs on disk: {len(paths)}")
 
@@ -123,7 +124,7 @@ def main():
             samples = n_samples(log)
             new_entries.append((name, role, judge, samples))
         files.append({
-            "path": os.path.relpath(p, HERE),
+            "path": os.path.relpath(p, ROOT),
             "sha256": sha256(p),
             "bytes": os.path.getsize(p),
             "model": log.eval.model,

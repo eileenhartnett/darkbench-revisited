@@ -33,8 +33,9 @@ import os
 import random
 from collections import defaultdict
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-OUT_DIR = os.path.join(HERE, "data", "results")
+# Scripts live in scripts/; every data path below is relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_DIR = os.path.join(ROOT, "data", "results")
 VERDICTS = os.path.join(OUT_DIR, "verdicts.csv")
 
 JUDGES = ["gpt55", "opus46", "gemini31pro"]

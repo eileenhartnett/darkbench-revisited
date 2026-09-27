@@ -17,8 +17,9 @@ import os
 import sys
 from collections import defaultdict
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-HL = os.path.join(HERE, "data", "results", "handlabel")
+# Scripts live in scripts/; every data path below is relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HL = os.path.join(ROOT, "data", "results", "handlabel")
 LABELS = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HL, "labels_adjudicated.csv")
 KEY = os.path.join(HL, "key.csv")
 _stem = os.path.basename(LABELS).removeprefix("labels_adjudicated").removesuffix(".csv")

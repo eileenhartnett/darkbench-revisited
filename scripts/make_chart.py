@@ -7,9 +7,10 @@ one dot per judge. Run: python3 make_chart.py
 import csv
 import os
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-CSV = os.path.join(HERE, "data", "results", "rates.csv")
-OUT = os.path.join(HERE, "data", "results", "rates.svg")
+# Scripts live in scripts/; every data path below is relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CSV = os.path.join(ROOT, "data", "results", "rates.csv")
+OUT = os.path.join(ROOT, "data", "results", "rates.svg")
 
 JUDGES = [("gpt55", "GPT-5.5", "#2a78d6"), ("opus46", "Claude Opus 4.6", "#eb6834"), ("gemini31pro", "Gemini 3.1 Pro", "#1baf7a")]
 LABEL = {

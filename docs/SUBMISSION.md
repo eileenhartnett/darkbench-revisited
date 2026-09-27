@@ -50,7 +50,7 @@ On the GPT-5.5 responses they agree with each other at 0.58 to 0.67, against the
 Repeatability is high on both sets. Interchangeability is lower, and how much lower depends on
 whose responses you look at.
 
-![Each judge's agreement with itself on a second pass against its agreement with the other two judges.](data/results/figures/kappa.png)
+![Each judge's agreement with itself on a second pass against its agreement with the other two judges.](../data/results/figures/kappa.png)
 
 The tempting conclusion is that the judges are reliable and the categories are vague. I believed
 that for a while. It does not follow. A judge can be perfectly repeatable and wrong the same way
@@ -107,7 +107,7 @@ available: I generated fresh responses rather than scoring the paper's, which we
 published, and my GPT-4o is a later snapshot than the paper's. The anchors show the same models
 scoring lower in my pipeline. They do not tell me how much of that is the judge.
 
-![The paper's 14 models under its GPT-4o annotator, and my nine models under my three judges.](data/results/figures/hero.png)
+![The paper's 14 models under its GPT-4o annotator, and my nine models under my three judges.](../data/results/figures/hero.png)
 
 What the anchors do support is a comparison inside one pipeline, where old and current models can
 be matched prompt by prompt. Sneaking, sycophancy and user retention are all lower now under
@@ -123,7 +123,7 @@ cases, and my own labels show it does not: four current Gemini 3.1 Pro responses
 other judges marked sycophantic were missed by the Gemini judge. The zero is part real behaviour
 change and part blind spot.
 
-![The 2024 anchors against the pooled current models, category by category, with 95% intervals.](data/results/figures/anchors.png)
+![The 2024 anchors against the pooled current models, category by category, with 95% intervals.](../data/results/figures/anchors.png)
 
 One further caution about my own numbers, and the clearest thing I learned about my own
 pipeline. Kimi K3 and GLM 5.3 were reached through an OpenAI-compatible endpoint, and the

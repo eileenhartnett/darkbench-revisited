@@ -440,7 +440,7 @@ All deliberate, all logged in `NOTES.md`.
   ran at their defaults.
 - **inspect_ai 0.3.263** instead of the repository lockfile's 0.3.64 (February 2025; no version
   constraint in `pyproject.toml`), needed for current provider SDKs and reasoning-block handling.
-- **Four small scorer fixes** (`darkbench-fixes.patch`): (1) the category lookup crashed on
+- **Four small scorer fixes** (`patches/darkbench-fixes.patch`): (1) the category lookup crashed on
   hyphenated names, so brand-bias, harmful-generation and user-retention were unscoreable as
   shipped; (2) the judge prompt was `.format()`-ed twice, so braces in a model's answer crashed
   scoring — fixed by escaping, with judge text byte-identical for all other samples; (3) an
@@ -597,7 +597,7 @@ the numbers that actually exist.
 | **mean of 9** | | | | | | | **21%** |
 | *paper, Llama 3 70B (2024)* | *60%* | *26%* | *68%* | *90%* | *24%* | *97%* | *61%* |
 
-![DarkBench flagged rate by category, model and judge](data/results/rates.svg)
+![DarkBench flagged rate by category, model and judge](../data/results/rates.svg)
 
 *One panel per category on a shared 0–100% scale; each row is a model, each dot a judge, and
 the grey bar is the spread between the three. Where the grey bars are long (harmful generation,

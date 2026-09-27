@@ -620,10 +620,10 @@ The science of evaluating AI models is still young and still improving, and a be
 
 The scripts for all of this live in the project's code repository.
 
-- **Scores and agreement** (Lessons 2, 3): `analyze.py` produces `rates.csv`, `judge_agreement.csv`, and `majority_rates.csv`. Running the full set of 12 models through 3 judges cost about $205 [W 8.12].
+- **Scores and agreement** (Lessons 2, 3): `scripts/analyze.py` produces `rates.csv`, `judge_agreement.csv`, and `majority_rates.csv`. Running the full set of 12 models through 3 judges cost about $205 [W 8.12].
 - **Test-retest** (Lesson 3): `score_test_retest.py`. Re-judging two complete sets of answers with all three judges cost about $25 [W 8.12].
-- **Hand labels** (Lessons 4, 5): `make_handlabel_sample.py` picks a deliberately skewed, blind sample; `score_handlabels.py` compares the judges against those human ratings.
-- **Confidence intervals** (Lesson 6): `make_artifact.py` calculates Wilson intervals from `rates.csv`; the claim-by-claim table was put together by hand.
+- **Hand labels** (Lessons 4, 5): `make_handlabel_sample.py` picks a deliberately skewed, blind sample; `scripts/score_handlabels.py` compares the judges against those human ratings.
+- **Confidence intervals** (Lesson 6): `scripts/make_artifact.py` calculates Wilson intervals from `rates.csv`; the claim-by-claim table was put together by hand.
 - **The rewrite test** (Lesson 7): not run yet; estimated at about $15 per category, plus writing and checking 110 rewritten prompts by hand [S14].
 
 ## Limitations
@@ -691,7 +691,7 @@ All deliberate, all logged in `NOTES.md`.
   ran at their defaults.
 - **inspect_ai 0.3.263** instead of the repository lockfile's 0.3.64 (February 2025; no version
   constraint in `pyproject.toml`), needed for current provider SDKs and reasoning-block handling.
-- **Four small scorer fixes** (`darkbench-fixes.patch`): (1) the category lookup crashed on
+- **Four small scorer fixes** (`patches/darkbench-fixes.patch`): (1) the category lookup crashed on
   hyphenated names, so brand-bias, harmful-generation and user-retention were unscoreable as
   shipped; (2) the judge prompt was `.format()`-ed twice, so braces in a model's answer crashed
   scoring, fixed by escaping, with judge text byte-identical for all other samples; (3) an
@@ -827,7 +827,7 @@ and is not close to it on any plausible correction, but it is an estimate and no
 ### A.13 Paired prompt-level contrasts
 
 Every model answers the same 110 prompts in a category, so a model-versus-model comparison is a
-paired one. `paired_analysis.py` takes the item-level verdicts in `verdicts.csv`, keeps the
+paired one. `scripts/paired_analysis.py` takes the item-level verdicts in `verdicts.csv`, keeps the
 prompts where both models have a valid, non-quarantined verdict from the same judge, and
 computes the difference in flag rate. The interval comes from resampling prompt ids with
 replacement 10,000 times (seed 20260927) and taking the 2.5th and 97.5th percentiles of the
@@ -884,7 +884,7 @@ inter-judge agreement from 5,685 usable shared responses back to 5,905, with κ 
 The contaminated verdicts are preserved in two places: the original scored logs on disk, which
 were never modified, and `data/results/brandbias_contaminated.csv`, which records all six
 superseded cells with their as-recorded counts. The re-scored logs live in
-`data/raw/inspect-logs-rescore/`, and `analyze.py` substitutes them per sample id so every
+`data/raw/inspect-logs-rescore/`, and `scripts/analyze.py` substitutes them per sample id so every
 other category keeps its first-pass verdicts exactly. Cost of the re-score is in A.12.
 
 **A limitation the re-score makes visible rather than removes.** The brand-bias prompts name
@@ -953,7 +953,7 @@ the numbers that actually exist.
 | **mean of 9** | | | | | | | **21%** |
 | *paper, Llama 3 70B (2024)* | *60%* | *26%* | *68%* | *90%* | *24%* | *97%* | *61%* |
 
-![DarkBench flagged rate by category, model and judge](data/results/rates.svg)
+![DarkBench flagged rate by category, model and judge](../data/results/rates.svg)
 
 *One panel per category on a shared 0–100% scale; each row is a model, each dot a judge, and
 the grey bar is the spread between the three. Where the grey bars are long (harmful generation,

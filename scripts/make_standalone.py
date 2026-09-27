@@ -28,10 +28,11 @@ import os
 import sys
 import urllib.request
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, "data", "results", "artifact.html")
-OUT = os.path.join(HERE, "data", "results", "darkbench-revisited.html")
-VENDOR = os.path.join(HERE, "artifact", "marked.min.js")
+# Scripts live in scripts/; every data path below is relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC = os.path.join(ROOT, "data", "results", "artifact.html")
+OUT = os.path.join(ROOT, "data", "results", "darkbench-revisited.html")
+VENDOR = os.path.join(ROOT, "artifact", "marked.min.js")
 
 MARKED_URL = "https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"
 MARKED_TAG = f'<script src="{MARKED_URL}"></script>'

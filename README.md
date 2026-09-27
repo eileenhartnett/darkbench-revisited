@@ -7,7 +7,7 @@ with a three-judge ensemble and an era-matched control.
 Course project for BlueDot Impact's AI safety course. **Status: complete, corrected after an
 external audit on 2026-09-27.** Model comparisons are reported as paired differences on matched
 prompts with bootstrap intervals (Supplement S6). Six contaminated brand-bias cells were
-re-scored on 2026-09-27; see [`CORRECTIONS.md`](CORRECTIONS.md) for every confirmed finding and
+re-scored on 2026-09-27; see [`CORRECTIONS.md`](docs/CORRECTIONS.md) for every confirmed finding and
 what changed.
 
 **Read the study:**
@@ -15,11 +15,11 @@ what changed.
 - **[Full report](https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15)**, written
   as a methods paper: eight lessons, four live charts, a methods appendix, and fifteen
   supplements (S1 to S14, plus S7b on matched judge agreement).
-  Source: [`METHODS_PAPER.md`](METHODS_PAPER.md).
-- **[`SUBMISSION.md`](SUBMISSION.md)**, a 2,000-word standalone narrative.
-- **[`WRITEUP.md`](WRITEUP.md)**, the superseded working document the report's `[W ...]` pointers cite.
-- **[`CORRECTIONS.md`](CORRECTIONS.md)**, the audit changelog: findings confirmed, rejected, and what moved.
-- **[`NOTES.md`](NOTES.md)**, the dated running log of every bug, decision, correction and
+  Source: [`METHODS_PAPER.md`](docs/METHODS_PAPER.md).
+- **[`SUBMISSION.md`](docs/SUBMISSION.md)**, a 2,000-word standalone narrative.
+- **[`WRITEUP.md`](docs/WRITEUP.md)**, the superseded working document the report's `[W ...]` pointers cite.
+- **[`CORRECTIONS.md`](docs/CORRECTIONS.md)**, the audit changelog: findings confirmed, rejected, and what moved.
+- **[`NOTES.md`](docs/NOTES.md)**, the dated running log of every bug, decision, correction and
   retraction.
 
 ---
@@ -106,40 +106,50 @@ differs, so we never have to compare our judges against the paper's retired ones
 ## Repository layout
 
 ```
+README.md                this file
+requirements-frozen.txt  exact environment that produced every result
+
+docs/                    the write-ups
+  METHODS_PAPER.md       the published report: 8 lessons, checklist, Appendix A, Supplements
+  SUBMISSION.md          ~2,000-word narrative for the BlueDot submission page
+  WRITEUP.md             superseded working document; the report's [W ...] pointers cite it
+  CORRECTIONS.md         audit changelog: each finding, verdict, evidence and what changed
+  NOTES.md               dated running log: every bug, decision, correction and retraction
+  rubrics_v1.md          two explicit rubrics for the harmful-generation readings (not run)
+  rubric_handlabel_check.md  hand-label protocol for that experiment
+  claude-code-project-file.md  project charter
+
+scripts/                 everything runnable; all paths resolve from the repository root
+  analyze.py             scored logs -> rates.csv, judge_agreement.csv, majority_rates.csv,
+                         quarantine.csv, verdicts.csv
+  paired_analysis.py     verdicts.csv -> paired_contrasts.csv, judge_agreement_matched.csv
+  score_test_retest.py   first-pass vs retest judge logs -> judge_test_retest.csv
+  score_handlabels.py    hand labels vs judge verdicts -> handlabel/judge_vs_human*.csv
+  make_handlabel_sample.py        blind stratified hand-labelling sample
+  make_handlabel_sample_round2.py second sample, sneaking and brand bias
+  make_artifact.py       docs/METHODS_PAPER.md + CSVs -> artifact.html (4 live charts)
+  make_figures.py        artifact chart code -> data/results/figures/*.png (headless Chrome)
+  make_standalone.py     artifact.html -> darkbench-revisited.html, a self-contained page
+  make_chart.py          rates.csv -> data/results/rates.svg
+  make_raw_manifest.py   zips the raw logs outside the repo, writes data/raw-manifest.json
+
+artifact/                head.html (styles, hero), tail.html (render + chart JS), marked.min.js
+patches/
+  darkbench-fixes.patch  the five scorer fixes applied to the vendored copy
+
 DarkBench/               vendored upstream benchmark, frozen at apartresearch 7eef151
   darkbench/             task, scorer, dark-pattern definitions, the 660 prompts
   background.md          how the benchmark works; paper-vs-code discrepancies
   judge_prompt_original.txt
-darkbench-fixes.patch    the five scorer fixes applied to the vendored copy
-analyze.py               scored logs -> data/results/rates.csv, judge_agreement.csv, majority_rates.csv + tables
-make_chart.py            rates.csv -> data/results/rates.svg
-score_test_retest.py     first-pass vs retest judge logs -> data/results/judge_test_retest.csv
-score_handlabels.py      hand labels vs judge verdicts -> data/results/handlabel/judge_vs_human*.csv
-make_handlabel_sample.py blind stratified hand-labelling sample
-make_handlabel_sample_round2.py  second sample, sneaking and brand bias
-make_artifact.py         METHODS_PAPER.md + CSVs -> data/results/artifact.html (web report, 4 live charts)
-make_raw_manifest.py     zips the raw logs outside the repo and writes data/raw-manifest.json
-paired_analysis.py       verdicts.csv -> paired_contrasts.csv, judge_agreement_matched.csv
-make_figures.py          artifact chart code -> data/results/figures/*.png via headless Chrome
-make_standalone.py       artifact.html -> data/results/darkbench-revisited.html, a self-contained
-                         page to host or email (doctype added, marked.js inlined)
-artifact/                head.html (styles, hero), tail.html (render + chart JS), marked.min.js
-rubrics_v1.md            two explicit rubrics for the harmful-generation readings (designed, not run)
-rubric_handlabel_check.md  hand-label protocol for that experiment
-data/results/            rates.csv, rates.svg, judge_agreement.csv, judge_test_retest.csv,
-                         majority_rates.csv, paper_figure4.csv, artifact.html,
-                         darkbench-revisited.html (standalone), figures/, handlabel/
+
+data/results/            rates.csv, verdicts.csv, quarantine.csv, brandbias_contaminated.csv,
+                         judge_agreement.csv, judge_agreement_matched.csv, paired_contrasts.csv,
+                         judge_test_retest.csv, majority_rates.csv, paper_figure4.csv,
+                         rates.svg, artifact.html, darkbench-revisited.html, figures/, handlabel/
 data/results/handlabel/  the blind sample, my adjudicated labels, and judge-vs-human scores
 data/results/figures/    PNG exports of the four charts; SUBMISSION.md embeds three of them
-data/raw/inspect-logs-rescore/  the 2026-09-27 brand-bias re-score logs (outside git)
-data/raw-manifest.json   SHA-256s + metadata for the raw logs (archived outside git)
-METHODS_PAPER.md         the published report: 8 lessons, checklist, Appendix A, Supplements S1-S14
-WRITEUP.md               the source of record: body, Methods, Supplements
-SUBMISSION.md            ~2,000-word narrative for the BlueDot submission page
-CORRECTIONS.md           audit changelog: each finding, verdict, evidence and what changed
-NOTES.md                 dated running log: every bug, decision, correction and retraction
-claude-code-project-file.md   project charter
-requirements-frozen.txt  exact environment that produced every result
+data/raw/                raw logs, not in git (see Raw logs below)
+data/raw-manifest.json   SHA-256s + metadata for all 91 raw logs (archived outside git)
 ```
 
 ## Reproducing
@@ -150,10 +160,10 @@ No API keys, no cost, nothing downloaded. This reproduces every number in the re
 committed CSVs and the item-level verdict export.
 
 ```bash
-python3 paired_analysis.py    # -> paired_contrasts.csv, judge_agreement_matched.csv
-python3 make_artifact.py      # -> data/results/artifact.html + prints three spot checks
-python3 make_figures.py       # -> data/results/figures/*.png, via headless Chrome
-python3 make_standalone.py    # -> data/results/darkbench-revisited.html
+python3 scripts/paired_analysis.py   # -> paired_contrasts.csv, judge_agreement_matched.csv
+python3 scripts/make_artifact.py     # -> data/results/artifact.html + three spot checks
+python3 scripts/make_figures.py      # -> data/results/figures/*.png, via headless Chrome
+python3 scripts/make_standalone.py   # -> data/results/darkbench-revisited.html
 ```
 
 `data/results/verdicts.csv` holds all 23,760 item-level judgments (sample id, model, judge,
@@ -188,9 +198,9 @@ and `-S batch=true` for judging; its interactive tier is capped at 250 requests/
 Then rebuild the results:
 
 ```bash
-.venv/bin/python ../analyze.py      # -> data/results/rates.csv (216 rows), judge_agreement.csv
-python3 ../make_chart.py            # -> data/results/rates.svg
-python3 ../make_artifact.py         # -> data/results/artifact.html (publish with the Artifact tool;
+.venv/bin/python ../scripts/analyze.py   # -> data/results/rates.csv (216 rows), judge_agreement.csv
+python3 ../scripts/make_chart.py         # -> data/results/rates.svg
+python3 ../scripts/make_artifact.py      # -> data/results/artifact.html (publish with the Artifact tool;
                                     #    same file path keeps the same URL)
 ```
 
@@ -224,7 +234,7 @@ fixes, all in `darkbench/scorer.py`, captured in `darkbench-fixes.patch`:
    endpoint (`openai/accounts/fireworks/models/kimi-k3`) were resolved as being built by OpenAI,
    and that name was interpolated into the brand-bias judge prompt. Applied 2026-09-27; it does
    not repair scores already produced, so the affected 660 judgments were re-scored on
-   2026-09-27 against the same saved responses. See [`CORRECTIONS.md`](CORRECTIONS.md).
+   2026-09-27 against the same saved responses. See [`CORRECTIONS.md`](docs/CORRECTIONS.md).
 
 Two discrepancies between the paper and the released code are documented in
 `DarkBench/background.md` (the code applies an undisclosed system prompt; the default judge is a

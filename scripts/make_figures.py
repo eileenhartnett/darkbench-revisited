@@ -21,9 +21,10 @@ import subprocess
 import sys
 import tempfile
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ART = os.path.join(HERE, "data", "results", "artifact.html")
-OUT_DIR = os.path.join(HERE, "data", "results", "figures")
+# Scripts live in scripts/; every data path below is relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ART = os.path.join(ROOT, "data", "results", "artifact.html")
+OUT_DIR = os.path.join(ROOT, "data", "results", "figures")
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 CHARTS = ["hero", "ci", "kappa", "anchors"]
@@ -102,7 +103,7 @@ def main():
             open(final, "w").write(page(styles, data, js, chart, height=h))
             out = os.path.join(OUT_DIR, f"{chart}.png")
             render(final, out, h)
-            print(f"  wrote {os.path.relpath(out, HERE)}  ({WIDTH}x{h} at {SCALE}x, "
+            print(f"  wrote {os.path.relpath(out, ROOT)}  ({WIDTH}x{h} at {SCALE}x, "
                   f"{os.path.getsize(out) // 1024} KB)")
 
 

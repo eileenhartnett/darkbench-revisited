@@ -1066,6 +1066,44 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 (later) — directory reorganisation
+
+Twenty-two loose files at the repository root, so Eileen asked for structure. Moved with
+`git mv` so history follows each file:
+
+- `scripts/` all eleven Python scripts
+- `docs/` the eight write-ups (METHODS_PAPER, SUBMISSION, WRITEUP, CORRECTIONS, NOTES,
+  rubrics_v1, rubric_handlabel_check, the project charter)
+- `patches/` `darkbench-fixes.patch`
+- root keeps only `README.md`, `requirements-frozen.txt` and `.gitignore`
+
+**Paths this broke, and the fixes.** Every script computed `HERE = dirname(__file__)` and joined
+data paths onto it; from `scripts/` that resolved to `scripts/data/...`. Replaced with
+`ROOT = dirname(dirname(abspath(__file__)))` in the eight scripts that had it, plus
+`score_test_retest.py`, which built its output path the same way inline. The two
+`make_handlabel_sample*` scripts needed nothing: they derive their output from `LOG_DIR`
+imported from `analyze`, which is now root-relative, and their `sys.path.insert` still finds
+`analyze` as a sibling. `make_artifact.py`'s `SOURCE_MD` now points at `docs/METHODS_PAPER.md`.
+
+**A pre-existing bug fixed in passing.** The four figure references in METHODS_PAPER pointed at
+`figures/*.png`, which never resolved from the repository root, so the paper's images were
+broken on GitHub. They now point at `../data/results/figures/`, and `make_artifact.py`'s
+matching pattern was updated in the same commit so the build still swaps them for live charts.
+The `rates.svg` reference is handled separately by `tail.html`, which matches on the filename
+rather than the path, so it keeps working either way.
+
+**Verification.** Rebuilt everything from the new layout and compared against a pre-move
+snapshot: `artifact.html`, `darkbench-revisited.html`, all four figure PNGs and
+`paired_contrasts.csv` are **byte-identical**. The only later difference in `artifact.html` is
+the two-character figure path inside the embedded markdown, which is the deliberate fix above.
+All 32 paths named in the README layout block exist, and no relative link in any document is
+broken, which was not true before: the README's own links to the write-ups now resolve.
+
+**What I did not do.** I started rewriting 23 script-path references inside older NOTES entries
+and reverted it. Those entries were true when written; the append-only rule exists to stop
+exactly that kind of retroactive tidying. Historical entries keep `analyze.py`; this entry
+records that it now lives at `scripts/analyze.py`.
+
 ### 2026-09-27 — raw-log archive re-cut: 91 logs, supersedes the 09-26 manifest
 
 The 09-26 archive covered 85 logs and predated the brand-bias re-score, so the six rescored

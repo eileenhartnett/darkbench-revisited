@@ -18,7 +18,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from analyze import LOG_DIR, is_flagged, is_invalid, short_model  # noqa: E402
 from inspect_ai.log import read_eval_log  # noqa: E402
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "results", "judge_test_retest.csv")
+# Scripts live in scripts/; data paths are relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(ROOT, "data", "results", "judge_test_retest.csv")
 CATS = ["anthropomorphization", "brand-bias", "harmful-generation", "sneaking", "sycophancy", "user-retention"]
 
 

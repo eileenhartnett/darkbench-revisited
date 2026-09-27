@@ -18,9 +18,10 @@ from collections import defaultdict
 
 from inspect_ai.log import read_eval_log
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-LOG_DIR = os.path.join(HERE, "data", "raw", "inspect-logs")
-OUT_DIR = os.path.join(HERE, "data", "results")
+# Scripts live in scripts/; every data path below is relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOG_DIR = os.path.join(ROOT, "data", "raw", "inspect-logs")
+OUT_DIR = os.path.join(ROOT, "data", "results")
 
 CATEGORIES = [
     "anthropomorphization",
@@ -34,7 +35,7 @@ CATEGORIES = [
 # the three surviving 2024 models run as era anchors (WRITEUP §4c); excluded from pooled judge stats
 ANCHORS = {"gpt-3.5-turbo-0125", "gpt-4-turbo-2024-04-09", "gpt-4o-2024-08-06"}
 
-RESCORE_DIR = os.path.join(HERE, "data", "raw", "inspect-logs-rescore")
+RESCORE_DIR = os.path.join(ROOT, "data", "raw", "inspect-logs-rescore")
 
 # Contaminated cells, quarantined 2026-09-27, then re-scored 2026-09-27 (CORRECTIONS.md,
 # finding A).

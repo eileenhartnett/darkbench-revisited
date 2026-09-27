@@ -88,7 +88,7 @@ be higher. The cap was $40.
 **Preservation.** The contaminated verdicts survive in the original scored logs, which were
 never modified, and in `data/results/brandbias_contaminated.csv`, which records all six
 superseded cells with their as-recorded counts. Re-scored logs are in
-`data/raw/inspect-logs-rescore/`; `analyze.py` substitutes them per sample id so every other
+`data/raw/inspect-logs-rescore/`; `scripts/analyze.py` substitutes them per sample id so every other
 category keeps its first-pass verdicts exactly.
 
 **A limitation the re-score makes visible rather than removes.** The brand-bias prompts name
@@ -117,7 +117,7 @@ So 48% is the GPT-4o annotator's figure. Judge choice moved the original paper's
 points, which is the same effect this project set out to measure.
 
 **What changed.** The baseline is relabelled in the abstract, Lesson 2, the hero chart subtitle
-and caption, `paper_figure4.csv`, `make_artifact.py` and the blog post. The hero legend was also
+and caption, `paper_figure4.csv`, `scripts/make_artifact.py` and the blog post. The hero legend was also
 wrong in a second way the audit caught: its hollow marker was labelled "same model under my
 judges" when the code plots the *paper's* score there. Both fixed and the figure regenerated.
 
@@ -141,7 +141,7 @@ interval excludes zero, so the old rule was too conservative. It discarded the p
 though every model answers the same 110 prompts. And it applied one model-versus-model rule to
 trend claims and judge claims alike.
 
-**What changed.** `paired_analysis.py` computes paired prompt-level differences with 95%
+**What changed.** `scripts/paired_analysis.py` computes paired prompt-level differences with 95%
 bootstrap intervals over resampled prompt ids (10,000 draws, seed 20260927), plus McNemar
 discordant counts. S6 is rebuilt around those, with non-model claims listed separately. The
 universal "15 points to separate" rule is removed, as is "inside noise" phrasing, and "fails" is
@@ -229,17 +229,17 @@ exception and the judge-dependent sensitivity.
 
 ## I. Implementation, confirmed
 
-- `score_handlabels.py` took the input file as an argument but hardcoded the output, so scoring
+- `scripts/score_handlabels.py` took the input file as an argument but hardcoded the output, so scoring
   the harm-reading labels would silently overwrite the willingness results. The output path is
   now derived from the input, with an optional explicit second argument. Both files reproduce
   byte-identical after the fix.
-- `analyze.py` assigned into a dict in filename order, so a second full log for the same model
+- `scripts/analyze.py` assigned into a dict in filename order, so a second full log for the same model
   and judge would silently replace the first. It now selects the canonical run by most valid
   verdicts, tie-broken by creation time, and prints what it displaced. Re-running confirms the
   manifest contains no such duplicate pair, so no result was ever affected.
 - `data/results/verdicts.csv` is new: all 23,760 item-level judgments, so the reliability and
   paired analyses can be checked without the 316 MB raw-log archive.
-- `make_figures.py` is new. The PNGs in `data/results/figures/` were produced by headless Chrome
+- `scripts/make_figures.py` is new. The PNGs in `data/results/figures/` were produced by headless Chrome
   from the artifact's chart code but the step was never scripted, so they went stale while
   `SUBMISSION.md` kept embedding them. It is now repeatable.
 

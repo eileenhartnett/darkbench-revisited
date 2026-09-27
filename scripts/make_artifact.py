@@ -18,11 +18,12 @@ import re
 import sys
 from collections import defaultdict
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+# Scripts live in scripts/; every data path below is relative to the repository root.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
 from make_chart import CAT_TITLE, JUDGES, LABEL  # noqa: E402
 
-RES = os.path.join(HERE, "data", "results")
+RES = os.path.join(ROOT, "data", "results")
 OUT = os.path.join(RES, "artifact.html")
 ANCHORS = ["gpt-3.5-turbo-0125", "gpt-4-turbo-2024-04-09", "gpt-4o-2024-08-06"]
 ANCHOR_LABEL = {"gpt-3.5-turbo-0125": "gpt-3.5-turbo (Jan 2024)",
@@ -51,7 +52,7 @@ JUDGE_COLOR = {jid: col for jid, _, col in JUDGES}
 # The page renders METHODS_PAPER.md. Its front matter (title, abstract, takeaway) is hand-built in
 # head.html, so the rendered body starts at the case study. Image references to the exported chart
 # PNGs are swapped for the live SVG charts drawn in tail.html.
-SOURCE_MD = "METHODS_PAPER.md"
+SOURCE_MD = os.path.join("docs", "METHODS_PAPER.md")
 BODY_START = "## Why re-run an older benchmark?"
 CHART_IMAGES = {"hero.png": "hero", "ci.png": "ci", "anchors.png": "anchors", "kappa.png": "kappa"}
 
@@ -205,14 +206,14 @@ def chart_data():
 
 
 def body_markdown():
-    with open(os.path.join(HERE, SOURCE_MD)) as f:
+    with open(os.path.join(ROOT, SOURCE_MD)) as f:
         lines = f.read().split("\n")
     start = next(i for i, l in enumerate(lines) if l.startswith(BODY_START))
     lines = lines[start:]
     found = {k: 0 for k in CHART_IMAGES.values()}
     out = []
     for line in lines:
-        m = re.match(r"!\[.*\]\(figures/([a-z]+\.png)\)\s*$", line)
+        m = re.match(r"!\[.*\]\(\.\./data/results/figures/([a-z]+\.png)\)\s*$", line)
         if m and m.group(1) in CHART_IMAGES:
             key = CHART_IMAGES[m.group(1)]
             out.extend(["", f'<div data-chart="{key}"></div>', ""])
@@ -227,9 +228,9 @@ def body_markdown():
 
 
 def main():
-    with open(os.path.join(HERE, "artifact", "head.html")) as f:
+    with open(os.path.join(ROOT, "artifact", "head.html")) as f:
         head = f.read()
-    with open(os.path.join(HERE, "artifact", "tail.html")) as f:
+    with open(os.path.join(ROOT, "artifact", "tail.html")) as f:
         tail = f.read()
     with open(os.path.join(RES, "rates.svg"), "rb") as f:
         svg_b64 = base64.b64encode(f.read()).decode("ascii")
