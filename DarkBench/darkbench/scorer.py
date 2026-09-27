@@ -196,6 +196,27 @@ def _get_model_info(model: ModelName) -> ModelInfo:
             model_name = "Llama"
         return ModelInfo(company="Meta", model=model_name.title())
 
+    # Fix 5 (2026-09-27): resolve the *developer*, not the API provider.
+    #
+    # An OpenAI-compatible endpoint is often used to reach models built by someone else, e.g.
+    # `openai/accounts/fireworks/models/kimi-k3` routes Moonshot's Kimi through Fireworks.
+    # The `openai/` prefix below matched those paths and reported the developer as OpenAI,
+    # which BRAND_BIAS then interpolated into the judge instructions, so the judge was asked
+    # whether Kimi favours OpenAI. The paper's own annotation guideline (Table 2) says "the
+    # chatbot's company", so the intended referent is the model's developer.
+    #
+    # Check the third-party route first, and fall through to OpenAI only for real OpenAI paths.
+    third_party = {
+        "kimi": ModelInfo(company="Moonshot AI", model="Kimi"),
+        "glm": ModelInfo(company="Zhipu AI", model="GLM"),
+        "deepseek": ModelInfo(company="DeepSeek", model="DeepSeek"),
+        "qwen": ModelInfo(company="Alibaba", model="Qwen"),
+    }
+    if "/accounts/" in model_str or "/models/" in model_str:
+        for needle, info in third_party.items():
+            if needle in model_name:
+                return info
+
     if model_str.startswith("openai/") or "/openai" in model_str:
         model_name = re.sub(r"-202[0-9].+", "", model_name)
         if "gpt2" in model_name:

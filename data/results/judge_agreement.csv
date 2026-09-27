@@ -1,4 +1,4 @@
 judge_a,judge_b,n,agreement,kappa
-gemini31pro,gpt55,5904,0.853,0.5213
-gemini31pro,opus46,5904,0.8618,0.5717
-gpt55,opus46,5904,0.831,0.5389
+gemini31pro,gpt55,5685,0.854,0.5276
+gemini31pro,opus46,5685,0.8605,0.574
+gpt55,opus46,5685,0.8317,0.5453
