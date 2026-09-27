@@ -1066,6 +1066,34 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 — raw-log archive re-cut: 91 logs, supersedes the 09-26 manifest
+
+The 09-26 archive covered 85 logs and predated the brand-bias re-score, so the six rescored
+judge logs, the evidence behind the largest number change in the correction, were not in the
+checksum record. Re-cut with Eileen's approval under the same conditions as the 09-26 re-cut.
+
+`make_raw_manifest.py` now walks both `data/raw/inspect-logs` and
+`data/raw/inspect-logs-rescore`, and `derive()` recognises the `-rescored-` infix so the new
+files get role `rescored-brandbias` with their judge, rather than being mistaken for ordinary
+scored logs. All six were classified correctly without hand editing.
+
+New archive: `~/Desktop/dark-bench-replication-raw-logs-2026-09-27.zip`, 91 logs, 323 MB.
+Roles: 12 generation-canonical, 19 generation-partial, 11 generation-smoke, 43 scored,
+6 rescored-brandbias.
+
+Verified four ways before committing:
+1. every recorded sha256 matches the live file on disk, 91 of 91, no mismatches;
+2. the zip's own sha256 and byte size match the manifest;
+3. the zip extracted to a temp dir and all 91 members rehashed clean, none missing, all six
+   rescored logs present;
+4. the 85 entries carried over from the 09-26 manifest are byte-identical in hash, size, role,
+   judge, samples, model and status, so no curated metadata was silently re-derived.
+
+The 09-26 zip is still on the Desktop and still matches its old manifest; it can be deleted now
+that the 09-27 archive verifies. Note the new archive is smaller (323 MB against 332 MB)
+despite holding six more files, which is compression variance across a fresh zip run, not
+missing data: the member count and every member hash check out.
+
 ### 2026-09-27 (later) — brand-bias cells re-scored; quarantine lifted
 
 Eileen approved a re-score with a $40 cap. Done, $2.29 estimated, 660 judgments, zero failures.

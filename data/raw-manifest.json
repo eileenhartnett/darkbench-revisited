@@ -1,9 +1,9 @@
 {
-  "created": "2026-09-26T19:39:51+00:00",
-  "zip_path": "/Users/eileenhartnett/Desktop/dark-bench-replication-raw-logs-2026-09-26.zip",
-  "zip_sha256": "59de193666abbf365b3048002bacbb71df72d2400b4e9db820252906e4c9e8c6",
-  "zip_bytes": 331567623,
-  "file_count": 85,
+  "created": "2026-09-27T19:11:37+00:00",
+  "zip_path": "/Users/eileenhartnett/Desktop/dark-bench-replication-raw-logs-2026-09-27.zip",
+  "zip_sha256": "c50b08d2659e8ff940e1f5d1601fbf0702bc07d1d98a4b77e188aa420c263bfa",
+  "zip_bytes": 338439110,
+  "file_count": 91,
   "upstream_commit": "7eef15102b37df2a15a6031cbbed6be488de7fbe (apartresearch/DarkBench)",
   "scorer_fixes_note": "Logs generated with vendored DarkBench 7eef151 plus fixes in darkbench-fixes.patch: hyphen lookup + brace escaping in effect for all scoring from 2026-09-09; batch parameter and RuntimeError retry added 2026-09-09 ~17:30 UTC (affect only how Gemini-Pro judge passes were executed, not verdict content). Generation logs are unaffected by scorer fixes. Environment: requirements-frozen.txt.",
   "roles": {
@@ -1032,6 +1032,78 @@
       "inspect_version": "0.3.263",
       "role": "generation-canonical",
       "judge": null
+    },
+    {
+      "path": "data/raw/inspect-logs-rescore/2026-09-27_glm-5p3-brandbias-rescored-gemini31pro.eval",
+      "sha256": "edee790bbb10575ece3e27cc3ec77554a7f5eb629c5e66f0b2de53bd334ad67a",
+      "bytes": 1198602,
+      "model": "openai/accounts/fireworks/models/glm-5p3",
+      "created": "2026-09-09T19:59:25+00:00",
+      "status": "success",
+      "samples": 110,
+      "inspect_version": "0.3.263",
+      "role": "rescored-brandbias",
+      "judge": "gemini31pro"
+    },
+    {
+      "path": "data/raw/inspect-logs-rescore/2026-09-27_glm-5p3-brandbias-rescored-gpt55.eval",
+      "sha256": "e1bda23f1cf2e5384611c933441071f7ac22bc9a56cd41d6255f74af4bf3da0e",
+      "bytes": 1142264,
+      "model": "openai/accounts/fireworks/models/glm-5p3",
+      "created": "2026-09-09T19:59:25+00:00",
+      "status": "success",
+      "samples": 110,
+      "inspect_version": "0.3.263",
+      "role": "rescored-brandbias",
+      "judge": "gpt55"
+    },
+    {
+      "path": "data/raw/inspect-logs-rescore/2026-09-27_glm-5p3-brandbias-rescored-opus46.eval",
+      "sha256": "33451ab0beacc4da37287d48f1be3cc821825e3f047bab49cc15d2eec24fc894",
+      "bytes": 993618,
+      "model": "openai/accounts/fireworks/models/glm-5p3",
+      "created": "2026-09-09T19:59:25+00:00",
+      "status": "success",
+      "samples": 110,
+      "inspect_version": "0.3.263",
+      "role": "rescored-brandbias",
+      "judge": "opus46"
+    },
+    {
+      "path": "data/raw/inspect-logs-rescore/2026-09-27_kimi-k3-brandbias-rescored-gemini31pro.eval",
+      "sha256": "228ef897195e5d2a12a6702e76ceca6c09f1cda1d04d1c87b02e76ea04e32868",
+      "bytes": 1317179,
+      "model": "openai/accounts/fireworks/models/kimi-k3",
+      "created": "2026-09-09T15:51:48+00:00",
+      "status": "success",
+      "samples": 110,
+      "inspect_version": "0.3.263",
+      "role": "rescored-brandbias",
+      "judge": "gemini31pro"
+    },
+    {
+      "path": "data/raw/inspect-logs-rescore/2026-09-27_kimi-k3-brandbias-rescored-gpt55.eval",
+      "sha256": "81df385ca5c8897e98d5cbc0ef827406921c264320a07f453d2502abe8c75519",
+      "bytes": 1213986,
+      "model": "openai/accounts/fireworks/models/kimi-k3",
+      "created": "2026-09-09T15:51:48+00:00",
+      "status": "success",
+      "samples": 110,
+      "inspect_version": "0.3.263",
+      "role": "rescored-brandbias",
+      "judge": "gpt55"
+    },
+    {
+      "path": "data/raw/inspect-logs-rescore/2026-09-27_kimi-k3-brandbias-rescored-opus46.eval",
+      "sha256": "953865dfa3c02f5656a42db505414dd2bc65b869ace59b0efe6587d939af6c60",
+      "bytes": 1222847,
+      "model": "openai/accounts/fireworks/models/kimi-k3",
+      "created": "2026-09-09T15:51:48+00:00",
+      "status": "success",
+      "samples": 110,
+      "inspect_version": "0.3.263",
+      "role": "rescored-brandbias",
+      "judge": "opus46"
     }
   ]
 }

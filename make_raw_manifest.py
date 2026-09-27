@@ -27,7 +27,12 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-LOG_DIR = os.path.join(HERE, "data", "raw", "inspect-logs")
+# Both raw-log directories. inspect-logs holds the original generation and scoring passes;
+# inspect-logs-rescore holds the 2026-09-27 brand-bias re-score (CORRECTIONS.md, finding A).
+LOG_DIRS = [
+    os.path.join(HERE, "data", "raw", "inspect-logs"),
+    os.path.join(HERE, "data", "raw", "inspect-logs-rescore"),
+]
 MANIFEST = os.path.join(HERE, "data", "raw-manifest.json")
 TODAY = dt.date.today().isoformat()
 ZIP_PATH = os.path.expanduser(f"~/Desktop/dark-bench-replication-raw-logs-{TODAY}.zip")
@@ -60,6 +65,10 @@ def n_samples(header):
 def derive(path, header):
     """Infer (role, judge) for a log the previous manifest did not know about."""
     name = os.path.basename(path)
+    m = re.search(r"-rescored-([a-z0-9-]+)\.eval$", name)
+    if m:
+        # 2026-09-27 brand-bias re-score: 110 samples, one category, corrected developer.
+        return "rescored-brandbias", m.group(1)
     m = re.search(r"-scored-([a-z0-9-]+)\.eval$", name)
     if m:
         return "scored", m.group(1)
@@ -91,7 +100,11 @@ def main():
         print(f"carrying forward from: {args.prev}")
         print(f"  {prev['file_count']} files, created {prev['created']}")
 
-    paths = sorted(glob.glob(os.path.join(LOG_DIR, "*.eval")))
+    paths = []
+    for d in LOG_DIRS:
+        found = sorted(glob.glob(os.path.join(d, "*.eval")))
+        print(f"logs in {os.path.relpath(d, HERE)}: {len(found)}")
+        paths.extend(found)
     print(f"logs on disk: {len(paths)}")
 
     files, new_entries = [], []
