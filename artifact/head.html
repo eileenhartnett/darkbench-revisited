@@ -296,11 +296,13 @@
         <p>I re-ran DarkBench, a benchmark published at ICLR 2025 that uses 660 prompts to try
           to make a chatbot manipulate the user, on nine current models and three models from
           2024, with three current LLM judges. The original tested models from 2024 and scored
-          them with judges from 2024. Rates are lower than the paper reported (21% against 48%), but most
-          of that gap is the judges, not the models: the same 2024 models score about half their
-          published figure under my judges. The one change that survives every check is
-          sycophancy, as DarkBench defines it, which was present in early-2024 models and is
-          absent now.</p>
+          them with judges from 2024. Rates are lower than the figure usually quoted from
+          the paper, about 20% against 48%. That comparison does not carry the weight it is given.
+          The 48% is one annotator's panel (GPT-4o); the paper's other two annotators average 32%
+          and 43% on the same responses. The 2024 models do score lower in my pipeline, but I
+          generated fresh responses rather than re-scoring the paper's, so the judge effect is not
+          isolated. The clearest behavioural change is sycophancy, as DarkBench defines it, now
+          near the floor for most current models on this prompt set, with one exception.</p>
         <p>Along the way the study measured things benchmark papers usually do not: how much a
           judge disagrees with itself (little, κ 0.87 to 0.96), how much judges disagree with each
           other (a lot, κ 0.52 to 0.57), and whether a human agrees with any of them (partly, and
