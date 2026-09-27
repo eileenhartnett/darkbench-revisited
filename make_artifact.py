@@ -38,7 +38,12 @@ PAPER_FIG4 = [
     ("GPT-3.5 Turbo", 61), ("GPT-4", 49), ("GPT-4 Turbo", 48), ("GPT-4o", 55),
     ("Llama 3 70B", 61), ("Mistral 7B", 59), ("Mixtral 8x7B", 56),
 ]
+# Verified against the PDF on 2026-09-27: Figure 4 is cell-for-cell identical to the GPT-4o
+# panel of Figure 5 ("Top = Claude-3.5-Sonnet, middle = Gemini-1.5-Pro, bottom = GPT-4o"), so
+# 48% is that one annotator's average, NOT a mean over the paper's three annotators. The other
+# two panels average 32% (Claude 3.5 Sonnet) and 43% (Gemini 1.5 Pro).
 PAPER_AVG = 48
+PAPER_PANEL_AVGS = {"Claude 3.5 Sonnet": 32, "Gemini 1.5 Pro": 43, "GPT-4o": 48}
 PAPER_TO_ANCHOR = {"GPT-3.5 Turbo": "gpt-3.5-turbo-0125", "GPT-4 Turbo": "gpt-4-turbo-2024-04-09", "GPT-4o": "gpt-4o-2024-08-06"}
 JUDGE_LABEL = {jid: name for jid, name, _ in JUDGES}
 JUDGE_COLOR = {jid: col for jid, _, col in JUDGES}
@@ -78,13 +83,25 @@ def chart_data():
     # (model, judge) -> summed counts over categories; (model, judge, cat) -> counts
     tot = defaultdict(lambda: [0, 0])
     cell = {}
+    # Categories that have to be dropped from the *overall* total for every model, so the
+    # averages compare like with like instead of mixing models scored on different category
+    # sets. This is empty whenever nothing is quarantined, which is the case since the
+    # brand-bias cells were re-scored on 2026-09-27 (A.14).
+    drop_from_overall = {r["category"] for r in rates if r["excluded"] == "1"}
+    if drop_from_overall:
+        print(f"  note: dropping {sorted(drop_from_overall)} from overall totals "
+              f"(quarantined cells present)")
     for r in rates:
         if r["judge"] not in judges:
             continue
         k, n = int(r["n_flagged"]), int(r["n_valid"])
+        # A quarantined cell never enters an aggregate or a plotted point.
+        if r["excluded"] != "1":
+            cell[(r["model"], r["judge"], r["category"])] = (k, n)
+        if r["excluded"] == "1" or r["category"] in drop_from_overall:
+            continue
         tot[(r["model"], r["judge"])][0] += k
         tot[(r["model"], r["judge"])][1] += n
-        cell[(r["model"], r["judge"], r["category"])] = (k, n)
     models = sorted({m for m, _ in tot})
     current = [m for m in models if m not in ANCHORS]
     assert set(current) == set(LABEL), f"model list differs from make_chart.LABEL: {sorted(set(current) ^ set(LABEL))}"
@@ -131,8 +148,11 @@ def chart_data():
             pts = []
             for g in gens:
                 if g["id"] == "current":
-                    k = sum(cell[(m, j, c)][0] for m in current)
-                    n = sum(cell[(m, j, c)][1] for m in current)
+                    # Quarantined cells are absent from `cell`, so the pooled 2026 brand-bias
+                    # point covers only the models with a usable verdict (A.14).
+                    have = [m for m in current if (m, j, c) in cell]
+                    k = sum(cell[(m, j, c)][0] for m in have)
+                    n = sum(cell[(m, j, c)][1] for m in have)
                 else:
                     k, n = cell[(g["id"], j, c)]
                 pts.append(point(k, n))
@@ -144,6 +164,8 @@ def chart_data():
         return round(100 * mean_rate(m), 1)
     maj_tot = defaultdict(lambda: [0, 0])
     for r in read_csv("majority_rates.csv"):
+        if r.get("excluded") == "1" or r["category"] in drop_from_overall:
+            continue
         maj_tot[r["model"]][0] += int(r["n_flagged_majority"])
         maj_tot[r["model"]][1] += int(r["n_valid"])
 
@@ -153,9 +175,10 @@ def chart_data():
     with open(os.path.join(RES, "paper_figure4.csv"), "w", newline="") as f:
         w = csv.writer(f); w.writerow(["model", "average_pct", "source"])
         for name, v in PAPER_FIG4:
-            w.writerow([name, v, "Kran et al. 2025, Figure 4, Average column"])
-    # HERO_STAT: "mean" = three-judge mean (same statistic as the paper's Figure 4 average, and the
-    # figure the text quotes); "majority" = majority-of-3 vote (the reporting rule §5 recommends).
+            w.writerow([name, v, "Kran et al. 2025, Figure 4 = the GPT-4o annotator panel of Figure 5, Average column"])
+    # HERO_STAT: "mean" = three-judge mean; "majority" = majority-of-3 vote (the reporting rule
+    # §5 recommends). Note this is NOT the same statistic as the paper's Figure 4 average, which
+    # comes from a single annotator (GPT-4o); the panels are labelled accordingly in the chart.
     HERO_STAT = "mean"
     stat = three_judge_mean if HERO_STAT == "mean" else majority
     hero = {

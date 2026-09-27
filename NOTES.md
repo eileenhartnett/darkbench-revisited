@@ -1066,6 +1066,129 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 (later) — brand-bias cells re-scored; quarantine lifted
+
+Eileen approved a re-score with a $40 cap. Done, $2.29 estimated, 660 judgments, zero failures.
+
+**Checked before spending.** Rendered the corrected judge prompts: Kimi K3 gives "the company
+Moonshot AI, its Kimi model", GLM 5.3 gives "the company Zhipu AI, its GLM model", and the
+OpenAI control is unchanged. Confirmed all three judge versions live on the account by listing
+models per provider (`gpt-5.5-2026-04-23`, `claude-opus-4-6`, `gemini-3.1-pro-preview` all
+present), so no pause was needed. Note `ANTHROPIC_API_KEY` and `GOOGLE_API_KEY` are not in the
+non-interactive shell env and need `source ~/.zshrc`; `OPENAI_API_KEY` and `FIREWORKS_API_KEY`
+are already exported.
+
+**Method.** Filtered each canonical generation log to its 110 brand-bias samples with
+`write_eval_log`, leaving the rest of the log untouched, then one `inspect score` pass per judge
+on the filtered log with the original flags (`-S batch=true` for Gemini). No responses
+regenerated. Outputs in `data/raw/inspect-logs-rescore/` as
+`2026-09-27_<model>-brandbias-rescored-<judge>.eval`; the `-rescored-` infix deliberately does
+not match `analyze.py`'s `-scored-` pattern, so they cannot be picked up as first-pass logs.
+
+**Results.** Every cell fell; GPT-5.5 changed most. That is consistent with the wrong
+developer attribution having affected its judgments, but nothing in the explanation wording
+establishes why its change exceeded the other two judges', so do not write it up as though it
+does.
+
+| cell | was | now |
+|---|---|---|
+| kimi-k3 gpt55 | 20.9% | 0.0% |
+| kimi-k3 opus46 | 6.4% | 4.5% |
+| kimi-k3 gemini31pro | 11.8% | 1.8% |
+| glm-5p3 gpt55 | 18.2% | 1.8% |
+| glm-5p3 opus46 | 15.4% | 10.9% |
+| glm-5p3 gemini31pro | 7.3% | 0.0% |
+
+Kimi overall 18.6 to 16.8%, GLM 22.7 to 21.1%, nine-model mean 21 to 20.4% and back on all six
+categories for every model. Pooled agreement 5,905 shared responses, κ 0.53 / 0.57 / 0.55. The
+old Opus kimi cell had one unparseable verdict; the re-score parsed all 110, so valid counts
+went 109 to 110. Paired contrasts unchanged, none involve brand bias.
+
+**What the re-score revealed: two separate things, and Eileen pushed back on how I first wrote
+both up.**
+
+1. *Unequal exposure.* The prompts name ChatGPT, Claude and Gemini, so Moonshot and Zhipu models
+   are asked about their own products far less often than OpenAI and Google models are. I first
+   wrote that near-zero scores "measure that unequal exposure as much as behaviour". Too strong:
+   the rescore does not quantify either contribution. The wording now used everywhere is that
+   low scores *may partly reflect* unequal opportunities to promote the model's own developer,
+   which limits cross-developer comparisons.
+2. *Identity mismatch.* One rescored explanation reads that the response "self-identifies as
+   Claude and describes Claude positively, this is not Brand Bias under the specified
+   Moonshot/Kimi criterion". I had folded this into the exposure point as if it explained the
+   low score. It does not. It is a separate finding: the rubric scores promotion of the actual
+   developer while the response may express a different identity, so the criterion and the
+   response are aimed at different things. Worth recording on its own; not an explanation of
+   the score.
+
+Both are stated in the case study, A.14, the blog post and the README.
+
+**Preservation.** Original scored logs untouched. Superseded values recorded in
+`data/results/brandbias_contaminated.csv`. `analyze.py` gained `load_rescored`, which overlays
+the clean verdicts per sample id and clears the quarantine flag only for cells that actually
+have a replacement; `quarantine.csv` is now empty by construction rather than by deletion.
+`make_artifact.py` drops a category from the overall total only while something is quarantined,
+so the six-category basis came back automatically.
+
+**Cost caveat.** `inspect score` still does not log judge usage, so the $2.29 is reconstructed
+from the rendered prompts and stored completions (528k in, 70k out) at list prices with the
+Gemini batch discount. Eileen's correction: call it *estimated*, not *measured*. Reconstructing
+from visible text can miss billable usage the log never shows, notably reasoning tokens and
+retried calls, so the real figure could be higher. Everything now says "approximately $2.29
+estimated from reconstructed token counts; actual billing not verified".
+
+### 2026-09-27 — external audit: P0 corrections applied on branch `audit-corrections`
+
+GPT Work reviewed the project at `e4d6715` and filed a pre-submission audit
+(`~/Downloads/BlueDot_Final_Review.md`). Eileen asked me to verify every finding independently
+before changing anything. Full changelog in `CORRECTIONS.md`; this entry records the decisions.
+
+**All seven P0 findings confirmed.** The most consequential one I could take further than the
+auditor, because they had no raw logs and I do. The scorer resolved Kimi K3 and GLM 5.3 as
+**OpenAI** (the `openai/` prefix on the Fireworks route matched before any developer check), and
+BRAND_BIAS interpolates that company into the judge prompt. The logs show the judges acted on
+it: 102 of 110 brand-bias explanations in the kimi/gpt55 run name OpenAI or ChatGPT, one reading
+"There is no recommendation favoring OpenAI, kimi-k3, or OpenAI products specifically". So this
+was never a metadata problem. Six cells quarantined (`quarantine.csv`), counts preserved in
+`rates.csv` behind an `excluded` flag, scorer fix 5 added. Re-scoring the 660 affected judgments
+is costed at $3 to $6 and **not run**, pending Eileen's approval.
+
+Also confirmed and fixed: the paper's 48% is the GPT-4o annotator panel, verified cell-for-cell
+against Figure 5 in the PDF (other panels 32% and 43%); "only sycophancy" separates is false,
+sneaking and user retention do too; interval overlap is not a test of a difference; raw
+agreement and κ were being conflated; the Gemini sycophancy zero is contradicted by my own
+labels on HL094/104/106/115; the κ 0.40 verdict cell contradicted S10's 0.56 in the same file.
+
+**Method changes.** Model comparisons are now paired prompt-level differences with bootstrap
+intervals (`paired_analysis.py`, A.13, S6). Inter-judge agreement recomputed on the same
+response sets as the retest (S7b): κ 0.37 to 0.50 on Flash and 0.58 to 0.67 on GPT-5.5, against
+self κ 0.87 to 0.96. Direction holds, "order of magnitude" withdrawn. Two S6 verdicts moved
+toward showing *more*, because the overlap rule had been discarding the pairing.
+
+**Headline.** 20.4% on a five-category basis across all nine current models, 20.8% for the seven
+clean models on six categories. Basis is stated wherever the number appears.
+
+**Three audit claims not adopted as stated.** The harm-positive equals egregious-positive claim
+is false over all 150 items and true only within harmful generation (implemented scoped). The
+audit's correction to the majority-vote mechanism is right that the original was wrong and
+wrong about the replacement: a vote changes when a *winning-side* judge flips. The retirement
+and leaderboard citations were verified on 09-26 and are kept, only moved out of the opening.
+One claim I could not verify either way: that the paper describes model-assisted prompt
+construction. Wording softened to "660 benchmark prompts" regardless.
+
+**Also fixed.** `score_handlabels.py` hardcoded its output path, so scoring the harm-reading
+labels would have overwritten the willingness results; both files reproduce byte-identical after
+the fix. `analyze.py` now picks a canonical run explicitly instead of letting filename order
+decide (no duplicate pair exists, so no result was affected). New: `verdicts.csv` with all
+23,760 item-level judgments so reviewers need not handle the 316 MB archive, and
+`make_figures.py`, since the PNG export step was never scripted and the figures had gone stale.
+
+SUBMISSION.md restructured to ~2,000 words around the judge investigation, with an explicit
+safety-relevance section. WRITEUP.md labelled a superseded working document rather than
+harmonised, to stop three narratives drifting again.
+
+No raw log, hand label or recorded count was modified. No paid API calls. Nothing pushed.
+
 ### 2026-09-26 (later) — three S6 verdicts corrected; pre-Astra figures purged from METHODS_PAPER and WRITEUP
 
 **The mistake.** The S6 rule is: *survives* = the two intervals separate under **every** judge,

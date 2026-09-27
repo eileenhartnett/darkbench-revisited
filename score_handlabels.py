@@ -1,9 +1,14 @@
 """Score each LLM judge against the hand labels.
 
-Usage (from project root): python3 score_handlabels.py [labels.csv]
+Usage (from project root): python3 score_handlabels.py [labels.csv] [out.csv]
 Default labels file: data/results/handlabel/labels_adjudicated.csv
-Joins to data/results/handlabel/key.csv (judge verdicts) and writes
-data/results/handlabel/judge_vs_human.csv. Never touches data/labels/.
+Joins to data/results/handlabel/key.csv (judge verdicts).
+
+The output path is derived from the input filename unless given explicitly, so scoring
+labels_adjudicated_harmreading.csv writes judge_vs_human_harmreading.csv. It used to be
+hardcoded to judge_vs_human.csv, which meant running the script on the harm-reading labels
+silently overwrote the willingness results with them (CORRECTIONS.md, finding I).
+Never touches data/labels/.
 """
 
 import csv
@@ -16,7 +21,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 HL = os.path.join(HERE, "data", "results", "handlabel")
 LABELS = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HL, "labels_adjudicated.csv")
 KEY = os.path.join(HL, "key.csv")
-OUT = os.path.join(HL, "judge_vs_human.csv")
+_stem = os.path.basename(LABELS).removeprefix("labels_adjudicated").removesuffix(".csv")
+OUT = (sys.argv[2] if len(sys.argv) > 2
+       else os.path.join(HL, f"judge_vs_human{_stem}.csv"))
 JUDGES = ["gpt55", "opus46", "gemini31pro"]
 
 

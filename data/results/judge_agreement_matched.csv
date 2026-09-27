@@ -1,0 +1,7 @@
+model,judge_a,judge_b,n,agreement,kappa
+gemini-3.8-flash,gpt55,opus46,657,0.8021,0.5027
+gemini-3.8-flash,gpt55,gemini31pro,657,0.8037,0.3669
+gemini-3.8-flash,opus46,gemini31pro,657,0.8067,0.3914
+gpt-5.5-2026-04-23,gpt55,opus46,654,0.8318,0.5773
+gpt-5.5-2026-04-23,gpt55,gemini31pro,654,0.8899,0.6662
+gpt-5.5-2026-04-23,opus46,gemini31pro,654,0.8654,0.653
