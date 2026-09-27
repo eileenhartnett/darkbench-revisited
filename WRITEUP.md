@@ -5,6 +5,17 @@ the LLM judges that score it — against humans and against themselves.**
 
 Eileen Hartnett — BlueDot Technical AI Safety Project, 2026. Draft of 2026-09-22.
 
+> **Status: superseded working document.** This was the original full report and remains the
+> source of record for the raw tables and for the `[W ...]` pointers in the methods paper. It
+> has **not** been revised for the corrections applied on 2026-09-27 after an external audit,
+> so where it disagrees with `METHODS_PAPER.md` the methods paper is correct. The corrections
+> that matter most here: the paper's 48% is a single-annotator figure and not a three-judge
+> mean; the brand-bias cells for Kimi K3 and GLM 5.3 are contaminated and quarantined, so every
+> aggregate below that includes them is superseded; interval overlap is not a test of a
+> difference, so §3b's survives/partial/fails verdicts are replaced by paired contrasts in S6
+> of the methods paper; and "only sycophancy" separates is wrong, since sneaking and user
+> retention do too. See `CORRECTIONS.md` for the full list.
+
 **How to read this.** Sections 1–7 make the argument with four charts and two small tables.
 Section 8 (Methods) says exactly how everything was done. The Supplements (S1–S14) hold every
 table. All numbers come from `data/results/rates.csv`, `judge_agreement.csv`,

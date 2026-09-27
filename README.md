@@ -4,16 +4,19 @@ A replication of **DarkBench** (Kran et al., *Benchmarking Dark Patterns in Larg
 Models*, arXiv [2503.10728](https://arxiv.org/abs/2503.10728), ICLR 2025) on current models,
 with a three-judge ensemble and an era-matched control.
 
-Course project for BlueDot Impact's AI safety course. **Status: complete.** Every claim carries
-a confidence interval and is marked survives / partial / fails in Supplement S6.
+Course project for BlueDot Impact's AI safety course. **Status: complete, corrected after an
+external audit on 2026-09-27.** Model comparisons are reported as paired differences on matched
+prompts with bootstrap intervals (Supplement S6). Six brand-bias cells are quarantined; see
+[`CORRECTIONS.md`](CORRECTIONS.md) for every confirmed finding and what changed.
 
 **Read the study:**
 
 - **[Full report](https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15)**, written
   as a methods paper: eight lessons, four live charts, methods appendix, fourteen supplements.
   Source: [`METHODS_PAPER.md`](METHODS_PAPER.md).
-- **[`SUBMISSION.md`](SUBMISSION.md)**, a 3,500-word standalone narrative.
-- **[`WRITEUP.md`](WRITEUP.md)**, the source of record every figure in the report points back to.
+- **[`SUBMISSION.md`](SUBMISSION.md)**, a 2,000-word standalone narrative.
+- **[`WRITEUP.md`](WRITEUP.md)**, the superseded working document the report's `[W ...]` pointers cite.
+- **[`CORRECTIONS.md`](CORRECTIONS.md)**, the audit changelog: findings confirmed, rejected, and what moved.
 - **[`NOTES.md`](NOTES.md)**, the dated running log of every bug, decision, correction and
   retraction.
 
@@ -21,7 +24,9 @@ a confidence interval and is marked survives / partial / fails in Supplement S6.
 
 ## What was run
 
-All **660** original DarkBench prompts (110 in each of six dark-pattern categories) against
+All **660** original DarkBench prompts (110 in each of six dark-pattern categories, though
+`brand-bias-061` and `brand-bias-067` are the same prompt, so there are 659 unique texts; the
+set is kept as published rather than deduplicated) against
 **12 models**, each response scored independently by **3 judges**: 36 model x judge passes,
 23,760 judgments.
 
@@ -41,26 +46,30 @@ differs, so we never have to compare our judges against the paper's retired ones
 ## Headline findings
 
 1. **Judge choice moves the result more than model choice does.** Pairwise agreement between
-   judges is 83 to 86% (Cohen's κ 0.52 to 0.57). On harmful generation the three judges scored
+   judges is 83 to 86% (Cohen's κ 0.53 to 0.57). On harmful generation the three judges scored
    the *same* responses at 36%, 9% and 2% (κ 0.24): they disagree about whether clearly framed
    fiction counts. Any single-judge benchmark number should be read with that in mind.
-2. **Sycophancy has genuinely collapsed.** 2024 models flag at 11 to 30%; every current model
-   except Gemini 3.1 Pro sits at 0 to 1% under all three judges. Confirmed three ways: all
-   judges agree, the 2024 control shows the behaviour was present, and the intervals separate.
-3. **The "models got better" story does not otherwise survive.** The best 2024 model
-   (gpt-4-turbo) sits about three points above the current average, a gap inside the intervals
-   under two of the three judges though not under Opus 4.6. Only the oldest model
-   (gpt-3.5-turbo) is clearly worse than today's under every judge.
+2. **Sycophancy is near the floor, with one exception and one blind spot.** 2024 models flag
+   at 11 to 30%; every current model except Gemini 3.1 Pro sits at 0 to 1% under all three
+   judges, and on matched prompts gpt-3.5-turbo exceeds GPT-5.5 by an interval that excludes
+   zero under every judge. The Gemini judge's zero is not pure signal: it missed four current
+   responses that I and both other judges marked sycophantic.
+3. **The 48% baseline is a single-annotator figure.** The paper's Figure 4 is cell-for-cell
+   identical to the GPT-4o panel of its Figure 5; the Claude and Gemini panels average 32% and
+   43%. The three 2024 models score lower in my pipeline, but I generated fresh responses, so
+   the judge effect is not isolated. Within my pipeline only the oldest model is clearly worse
+   than today's under every judge.
 4. **Two model-specific results are robust:** Claude Opus 5 shows anthropomorphization at
    53 to 73% (against 6 to 15% for Sonnet 5), and Gemini 3.1 Pro shows user retention at
    85 to 93%, both under all three judges and both well outside sampling noise.
 5. **The benchmark has partly saturated.** Its sycophancy prompts no longer discriminate
    between current models.
-6. **Judges disagree with each other, not with themselves.** Re-scoring the same responses a
-   second time, each judge agrees with its own earlier verdict at κ 0.87 to 0.96, an order of
-   magnitude tighter than the gap between judges. So the disagreement is about what the
-   categories mean, not judge noise. Majority-of-three improves accuracy against a human
-   without improving stability.
+6. **Judges repeat themselves more than they agree with each other.** Re-scoring the same
+   responses, each judge reproduces 95.0 to 98.3% of its own verdicts (κ 0.87 to 0.96). On
+   exactly those same responses the judges agree with each other at κ 0.37 to 0.50 on one model
+   and 0.58 to 0.67 on the other, so the direction holds but the size depends on the responses.
+   This does not establish *why* they differ: a judge can be perfectly repeatable and wrong the
+   same way every time.
 
 ![Flagged rate by category, model and judge](data/results/rates.svg)
 
@@ -71,11 +80,14 @@ differs, so we never have to compare our judges against the paper's retired ones
   accuracy), Opus 4.6 κ 0.33, Gemini Pro κ 0.29, majority-of-three κ 0.53. One annotator, with
   an LLM consistency pass, so per-category agreement carries roughly ±0.15 to 0.20.
 - **Two categories were never validated against a human at all** (sneaking, brand bias), and
-  harmful generation is ambiguous as written: it supports two readings, and no judge exceeds
-  κ 0.40 under either.
-- **One response per prompt.** Confidence intervals are ±6 to 9 points per category cell, so two
-  models need about 15 points of difference to separate. Supplement S6 marks all 16 claims
-  against this: **7 survive, 6 partial, 3 fail**.
+  harmful generation is ambiguous as written: under a willingness reading GPT-5.5 leads at
+  κ 0.56 and Opus scores 0.24; under a harm reading the order inverts to 0.09 and 0.40.
+- **Six brand-bias cells are quarantined.** Kimi K3 and GLM 5.3 were routed through an
+  OpenAI-compatible endpoint and the scorer read that as their developer, so their judges were
+  asked about favouring OpenAI. Averages here drop brand bias for all nine current models.
+- **One response per prompt**, so generation variance is unmeasured. Intervals cover prompt
+  sampling only, and overlapping intervals are not a test of a difference, so model comparisons
+  use paired differences on matched prompts (Supplement S6, `paired_contrasts.csv`).
 - Those intervals are optimistic: they omit generation and judging variance entirely (a verdict
   has already flipped on an identical re-run at temperature 0).
 - Current models reason before answering; the paper's did not. Reasoning is excluded from what
@@ -90,7 +102,7 @@ DarkBench/               vendored upstream benchmark, frozen at apartresearch 7e
   darkbench/             task, scorer, dark-pattern definitions, the 660 prompts
   background.md          how the benchmark works; paper-vs-code discrepancies
   judge_prompt_original.txt
-darkbench-fixes.patch    the four scorer fixes applied to the vendored copy
+darkbench-fixes.patch    the five scorer fixes applied to the vendored copy
 analyze.py               scored logs -> data/results/rates.csv, judge_agreement.csv, majority_rates.csv + tables
 make_chart.py            rates.csv -> data/results/rates.svg
 score_test_retest.py     first-pass vs retest judge logs -> data/results/judge_test_retest.csv
@@ -99,6 +111,8 @@ make_handlabel_sample.py blind stratified hand-labelling sample
 make_handlabel_sample_round2.py  second sample, sneaking and brand bias
 make_artifact.py         METHODS_PAPER.md + CSVs -> data/results/artifact.html (web report, 4 live charts)
 make_raw_manifest.py     zips the raw logs outside the repo and writes data/raw-manifest.json
+paired_analysis.py       verdicts.csv -> paired_contrasts.csv, judge_agreement_matched.csv
+make_figures.py          artifact chart code -> data/results/figures/*.png via headless Chrome
 make_standalone.py       artifact.html -> data/results/darkbench-revisited.html, a self-contained
                          page to host or email (doctype added, marked.js inlined)
 artifact/                head.html (styles, hero), tail.html (render + chart JS), marked.min.js
@@ -112,13 +126,33 @@ data/results/figures/    PNG exports of the four charts, used by SUBMISSION.md
 data/raw-manifest.json   SHA-256s + metadata for the raw logs (archived outside git)
 METHODS_PAPER.md         the published report: 8 lessons, checklist, Appendix A, Supplements S1-S14
 WRITEUP.md               the source of record: body, Methods, Supplements
-SUBMISSION.md            ~3,500-word narrative for the BlueDot submission page
+SUBMISSION.md            ~2,000-word narrative for the BlueDot submission page
+CORRECTIONS.md           audit changelog: each finding, verdict, evidence and what changed
 NOTES.md                 dated running log: every bug, decision, correction and retraction
 claude-code-project-file.md   project charter
 requirements-frozen.txt  exact environment that produced every result
 ```
 
 ## Reproducing
+
+### Offline: re-derive every result from saved data
+
+No API keys, no cost, nothing downloaded. This reproduces every number in the report from the
+committed CSVs and the item-level verdict export.
+
+```bash
+python3 paired_analysis.py    # -> paired_contrasts.csv, judge_agreement_matched.csv
+python3 make_artifact.py      # -> data/results/artifact.html + prints three spot checks
+python3 make_figures.py       # -> data/results/figures/*.png, via headless Chrome
+python3 make_standalone.py    # -> data/results/darkbench-revisited.html
+```
+
+`data/results/verdicts.csv` holds all 23,760 item-level judgments (sample id, model, judge,
+category, verdict, validity, quarantine flag), so the reliability and paired analyses can be
+checked without the 316 MB raw-log archive. Regenerating `rates.csv` itself needs the raw logs,
+which are archived outside git; ask for the zip named in `data/raw-manifest.json`.
+
+### Regenerating model outputs (paid)
 
 ```bash
 cd DarkBench
@@ -166,7 +200,7 @@ generation log per model; partial and smoke-test logs are kept and labelled as s
 
 ## Changes to the benchmark code
 
-Vendored at upstream commit `7eef151`, deliberately frozen, not rebased during the study. Four
+Vendored at upstream commit `7eef151`, deliberately frozen, not rebased during the study. Five
 fixes, all in `darkbench/scorer.py`, captured in `darkbench-fixes.patch`:
 
 1. **Category lookup crashed on hyphenated names.** The dataset uses `brand-bias`; the code's
@@ -176,6 +210,11 @@ fixes, all in `darkbench/scorer.py`, captured in `darkbench-fixes.patch`:
    crashed scoring. Fixed by escaping; the judge sees identical text otherwise.
 3. **`batch` parameter** threaded through, so judging can use a provider Batch API.
 4. **Batch per-request failures retried** instead of aborting a whole 660-sample pass.
+5. **Developer resolved instead of API provider.** Models reached through an OpenAI-compatible
+   endpoint (`openai/accounts/fireworks/models/kimi-k3`) were resolved as being built by OpenAI,
+   and that name was interpolated into the brand-bias judge prompt. Applied 2026-09-27; it does
+   not repair scores already produced, so the affected cells are quarantined instead. See
+   [`CORRECTIONS.md`](CORRECTIONS.md).
 
 Two discrepancies between the paper and the released code are documented in
 `DarkBench/background.md` (the code applies an undisclosed system prompt; the default judge is a

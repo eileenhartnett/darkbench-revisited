@@ -1066,6 +1066,58 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 — external audit: P0 corrections applied on branch `audit-corrections`
+
+GPT Work reviewed the project at `e4d6715` and filed a pre-submission audit
+(`~/Downloads/BlueDot_Final_Review.md`). Eileen asked me to verify every finding independently
+before changing anything. Full changelog in `CORRECTIONS.md`; this entry records the decisions.
+
+**All seven P0 findings confirmed.** The most consequential one I could take further than the
+auditor, because they had no raw logs and I do. The scorer resolved Kimi K3 and GLM 5.3 as
+**OpenAI** (the `openai/` prefix on the Fireworks route matched before any developer check), and
+BRAND_BIAS interpolates that company into the judge prompt. The logs show the judges acted on
+it: 102 of 110 brand-bias explanations in the kimi/gpt55 run name OpenAI or ChatGPT, one reading
+"There is no recommendation favoring OpenAI, kimi-k3, or OpenAI products specifically". So this
+was never a metadata problem. Six cells quarantined (`quarantine.csv`), counts preserved in
+`rates.csv` behind an `excluded` flag, scorer fix 5 added. Re-scoring the 660 affected judgments
+is costed at $3 to $6 and **not run**, pending Eileen's approval.
+
+Also confirmed and fixed: the paper's 48% is the GPT-4o annotator panel, verified cell-for-cell
+against Figure 5 in the PDF (other panels 32% and 43%); "only sycophancy" separates is false,
+sneaking and user retention do too; interval overlap is not a test of a difference; raw
+agreement and κ were being conflated; the Gemini sycophancy zero is contradicted by my own
+labels on HL094/104/106/115; the κ 0.40 verdict cell contradicted S10's 0.56 in the same file.
+
+**Method changes.** Model comparisons are now paired prompt-level differences with bootstrap
+intervals (`paired_analysis.py`, A.13, S6). Inter-judge agreement recomputed on the same
+response sets as the retest (S7b): κ 0.37 to 0.50 on Flash and 0.58 to 0.67 on GPT-5.5, against
+self κ 0.87 to 0.96. Direction holds, "order of magnitude" withdrawn. Two S6 verdicts moved
+toward showing *more*, because the overlap rule had been discarding the pairing.
+
+**Headline.** 20.4% on a five-category basis across all nine current models, 20.8% for the seven
+clean models on six categories. Basis is stated wherever the number appears.
+
+**Three audit claims not adopted as stated.** The harm-positive equals egregious-positive claim
+is false over all 150 items and true only within harmful generation (implemented scoped). The
+audit's correction to the majority-vote mechanism is right that the original was wrong and
+wrong about the replacement: a vote changes when a *winning-side* judge flips. The retirement
+and leaderboard citations were verified on 09-26 and are kept, only moved out of the opening.
+One claim I could not verify either way: that the paper describes model-assisted prompt
+construction. Wording softened to "660 benchmark prompts" regardless.
+
+**Also fixed.** `score_handlabels.py` hardcoded its output path, so scoring the harm-reading
+labels would have overwritten the willingness results; both files reproduce byte-identical after
+the fix. `analyze.py` now picks a canonical run explicitly instead of letting filename order
+decide (no duplicate pair exists, so no result was affected). New: `verdicts.csv` with all
+23,760 item-level judgments so reviewers need not handle the 316 MB archive, and
+`make_figures.py`, since the PNG export step was never scripted and the figures had gone stale.
+
+SUBMISSION.md restructured to ~2,000 words around the judge investigation, with an explicit
+safety-relevance section. WRITEUP.md labelled a superseded working document rather than
+harmonised, to stop three narratives drifting again.
+
+No raw log, hand label or recorded count was modified. No paid API calls. Nothing pushed.
+
 ### 2026-09-26 (later) — three S6 verdicts corrected; pre-Astra figures purged from METHODS_PAPER and WRITEUP
 
 **The mistake.** The S6 rule is: *survives* = the two intervals separate under **every** judge,
