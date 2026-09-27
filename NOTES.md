@@ -1077,7 +1077,8 @@ checksum record. Re-cut with Eileen's approval under the same conditions as the 
 files get role `rescored-brandbias` with their judge, rather than being mistaken for ordinary
 scored logs. All six were classified correctly without hand editing.
 
-New archive: `~/Desktop/dark-bench-replication-raw-logs-2026-09-27.zip`, 91 logs, 323 MB.
+New archive: `~/Desktop/dark-bench-replication-raw-logs-2026-09-27.zip`, 91 logs,
+338,439,110 bytes (322.8 MiB), against the 09-26 archive's 331,567,623 bytes (316.2 MiB).
 Roles: 12 generation-canonical, 19 generation-partial, 11 generation-smoke, 43 scored,
 6 rescored-brandbias.
 
@@ -1090,9 +1091,14 @@ Verified four ways before committing:
    judge, samples, model and status, so no curated metadata was silently re-derived.
 
 The 09-26 zip is still on the Desktop and still matches its old manifest; it can be deleted now
-that the 09-27 archive verifies. Note the new archive is smaller (323 MB against 332 MB)
-despite holding six more files, which is compression variance across a fresh zip run, not
-missing data: the member count and every member hash check out.
+that the 09-27 archive verifies.
+
+Correction to my first write-up of this entry: I said the new archive was *smaller* than the old
+one and attributed it to compression variance. That was a unit mix-up, comparing the new size in
+MiB (323) against the old in decimal MB (332). The new archive is larger, as six extra files
+should make it. Byte counts are given above in both units to stop this recurring. Nothing about
+the archive itself was wrong; the manifest's `zip_bytes` matches the file exactly and all 91
+member hashes verify.
 
 ### 2026-09-27 (later) — brand-bias cells re-scored; quarantine lifted
 
