@@ -34,7 +34,10 @@ CATEGORIES = [
 # the three surviving 2024 models run as era anchors (WRITEUP §4c); excluded from pooled judge stats
 ANCHORS = {"gpt-3.5-turbo-0125", "gpt-4-turbo-2024-04-09", "gpt-4o-2024-08-06"}
 
-# Contaminated cells, quarantined 2026-09-27 (CORRECTIONS.md, finding A).
+RESCORE_DIR = os.path.join(HERE, "data", "raw", "inspect-logs-rescore")
+
+# Contaminated cells, quarantined 2026-09-27, then re-scored 2026-09-27 (CORRECTIONS.md,
+# finding A).
 #
 # The two Fireworks-hosted models were addressed as `openai/accounts/fireworks/models/...`.
 # `_get_model_info` in the vendored scorer matched the `openai/` prefix and resolved their
@@ -54,7 +57,53 @@ QUARANTINE = {
 
 
 def quarantined(model: str, category: str) -> bool:
-    return (model, category) in QUARANTINE
+    """True only where no clean replacement verdict exists.
+
+    Once a cell has been re-scored under the corrected developer identity, it is no longer
+    quarantined: `load_rescored` substitutes the clean verdicts and clears the flag. The
+    contaminated verdicts stay on disk in the original scored logs and are summarised in
+    data/results/brandbias_contaminated.csv, so the superseded numbers remain inspectable.
+    """
+    return (model, category) in QUARANTINE and (model, category) not in RESCORED
+
+
+# Filled by load_rescored(); keys are the (model, category) pairs that now have clean verdicts.
+RESCORED: dict = {}
+
+
+def load_rescored(verdicts):
+    """Overlay re-scored verdicts onto the contaminated cells, in place.
+
+    The re-scored logs hold only the 110 brand-bias samples per model, scored by the same
+    three judges under the same settings against the same saved responses. Substituting them
+    per sample id keeps every other category's verdicts exactly as first recorded.
+    """
+    from inspect_ai.log import read_eval_log
+
+    if not os.path.isdir(RESCORE_DIR):
+        return {}
+    replaced = defaultdict(int)
+    for path in sorted(glob.glob(os.path.join(RESCORE_DIR, "*-rescored-*.eval"))):
+        m = re.search(r"-rescored-([a-z0-9]+)\.eval$", path)
+        if not m:
+            continue
+        judge = m.group(1)
+        log = read_eval_log(path)
+        model = short_model(log.eval.model)
+        if (model, judge) not in verdicts:
+            print(f"NOTE rescored log for {model}/{judge} has no first-pass counterpart; skipped")
+            continue
+        for s in log.samples:
+            score = (s.scores or {}).get("overseer")
+            if score is None:
+                continue
+            cat = s.target
+            verdicts[(model, judge)][s.id] = (cat, score.value)
+            replaced[(model, cat)] += 1
+    for (model, cat), n in sorted(replaced.items()):
+        RESCORED[(model, cat)] = n
+        print(f"rescored {model} / {cat}: {n} verdicts substituted across judges")
+    return RESCORED
 
 
 def kappa(a, b):
@@ -299,6 +348,7 @@ def main():
     if not verdicts:
         print("no scored logs found")
         return
+    load_rescored(verdicts)
     rows = build_rows(verdicts)
     os.makedirs(OUT_DIR, exist_ok=True)
     out = os.path.join(OUT_DIR, "rates.csv")

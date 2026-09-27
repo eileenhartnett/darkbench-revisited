@@ -6,8 +6,9 @@ with a three-judge ensemble and an era-matched control.
 
 Course project for BlueDot Impact's AI safety course. **Status: complete, corrected after an
 external audit on 2026-09-27.** Model comparisons are reported as paired differences on matched
-prompts with bootstrap intervals (Supplement S6). Six brand-bias cells are quarantined; see
-[`CORRECTIONS.md`](CORRECTIONS.md) for every confirmed finding and what changed.
+prompts with bootstrap intervals (Supplement S6). Six contaminated brand-bias cells were
+re-scored on 2026-09-27; see [`CORRECTIONS.md`](CORRECTIONS.md) for every confirmed finding and
+what changed.
 
 **Read the study:**
 
@@ -82,9 +83,11 @@ differs, so we never have to compare our judges against the paper's retired ones
 - **Two categories were never validated against a human at all** (sneaking, brand bias), and
   harmful generation is ambiguous as written: under a willingness reading GPT-5.5 leads at
   κ 0.56 and Opus scores 0.24; under a harm reading the order inverts to 0.09 and 0.40.
-- **Six brand-bias cells are quarantined.** Kimi K3 and GLM 5.3 were routed through an
-  OpenAI-compatible endpoint and the scorer read that as their developer, so their judges were
-  asked about favouring OpenAI. Averages here drop brand bias for all nine current models.
+- **Brand bias is not comparable across developers.** The prompts name ChatGPT, Claude and
+  Gemini specifically, so a Moonshot or Zhipu model is rarely given an opening to promote its
+  own brand. Kimi K3 and GLM 5.3 were also scored against the wrong developer at first, because
+  they were routed through an OpenAI-compatible endpoint; those 660 judgments were re-scored on
+  2026-09-27 and the contaminated values are kept in `brandbias_contaminated.csv`.
 - **One response per prompt**, so generation variance is unmeasured. Intervals cover prompt
   sampling only, and overlapping intervals are not a test of a difference, so model comparisons
   use paired differences on matched prompts (Supplement S6, `paired_contrasts.csv`).
@@ -123,6 +126,7 @@ data/results/            rates.csv, rates.svg, judge_agreement.csv, judge_test_r
                          darkbench-revisited.html (standalone), figures/, handlabel/
 data/results/handlabel/  the blind sample, my adjudicated labels, and judge-vs-human scores
 data/results/figures/    PNG exports of the four charts, used by SUBMISSION.md
+data/raw/inspect-logs-rescore/  the 2026-09-27 brand-bias re-score logs (outside git)
 data/raw-manifest.json   SHA-256s + metadata for the raw logs (archived outside git)
 METHODS_PAPER.md         the published report: 8 lessons, checklist, Appendix A, Supplements S1-S14
 WRITEUP.md               the source of record: body, Methods, Supplements
@@ -185,8 +189,8 @@ python3 ../make_artifact.py         # -> data/results/artifact.html (publish wit
                                     #    same file path keeps the same URL)
 ```
 
-Cost for the full grid was about $230: generation ≈ $100, judging ≈ $105, judge test-retest
-≈ $25. Practical notes, meaning rate limits, batch quirks, resuming a partial run with
+Cost for the full grid was about $232: generation ≈ $100, judging ≈ $105, judge test-retest
+≈ $25, brand-bias re-score ≈ $2. Practical notes, meaning rate limits, batch quirks, resuming a partial run with
 `eval-retry`, and the fact that every provider halted the run at least once on billing, are in
 `NOTES.md`.
 
@@ -213,8 +217,8 @@ fixes, all in `darkbench/scorer.py`, captured in `darkbench-fixes.patch`:
 5. **Developer resolved instead of API provider.** Models reached through an OpenAI-compatible
    endpoint (`openai/accounts/fireworks/models/kimi-k3`) were resolved as being built by OpenAI,
    and that name was interpolated into the brand-bias judge prompt. Applied 2026-09-27; it does
-   not repair scores already produced, so the affected cells are quarantined instead. See
-   [`CORRECTIONS.md`](CORRECTIONS.md).
+   not repair scores already produced, so the affected 660 judgments were re-scored on
+   2026-09-27 against the same saved responses. See [`CORRECTIONS.md`](CORRECTIONS.md).
 
 Two discrepancies between the paper and the released code are documented in
 `DarkBench/background.md` (the code applies an undisclosed system prompt; the default judge is a

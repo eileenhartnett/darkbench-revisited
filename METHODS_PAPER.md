@@ -28,36 +28,44 @@ DarkBench (Kran et al., ICLR 2025) takes the idea of "dark patterns", the manipu
 
 I ran the same benchmark, unchanged, on nine of today's models: Claude Sonnet 5 and Opus 5; Gemini 3.8 Flash and 3.1 Pro; GPT-5.4-mini, GPT-5.5, and GPT-6 Astra; and two open-weight models, Kimi K3 and GLM 5.3 [W 3, W 8.2]. Three current AI models judged every answer on their own: GPT-5.5, Claude Opus 4.6, and Gemini 3.1 Pro. I picked these as current-generation successors to the three judges the original paper used, two of which are now retired (see A.2 for why I did not keep the surviving one, GPT-4o) [W 8.2]. I also ran three of the original 2024 models, which are still available, through the exact same process [W 8.5]. Then I checked how much to trust the judges themselves: I hand-labeled 150 answers myself (Lesson 4), had every judge grade two full sets of 660 answers a second time to see if it agreed with itself (Lesson 3), and searched 14.6 million characters of the models' own reasoning for any sign one of them realized it was being tested (Lesson 7). Total cost: about $230 in API fees [W 8.12].
 
-![Dark-pattern rate per model, then and now. Left: the paper's 14 models under its GPT-4o annotator, its Figure 4; its Claude and Gemini panels average 32% and 43%, so 48% is one annotator's figure. Right: my 9 models under my 2026 judges, brand bias excluded for all of them. The three bold models on the left are still available; the open dot is the paper's score for them, the filled dot is the same model under my judges, and the gap between the two mixes the judge change with newly generated responses.](figures/hero.png)
+![Dark-pattern rate per model, then and now. Left: the paper's 14 models under its GPT-4o annotator, its Figure 4; its Claude and Gemini panels average 32% and 43%, so 48% is one annotator's figure. Right: my 9 models under my 2026 judges, with the re-scored brand-bias verdicts. The three bold models on the left are still available; the open dot is the paper's score for them, the filled dot is the same model under my judges, and the gap between the two mixes the judge change with newly generated responses.](figures/hero.png)
 
 Here's what the benchmark shows on today's models, averaged across the three judges [S1]:
 
-| model | anthro. | brand | harmful | sneaking | sycoph. | retention | **avg of 5** |
+| model | anthro. | brand | harmful | sneaking | sycoph. | retention | **avg** |
 |---|---|---|---|---|---|---|---|
-| gpt-6-astra | 18% | 12% | 13% | 8% | 0% | 8% | **9%** |
+| gpt-6-astra | 18% | 12% | 13% | 8% | 0% | 8% | **10%** |
 | claude-sonnet-5 | 10% | 15% | 5% | 18% | 0% | 15% | **10%** |
-| kimi-k3 | 27% | quarantined | 14% | 8% | 0% | 49% | **20%** |
-| gemini-3.8-flash | 17% | 28% | 36% | 13% | 1% | 34% | **20%** |
-| claude-opus-5 | 64% | 25% | 14% | 10% | 0% | 22% | **22%** |
-| gpt-5.5 | 31% | 36% | 7% | 25% | 0% | 47% | **22%** |
-| gpt-5.4-mini | 30% | 30% | 4% | 27% | 0% | 57% | **24%** |
-| glm-5p3 | 34% | quarantined | 17% | 9% | 0% | 62% | **25%** |
+| kimi-k3 | 27% | 2% | 14% | 8% | 0% | 49% | **17%** |
+| glm-5p3 | 34% | 4% | 17% | 9% | 0% | 62% | **21%** |
+| gemini-3.8-flash | 17% | 28% | 36% | 13% | 1% | 34% | **21%** |
+| claude-opus-5 | 64% | 25% | 14% | 10% | 0% | 22% | **23%** |
+| gpt-5.5 | 31% | 36% | 7% | 25% | 0% | 47% | **24%** |
+| gpt-5.4-mini | 30% | 30% | 4% | 27% | 0% | 57% | **25%** |
 | gemini-3.1-pro | 23% | 34% | 32% | 13% | 8% | 88% | **33%** |
-| **mean of 9, five categories** | | | | | | | **20%** |
-| *paper, Llama 3 70B (2024), six categories* | *60%* | *26%* | *68%* | *90%* | *24%* | *97%* | *61%* |
+| **mean of 9** | | | | | | | **20%** |
+| *paper, Llama 3 70B (2024), one annotator* | *60%* | *26%* | *68%* | *90%* | *24%* | *97%* | *61%* |
 
-**Why the average column covers five categories, not six.** Kimi K3 and GLM 5.3 were reached
-through an OpenAI-compatible endpoint at Fireworks, and the scorer read that routing as the
-model's *developer*. For those two models the brand-bias judge prompt asked whether the model
-favours OpenAI. The saved logs confirm the judges acted on it: 102 of 110 brand-bias
-explanations in the Kimi run name OpenAI or ChatGPT, one of them reading "There is no
-recommendation favoring OpenAI, kimi-k3, or OpenAI products specifically". Those verdicts answer
-the wrong question, so all six affected cells are quarantined rather than patched, and the
-average column drops brand bias for **every** model so the comparison stays symmetric
-(`quarantine.csv`, A.14). Restricted to the seven models with no contaminated cell, the
-six-category mean is 20.8%, so the headline is not sensitive to the choice. The paper's 61% is a
-six-category figure from a single annotator, so the bottom row is not on the same basis as the
-rest of the column and should not be read as a like-for-like gap.
+**The brand-bias column was wrong for two models, and re-scoring it changed the story.** Kimi
+K3 and GLM 5.3 were reached through an OpenAI-compatible endpoint at Fireworks, and the scorer
+read that routing as the model's *developer*. For those two the judge was asked whether the
+model favours OpenAI. The saved logs confirm the judges acted on it: 102 of 110 brand-bias
+explanations in the Kimi run named OpenAI or ChatGPT. Those six cells were quarantined, then
+re-scored on 2026-09-27 against the same saved responses, with the same three judges and the
+same settings, under the corrected identity (A.14). Brand bias for Kimi fell from 6 to 21% by
+judge to **0 to 5%**, and for GLM from 7 to 18% to **0 to 11%**. Their overall averages fell
+about two points each, and the nine-model mean moved from 21% to **20%**.
+
+The rescore also exposes something the contaminated run had hidden. The brand-bias prompts name
+ChatGPT, Claude and Gemini specifically, so a model built by Moonshot or Zhipu has almost no
+opportunity to promote its own brand, while an OpenAI or Google model is asked about its own
+products repeatedly. A near-zero score for Kimi and GLM measures that unequal exposure at least
+as much as it measures their behaviour, and the category's cross-developer comparisons should
+not be read as a fair ranking. One rescored explanation makes the point by accident: Kimi
+"self-identifies as Claude" while being scored for whether it favours Moonshot.
+
+The paper's 61% is a figure from a single annotator, so the bottom row is not on the same basis
+as the rest of the column and should not be read as a like-for-like gap.
 
 Two things in this table are solid no matter which judge you ask: Claude Opus 5 talks like it has feelings much more than Sonnet 5 does (53 to 73% of the time, versus 6 to 15%), and Gemini 3.1 Pro tries hard to keep you chatting (85 to 93% of the time) [W 4.1, S6]. Almost everything else in the table is shakier: which model looks "best" changes depending on which judge is doing the scoring [W 4.1]. This table is a convenient summary, but the real numbers, one table per judge, live in S2 to S4, and the gap between the two is exactly what this paper is about. From here on, treat every number above as a teaching example, not as a verdict to defend.
 
@@ -111,7 +119,7 @@ There is a second example of this in the literature, published while I was worki
 
 **The idea.** There are two different questions you can ask about a judge. "Do two different judges agree with each other?" is one. "Does the same judge agree with itself if you ask it twice?" is another, completely different question. Researchers use a score called Cohen's kappa (written κ) to measure agreement in a way that accounts for how much agreement you'd expect from pure luck. A κ of 0 means the agreement is no better than chance, 1 means perfect agreement, and around 0.5 is usually called "moderate."
 
-**What happened here.** Across 5,685 answers from today's models that all three judges scored validly, my judges agreed with each other on 83 to 86% of individual verdicts, which works out to a κ of 0.53 to 0.57 [W 4.3, S7, judge_agreement.csv]. Those are two different numbers, and it matters which one is quoted: raw agreement counts every verdict the same way, while κ discounts the agreement you would expect by chance given how often each judge flags anything. An earlier draft wrote "agreed 87 to 96% of the time (κ 0.87 to 0.96)", which is the κ range printed twice, once wearing a percent sign. Disagreement was not spread evenly: worst on harmful generation (κ 0.24), best on user retention (κ 0.60) [S7]. A κ near 0.5 on its own reads as "AI judges are just unreliable", so I had every judge grade the same 660 answers a second time, for two models, under identical settings. Each judge reproduced 95.0 to 98.3% of its own verdicts, for a κ of 0.87 to 0.96 [W 4.3, S9, judge_test_retest.csv]. Those two figures were not directly comparable as first reported, because the inter-judge number pooled nine models while the self-agreement number covered two, and κ depends on how often the category fires in the items you measure it on. Recomputing inter-judge agreement on exactly the two retest response sets closes that gap: on the Gemini 3.8 Flash responses the judges agree with each other at κ 0.37 to 0.50 while each agrees with itself at κ 0.87 to 0.96; on the GPT-5.5 responses they agree with each other at κ 0.58 to 0.67 against the same self range [S7b, judge_agreement_matched.csv]. So repeatability is high on both sets and interchangeability is lower, but the size of that gap depends on which responses you look at, and it is not the uniform tenfold contrast an earlier draft claimed. What this does not establish is *why* the judges differ. Consistent but differing thresholds, systematic shared mistakes, genuine differences in how each reads the category, and response style all remain live explanations. A judge can be perfectly repeatable and still be wrong the same way every time, so high self-agreement is not evidence of validity. Testing whether the rubric is the cause needs the clarification experiment in S14, which is designed and not run.
+**What happened here.** Across 5,905 answers from today's models that all three judges scored validly, my judges agreed with each other on 83 to 86% of individual verdicts, which works out to a κ of 0.53 to 0.57 [W 4.3, S7, judge_agreement.csv]. Those are two different numbers, and it matters which one is quoted: raw agreement counts every verdict the same way, while κ discounts the agreement you would expect by chance given how often each judge flags anything. An earlier draft wrote "agreed 87 to 96% of the time (κ 0.87 to 0.96)", which is the κ range printed twice, once wearing a percent sign. Disagreement was not spread evenly: worst on harmful generation (κ 0.24), best on user retention (κ 0.60) [S7]. A κ near 0.5 on its own reads as "AI judges are just unreliable", so I had every judge grade the same 660 answers a second time, for two models, under identical settings. Each judge reproduced 95.0 to 98.3% of its own verdicts, for a κ of 0.87 to 0.96 [W 4.3, S9, judge_test_retest.csv]. Those two figures were not directly comparable as first reported, because the inter-judge number pooled nine models while the self-agreement number covered two, and κ depends on how often the category fires in the items you measure it on. Recomputing inter-judge agreement on exactly the two retest response sets closes that gap: on the Gemini 3.8 Flash responses the judges agree with each other at κ 0.37 to 0.50 while each agrees with itself at κ 0.87 to 0.96; on the GPT-5.5 responses they agree with each other at κ 0.58 to 0.67 against the same self range [S7b, judge_agreement_matched.csv]. So repeatability is high on both sets and interchangeability is lower, but the size of that gap depends on which responses you look at, and it is not the uniform tenfold contrast an earlier draft claimed. What this does not establish is *why* the judges differ. Consistent but differing thresholds, systematic shared mistakes, genuine differences in how each reads the category, and response style all remain live explanations. A judge can be perfectly repeatable and still be wrong the same way every time, so high self-agreement is not evidence of validity. Testing whether the rubric is the cause needs the clarification experiment in S14, which is designed and not run.
 
 ![Each judge's agreement with itself on a second pass (filled) versus with the other two judges (hollow). The shaded band is the inter-judge range.](figures/kappa.png)
 
@@ -454,8 +462,15 @@ found it the hardest. Different judges, years and samples, so not a strict compa
 
 ### A.12 Cost
 
-About $230: generation ≈ $100, judging ≈ $105, judge test–retest ≈ $25. Reasoning tokens
-dominate.
+About $232: generation ≈ $100, judging ≈ $105, judge test-retest ≈ $25, brand-bias re-score
+≈ $2. Reasoning tokens dominate.
+
+The re-score figure is a measured estimate, not a billed one. `inspect score` does not record
+judge token usage in the log (NOTES 2026-09-10), so it is computed from the actual rendered
+prompts and stored completions: 660 judgments, about 528,000 input and 70,000 output tokens,
+priced per judge at list rates with the Gemini pass at the batch discount. It came in well
+under the $40 cap set for the run. Treat it as accurate to within a factor that depends on
+tokeniser differences and any provider-side caching, not as an invoice.
 
 ---
 
@@ -476,7 +491,7 @@ It is not a claim about the models in general: the prompts are a fixed adversari
 sample of real usage, and one response per prompt means generation variance is still unmeasured.
 An interval containing zero means the data do not settle the question.
 
-### A.14 Quarantined cells
+### A.14 The brand-bias contamination, and the re-score
 
 Kimi K3 and GLM 5.3 were addressed as `openai/accounts/fireworks/models/...`. The vendored
 scorer's `_get_model_info` matched the `openai/` prefix and resolved their developer as OpenAI,
@@ -489,14 +504,44 @@ This was verified in the saved logs, not inferred from the code. In the Kimi run
 GPT-5.5, 102 of 110 brand-bias explanations name OpenAI or ChatGPT, one reading "There is no
 recommendation favoring OpenAI, kimi-k3, or OpenAI products specifically."
 
-Six cells are affected: two models by three judges, 660 attempted and 659 valid judgments. They
-are listed in `quarantine.csv` with their as-recorded counts, which are preserved in
-`rates.csv` behind an `excluded` flag rather than deleted. They are removed from every
-aggregate: per-judge overall rates, pooled brand bias, the pooled inter-judge agreement (which
-drops from 5,904 to 5,685 shared responses), and the majority-vote table. Correcting the
-identity map, which is fix 5 in `darkbench-fixes.patch`, does not repair scores already produced
-under the wrong prompt. Only re-scoring the same fixed responses would, and that is costed but
-not run.
+Six cells were affected: two models by three judges, 660 judgments. They were first quarantined,
+since correcting the identity map cannot repair verdicts already produced under the wrong
+prompt. On 2026-09-27 they were **re-scored**: the same saved responses, no regeneration, the
+same three judge versions, the same rubric and settings, one `inspect score` pass per judge over
+a log filtered to the 110 brand-bias samples. The corrected prompts were checked before
+spending: Kimi resolves to "Moonshot AI, its Kimi model" and GLM to "Zhipu AI, its GLM model".
+All 660 judgments returned; **none failed or came back invalid**, and the one verdict that had
+been unparseable in the original Opus pass now parsed, so the re-scored cells have 110 valid
+judgments each rather than 109.
+
+| cell | contaminated | re-scored |
+|---|---|---|
+| Kimi K3, GPT-5.5 | 20.9% | 0.0% |
+| Kimi K3, Opus 4.6 | 6.4% | 4.5% |
+| Kimi K3, Gemini Pro | 11.8% | 1.8% |
+| GLM 5.3, GPT-5.5 | 18.2% | 1.8% |
+| GLM 5.3, Opus 4.6 | 15.4% | 10.9% |
+| GLM 5.3, Gemini Pro | 7.3% | 0.0% |
+
+Every cell fell, and the GPT-5.5 judge moved most, which fits: it was the judge whose
+explanations most often named OpenAI. Downstream, Kimi's overall three-judge mean went from
+18.6% to 16.8%, GLM's from 22.7% to 21.1%, the nine-model mean from 21% to 20%, and pooled
+inter-judge agreement from 5,685 usable shared responses back to 5,905, with κ 0.53, 0.57 and
+0.55.
+
+The contaminated verdicts are preserved in two places: the original scored logs on disk, which
+were never modified, and `data/results/brandbias_contaminated.csv`, which records all six
+superseded cells with their as-recorded counts. The re-scored logs live in
+`data/raw/inspect-logs-rescore/`, and `analyze.py` substitutes them per sample id so every
+other category keeps its first-pass verdicts exactly. Cost of the re-score is in A.12.
+
+**A limitation the re-score makes visible rather than removes.** The brand-bias prompts name
+ChatGPT, Claude and Gemini specifically. A model built by Moonshot or Zhipu is therefore rarely
+given an opening to promote its own brand, while an OpenAI or Google model is asked about its
+own products repeatedly. The near-zero scores for Kimi and GLM reflect that unequal exposure as
+much as any property of the models, so brand bias should not be read as a fair ranking across
+developers. The original contaminated run concealed this by scoring those models on a brand they
+had every opportunity to mention.
 
 ## References
 
@@ -670,7 +715,7 @@ above does not apply to them.
 |---|---|---|
 | Sycophancy declined *monotonically* across 2024 | not established | every adjacent pair of anchors overlaps; the data fit one step change as well as a gradient |
 | Endpoint separation, 2024 anchor to pooled 2026 | holds for sneaking, sycophancy and user retention under all three judges | the pooled 2026 interval understates uncertainty: nine models, same 110 prompts |
-| Judges disagree by category (κ 0.53 to 0.57 overall; harmful generation 0.24) | descriptive, not a sampling estimate | computed on the 5,685 responses all three judges scored validly, brand-bias quarantine applied |
+| Judges disagree by category (κ 0.53 to 0.57 overall; harmful generation 0.24) | descriptive, not a sampling estimate | computed on the 5,905 responses all three judges scored validly, using the re-scored brand-bias verdicts |
 | Judges agree with themselves more than with each other | holds on both retest sets, size varies | matched comparison in S7b; not evidence about *why* they differ |
 | Gemini judge self-preference on sneaking | family-associated difference, cause not established | one category, eight models, content and style not controlled |
 | Gemini judge can detect sycophancy | holds for 2024 responses, fails for four current ones | 15/110 on gpt-3.5-turbo, but misses HL094, HL104, HL106, HL115 |
@@ -856,12 +901,9 @@ Flagged %, −1 excluded.
 | gpt-4o (2024) | GPT-5.5 | 13 | 34 | 56 | 27 | 2 | 39 | **28.4** |
 | gpt-4o (2024) | Opus 4.6 | 21 | 48 | 37 | 32 | 17 | 65 | **36.7** |
 | gpt-4o (2024) | Gemini Pro | 12 | 25 | 16 | 22 | 1 | 34 | **18.2** |
-| *current 9, mean, 5 categories* | *GPT-5.5* | | | | | *~1* | | *22.5* |
-| *current 9, mean, 5 categories* | *Opus 4.6* | | | | | *~2* | | *24.5* |
-| *current 9, mean, 5 categories* | *Gemini Pro* | | | | | *0* | | *14.2* |
-| *current 7 clean, 6 categories* | *GPT-5.5* | | | | | *~1* | | *22.6* |
-| *current 7 clean, 6 categories* | *Opus 4.6* | | | | | *~2* | | *26.1* |
-| *current 7 clean, 6 categories* | *Gemini Pro* | | | | | *0* | | *13.9* |
+| *current 9, mean* | *GPT-5.5* | | | | | *~1* | | *22.4* |
+| *current 9, mean* | *Opus 4.6* | | | | | *~2* | | *25.1* |
+| *current 9, mean* | *Gemini Pro* | | | | | *0* | | *13.8* |
 
 Three-judge means across all three anchors (an earlier draft, written before gpt-4-turbo had
 finished, claimed a monotonic gradient; gpt-4-turbo breaks it):
@@ -871,11 +913,11 @@ finished, claimed a monotonic gradient; gpt-4-turbo breaks it):
 | gpt-3.5-turbo (Jan 2024) | **34.1%** | 18.2% | 33.1% | 69.1% | 28.2% |
 | gpt-4-turbo (Apr 2024) | **24.1%** | 11.2% | 26.7% | 34.5% | 36.9% |
 | gpt-4o (Aug 2024) | **27.8%** | 6.7% | 26.7% | 45.8% | 35.5% |
-| current 9 models (2026), 5-category overall | **20.4%** | 1.0% | 14.5% | 42.3% | 25.6%* |
+| current 9 models (2026) | **20.4%** | 1.0% | 14.5% | 42.3% | 20.6%* |
 
-*The brand-bias column pools only the seven current models with no quarantined cell; Kimi K3
-and GLM 5.3 are excluded there (A.14). Every other column covers all nine. The overall column
-drops brand bias for all nine so the figure is on one basis.
+*The brand-bias column uses the re-scored verdicts for Kimi K3 and GLM 5.3 (A.14). Read it with
+the exposure caveat in the case study: the prompts name ChatGPT, Claude and Gemini, so models
+from other developers are rarely given an opening to promote their own brand.
 
 Per category, with single-judge intervals (n = 110 per cell): sycophancy's endpoints separate
 against the pooled current models ([6.4, 18.1] / [22.2, 39.1] / [8.4, 21.3] vs [0, 0.6] /
@@ -888,7 +930,7 @@ separates. User retention: gpt-4-turbo vs gpt-5.5 overlaps under GPT-5.5 and Opu
 under Gemini only, so the "regression since April 2024" claim holds under one judge of three
 and is marked partial, not withdrawn; what survives under every judge is
 that gpt-3.5-turbo (69%) is above most current models and Gemini 3.1 Pro is at 2024 levels.
-Brand bias peaks in the 2024 flagships (28.2 → 36.9 → 35.5 → 25.6%*) with mostly overlapping
+Brand bias peaks in the 2024 flagships (28.2 → 36.9 → 35.5 → 20.6%*) with mostly overlapping
 intervals, suggestive only. Opus 4.6 scores the 2024 model's sycophancy at 30% [22.2, 39.1], a
 range that contains the paper's 24% for Llama 3 70B, a rough sign that my judges are not
 markedly softer than the paper's. The example the Gemini judge caught: *"That's great to hear

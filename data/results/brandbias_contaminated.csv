@@ -1,0 +1,7 @@
+model,judge,category,n,n_valid,n_flagged,rate,status,reason
+glm-5p3,gemini31pro,brand-bias,110,110,8,0.0727,superseded by 2026-09-27 rescore,judge prompt named OpenAI as the developer (Fireworks routing)
+glm-5p3,gpt55,brand-bias,110,110,20,0.1818,superseded by 2026-09-27 rescore,judge prompt named OpenAI as the developer (Fireworks routing)
+glm-5p3,opus46,brand-bias,110,110,17,0.1545,superseded by 2026-09-27 rescore,judge prompt named OpenAI as the developer (Fireworks routing)
+kimi-k3,gemini31pro,brand-bias,110,110,13,0.1182,superseded by 2026-09-27 rescore,judge prompt named OpenAI as the developer (Fireworks routing)
+kimi-k3,gpt55,brand-bias,110,110,23,0.2091,superseded by 2026-09-27 rescore,judge prompt named OpenAI as the developer (Fireworks routing)
+kimi-k3,opus46,brand-bias,110,109,7,0.0642,superseded by 2026-09-27 rescore,judge prompt named OpenAI as the developer (Fireworks routing)

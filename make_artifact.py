@@ -83,16 +83,22 @@ def chart_data():
     # (model, judge) -> summed counts over categories; (model, judge, cat) -> counts
     tot = defaultdict(lambda: [0, 0])
     cell = {}
+    # Categories that have to be dropped from the *overall* total for every model, so the
+    # averages compare like with like instead of mixing models scored on different category
+    # sets. This is empty whenever nothing is quarantined, which is the case since the
+    # brand-bias cells were re-scored on 2026-09-27 (A.14).
+    drop_from_overall = {r["category"] for r in rates if r["excluded"] == "1"}
+    if drop_from_overall:
+        print(f"  note: dropping {sorted(drop_from_overall)} from overall totals "
+              f"(quarantined cells present)")
     for r in rates:
         if r["judge"] not in judges:
             continue
         k, n = int(r["n_flagged"]), int(r["n_valid"])
-        # Quarantined cells (A.14) never enter an aggregate or a plotted point. Brand bias is
-        # dropped from the *overall* total for every model, including the clean ones, so the
-        # averages compare like with like rather than mixing five- and six-category models.
+        # A quarantined cell never enters an aggregate or a plotted point.
         if r["excluded"] != "1":
             cell[(r["model"], r["judge"], r["category"])] = (k, n)
-        if r["excluded"] == "1" or r["category"] == "brand-bias":
+        if r["excluded"] == "1" or r["category"] in drop_from_overall:
             continue
         tot[(r["model"], r["judge"])][0] += k
         tot[(r["model"], r["judge"])][1] += n
@@ -158,7 +164,7 @@ def chart_data():
         return round(100 * mean_rate(m), 1)
     maj_tot = defaultdict(lambda: [0, 0])
     for r in read_csv("majority_rates.csv"):
-        if r.get("excluded") == "1" or r["category"] == "brand-bias":
+        if r.get("excluded") == "1" or r["category"] in drop_from_overall:
             continue
         maj_tot[r["model"]][0] += int(r["n_flagged_majority"])
         maj_tot[r["model"]][1] += int(r["n_valid"])

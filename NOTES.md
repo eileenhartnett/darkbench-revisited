@@ -1066,6 +1066,62 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 (later) — brand-bias cells re-scored; quarantine lifted
+
+Eileen approved a re-score with a $40 cap. Done, $2.29 estimated, 660 judgments, zero failures.
+
+**Checked before spending.** Rendered the corrected judge prompts: Kimi K3 gives "the company
+Moonshot AI, its Kimi model", GLM 5.3 gives "the company Zhipu AI, its GLM model", and the
+OpenAI control is unchanged. Confirmed all three judge versions live on the account by listing
+models per provider (`gpt-5.5-2026-04-23`, `claude-opus-4-6`, `gemini-3.1-pro-preview` all
+present), so no pause was needed. Note `ANTHROPIC_API_KEY` and `GOOGLE_API_KEY` are not in the
+non-interactive shell env and need `source ~/.zshrc`; `OPENAI_API_KEY` and `FIREWORKS_API_KEY`
+are already exported.
+
+**Method.** Filtered each canonical generation log to its 110 brand-bias samples with
+`write_eval_log`, leaving the rest of the log untouched, then one `inspect score` pass per judge
+on the filtered log with the original flags (`-S batch=true` for Gemini). No responses
+regenerated. Outputs in `data/raw/inspect-logs-rescore/` as
+`2026-09-27_<model>-brandbias-rescored-<judge>.eval`; the `-rescored-` infix deliberately does
+not match `analyze.py`'s `-scored-` pattern, so they cannot be picked up as first-pass logs.
+
+**Results.** Every cell fell, GPT-5.5 the most, which fits since it was the judge whose
+explanations most often named OpenAI.
+
+| cell | was | now |
+|---|---|---|
+| kimi-k3 gpt55 | 20.9% | 0.0% |
+| kimi-k3 opus46 | 6.4% | 4.5% |
+| kimi-k3 gemini31pro | 11.8% | 1.8% |
+| glm-5p3 gpt55 | 18.2% | 1.8% |
+| glm-5p3 opus46 | 15.4% | 10.9% |
+| glm-5p3 gemini31pro | 7.3% | 0.0% |
+
+Kimi overall 18.6 to 16.8%, GLM 22.7 to 21.1%, nine-model mean 21 to 20.4% and back on all six
+categories for every model. Pooled agreement 5,905 shared responses, κ 0.53 / 0.57 / 0.55. The
+old Opus kimi cell had one unparseable verdict; the re-score parsed all 110, so valid counts
+went 109 to 110. Paired contrasts unchanged, none involve brand bias.
+
+**What the re-score revealed.** Kimi's rescored explanations are the interesting part: one reads
+that the response "self-identifies as Claude and describes Claude positively, this is not Brand
+Bias under the specified Moonshot/Kimi criterion". The brand-bias prompts name ChatGPT, Claude
+and Gemini, so Moonshot and Zhipu models are rarely given an opening to promote their own brand
+while OpenAI and Google models are asked about their own products repeatedly. Near-zero is
+partly an artefact of unequal exposure. Eileen asked for this limitation to be retained and it
+is now stated in the case study, A.14, the blog post and the README. The contaminated run had
+hidden it by scoring those two models on a brand they had every chance to mention.
+
+**Preservation.** Original scored logs untouched. Superseded values recorded in
+`data/results/brandbias_contaminated.csv`. `analyze.py` gained `load_rescored`, which overlays
+the clean verdicts per sample id and clears the quarantine flag only for cells that actually
+have a replacement; `quarantine.csv` is now empty by construction rather than by deletion.
+`make_artifact.py` drops a category from the overall total only while something is quarantined,
+so the six-category basis came back automatically.
+
+**Cost caveat.** `inspect score` still does not log judge usage, so $2.29 is computed from the
+rendered prompts and stored completions (528k in, 70k out) at list prices with the Gemini batch
+discount. It is a measured estimate, not an invoice.
+
 ### 2026-09-27 — external audit: P0 corrections applied on branch `audit-corrections`
 
 GPT Work reviewed the project at `e4d6715` and filed a pre-submission audit

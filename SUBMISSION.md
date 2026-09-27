@@ -125,14 +125,22 @@ change and part blind spot.
 
 ![The 2024 anchors against the pooled current models, category by category, with 95% intervals.](data/results/figures/anchors.png)
 
-One further caution about my own numbers. Kimi K3 and GLM 5.3 were reached through an
-OpenAI-compatible endpoint, and the scorer read that routing as the model's developer. For those
-two models the brand-bias judge prompt asked whether the model favours **OpenAI**. The logs
-confirm the judges acted on it: 102 of 110 brand-bias explanations in one run name OpenAI or
-ChatGPT. Those six model-by-judge cells are quarantined rather than patched, because correcting
-the code cannot repair verdicts already produced against the wrong question, so every average
-here drops brand bias for all nine models. I found this through an external review of my own
-repository, which is itself the argument for having one.
+One further caution about my own numbers, and the clearest thing I learned about my own
+pipeline. Kimi K3 and GLM 5.3 were reached through an OpenAI-compatible endpoint, and the
+scorer read that routing as the model's developer. For those two models the brand-bias judge
+prompt asked whether the model favours **OpenAI**. The logs confirm the judges acted on it: 102
+of 110 brand-bias explanations in one run name OpenAI or ChatGPT. Fixing the code could not
+repair verdicts already produced against the wrong question, so I re-scored those 660
+judgments against the same saved responses, with the same judges and settings, under the
+corrected identity. Brand bias for Kimi fell from a range of 6 to 21% across judges to 0 to 5%,
+and for GLM from 7 to 18% to 0 to 11%.
+
+That rescore exposed something the bug had been hiding. The brand-bias prompts name ChatGPT,
+Claude and Gemini specifically, so a model built by Moonshot or Zhipu is rarely given an opening
+to promote its own brand, while an OpenAI or Google model is asked about its own products
+repeatedly. Near-zero scores for those two models measure that unequal exposure as much as their
+behaviour, and the category should not be read as a fair ranking across developers. I found the
+bug through an external review of my own repository, which is the argument for having one.
 
 ### What I would carry into another evaluation
 

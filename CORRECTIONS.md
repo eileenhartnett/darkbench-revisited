@@ -13,7 +13,7 @@ was modified. No paid model API calls were made.
 
 | Finding | Verdict | Effect on results |
 |---|---|---|
-| A. Brand-bias developer identity | **Confirmed, worse than reported** | 6 cells quarantined; every aggregate recomputed |
+| A. Brand-bias developer identity | **Confirmed, worse than reported** | 6 cells re-scored 2026-09-27; every aggregate recomputed |
 | B. 48% is a single-annotator figure | **Confirmed** | Baseline relabelled everywhere; hero chart and legend fixed |
 | C. "Only sycophancy" separates | **Confirmed false** | Three categories separate, not one |
 | D. Interval-overlap reasoning | **Confirmed** | S6 replaced by paired contrasts; two verdicts moved |
@@ -45,19 +45,55 @@ referent is not in dispute. This is a defect against the benchmark's own design.
 
 **What changed.** Fix 5 in the scorer resolves the developer rather than the API provider
 (Moonshot AI / Kimi, Zhipu AI / GLM, plus DeepSeek and Qwen). Fixing the code does **not** repair
-scores produced under the wrong prompt, so the six affected cells (2 models x 3 judges, 660
-attempted and 659 valid judgments) are **quarantined**, not patched. Their as-recorded counts are
-preserved in `rates.csv` behind an `excluded` flag and listed in `quarantine.csv`.
+scores produced under the wrong prompt, so the six affected cells were first quarantined, then
+**re-scored on 2026-09-27**.
 
-**Results affected.** Every aggregate that included them: per-judge current-model rates, pooled
-brand bias, the pooled inter-judge agreement (5,904 shared responses to 5,685, κ 0.5213/0.5717/
-0.5389 to 0.5276/0.5740/0.5453), the majority-vote table, and the hero and anchors charts. The
-headline average now drops brand bias for **all nine** current models so the comparison is
-symmetric: **20.4%** on that basis, against **20.8%** for the seven models with no contaminated
-cell on all six categories. The choice of basis does not move the headline.
+**The re-score.** Same saved responses, no regeneration. Same three judge versions, all
+confirmed live on the account before spending: `gpt-5.5-2026-04-23`, `claude-opus-4-6`,
+`gemini-3.1-pro-preview`. Same rubric and settings, one `inspect score` pass per judge over a
+log filtered to the 110 brand-bias samples, with the Gemini pass on the batch API as before.
+The corrected prompts were rendered and checked first: Kimi resolves to "Moonshot AI, its Kimi
+model", GLM to "Zhipu AI, its GLM model", and the OpenAI control is unchanged. All 660
+judgments returned, **none failed or invalid**; the one verdict that had been unparseable in
+the original Opus pass now parses, so each re-scored cell has 110 valid judgments rather
+than 109.
 
-**Not done.** Re-scoring the 660 affected judgments would restore the cells. It is costed at
-roughly $3 to $6 and awaits approval; no call has been made.
+| cell | contaminated | re-scored |
+|---|---|---|
+| Kimi K3, GPT-5.5 | 20.9% | 0.0% |
+| Kimi K3, Opus 4.6 | 6.4% | 4.5% |
+| Kimi K3, Gemini Pro | 11.8% | 1.8% |
+| GLM 5.3, GPT-5.5 | 18.2% | 1.8% |
+| GLM 5.3, Opus 4.6 | 15.4% | 10.9% |
+| GLM 5.3, Gemini Pro | 7.3% | 0.0% |
+
+Every cell fell. The GPT-5.5 judge moved most, which fits: it was the judge whose explanations
+most often named OpenAI.
+
+**Results affected.** Kimi's overall three-judge mean 18.6% to 16.8%; GLM's 22.7% to 21.1%; the
+nine-model mean 21% to **20.4%**, now on the full six categories for every model rather than
+the five-category basis the quarantine had forced. Pooled inter-judge agreement returns to
+5,905 shared responses at κ 0.53 / 0.57 / 0.55. Pooled current-model brand bias is 21.7 / 28.4 /
+11.8% by judge. The paired contrasts in S6 are unchanged, since none of them involves brand
+bias. All four figures and both HTML builds regenerated.
+
+**Cost.** About **$2.29** against a $40 cap, measured rather than billed: `inspect score` does
+not log judge usage, so it is computed from the rendered prompts and stored completions
+(528k input, 70k output tokens) at list prices, with the Gemini pass at the batch discount.
+
+**Preservation.** The contaminated verdicts survive in the original scored logs, which were
+never modified, and in `data/results/brandbias_contaminated.csv`, which records all six
+superseded cells with their as-recorded counts. Re-scored logs are in
+`data/raw/inspect-logs-rescore/`; `analyze.py` substitutes them per sample id so every other
+category keeps its first-pass verdicts exactly.
+
+**A limitation the re-score makes visible rather than removes.** The brand-bias prompts name
+ChatGPT, Claude and Gemini specifically, so a model built by Moonshot or Zhipu is rarely given
+an opening to promote its own brand, while an OpenAI or Google model is asked about its own
+products repeatedly. Near-zero scores for Kimi and GLM measure that unequal exposure as much as
+their behaviour, and the category is not a fair cross-developer ranking. The contaminated run
+had concealed this by scoring those two models on a brand they had every opportunity to
+mention. This limitation is retained in the paper, the blog post and the README.
 
 ## B. The 48% is one annotator's panel, confirmed from the PDF
 
@@ -220,8 +256,9 @@ which is accurate either way, and no claim now rests on it.
 
 ## What remains uncertain
 
-- The brand-bias rates for Kimi K3 and GLM 5.3 are unknown, not zero and not the recorded values.
-  Only re-scoring recovers them.
+- The brand-bias rates for Kimi K3 and GLM 5.3 are now measured under the correct developer,
+  but the category still gives models unequal exposure by developer, so cross-developer
+  comparison on brand bias remains unsound.
 - Generation variance is still unmeasured: one response per prompt throughout.
 - Two categories, sneaking and brand bias, have no human validation at all.
 - Why the judges disagree is not established. The rubric-clarification experiment that would test
