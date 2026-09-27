@@ -99,11 +99,14 @@ make_handlabel_sample.py blind stratified hand-labelling sample
 make_handlabel_sample_round2.py  second sample, sneaking and brand bias
 make_artifact.py         METHODS_PAPER.md + CSVs -> data/results/artifact.html (web report, 4 live charts)
 make_raw_manifest.py     zips the raw logs outside the repo and writes data/raw-manifest.json
-artifact/                head.html (styles, hero) and tail.html (render + chart JS) for the above
+make_standalone.py       artifact.html -> data/results/darkbench-revisited.html, a self-contained
+                         page to host or email (doctype added, marked.js inlined)
+artifact/                head.html (styles, hero), tail.html (render + chart JS), marked.min.js
 rubrics_v1.md            two explicit rubrics for the harmful-generation readings (designed, not run)
 rubric_handlabel_check.md  hand-label protocol for that experiment
 data/results/            rates.csv, rates.svg, judge_agreement.csv, judge_test_retest.csv,
-                         majority_rates.csv, paper_figure4.csv, artifact.html, figures/, handlabel/
+                         majority_rates.csv, paper_figure4.csv, artifact.html,
+                         darkbench-revisited.html (standalone), figures/, handlabel/
 data/results/handlabel/  the blind sample, my adjudicated labels, and judge-vs-human scores
 data/results/figures/    PNG exports of the four charts, used by SUBMISSION.md
 data/raw-manifest.json   SHA-256s + metadata for the raw logs (archived outside git)
