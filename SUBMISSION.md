@@ -136,11 +136,15 @@ corrected identity. Brand bias for Kimi fell from a range of 6 to 21% across jud
 and for GLM from 7 to 18% to 0 to 11%.
 
 That rescore exposed something the bug had been hiding. The brand-bias prompts name ChatGPT,
-Claude and Gemini specifically, so a model built by Moonshot or Zhipu is rarely given an opening
-to promote its own brand, while an OpenAI or Google model is asked about its own products
-repeatedly. Near-zero scores for those two models measure that unequal exposure as much as their
-behaviour, and the category should not be read as a fair ranking across developers. I found the
-bug through an external review of my own repository, which is the argument for having one.
+Claude and Gemini specifically, so a model built by Moonshot or Zhipu is asked about its own
+products far less often than an OpenAI or Google model is. Low scores may partly reflect
+unequal opportunities to promote the model's own developer, which limits cross-developer
+comparisons on this category. I cannot say how much of a low score is exposure and how much is
+behaviour; the rescore does not separate them. The rescored explanations also turned up a
+different problem: one notes that a Kimi response "self-identifies as Claude", so the rubric
+was scoring promotion of the actual developer while the response presented another identity
+entirely. I found the original bug through an external review of my own repository, which is
+the argument for having one.
 
 ### What I would carry into another evaluation
 

@@ -67,8 +67,9 @@ than 109.
 | GLM 5.3, Opus 4.6 | 15.4% | 10.9% |
 | GLM 5.3, Gemini Pro | 7.3% | 0.0% |
 
-Every cell fell. The GPT-5.5 judge moved most, which fits: it was the judge whose explanations
-most often named OpenAI.
+Every cell fell. The GPT-5.5 judge changed most, which is consistent with the incorrect
+developer attribution having affected its judgments, but the explanation wording does not
+establish why its change exceeded the other two judges'.
 
 **Results affected.** Kimi's overall three-judge mean 18.6% to 16.8%; GLM's 22.7% to 21.1%; the
 nine-model mean 21% to **20.4%**, now on the full six categories for every model rather than
@@ -77,9 +78,12 @@ the five-category basis the quarantine had forced. Pooled inter-judge agreement 
 11.8% by judge. The paired contrasts in S6 are unchanged, since none of them involves brand
 bias. All four figures and both HTML builds regenerated.
 
-**Cost.** About **$2.29** against a $40 cap, measured rather than billed: `inspect score` does
-not log judge usage, so it is computed from the rendered prompts and stored completions
-(528k input, 70k output tokens) at list prices, with the Gemini pass at the batch discount.
+**Cost.** Approximately **$2.29, estimated from reconstructed token counts; actual billing not
+verified.** `inspect score` does not log judge usage, so the figure is reconstructed from the
+rendered prompts and stored completions (528k input, 70k output tokens) at list prices, with
+the Gemini pass at the batch discount. Reconstructing from visible text can miss billable usage
+the log does not show, including reasoning tokens and retried calls, so the true figure could
+be higher. The cap was $40.
 
 **Preservation.** The contaminated verdicts survive in the original scored logs, which were
 never modified, and in `data/results/brandbias_contaminated.csv`, which records all six
@@ -88,12 +92,19 @@ superseded cells with their as-recorded counts. Re-scored logs are in
 category keeps its first-pass verdicts exactly.
 
 **A limitation the re-score makes visible rather than removes.** The brand-bias prompts name
-ChatGPT, Claude and Gemini specifically, so a model built by Moonshot or Zhipu is rarely given
-an opening to promote its own brand, while an OpenAI or Google model is asked about its own
-products repeatedly. Near-zero scores for Kimi and GLM measure that unequal exposure as much as
-their behaviour, and the category is not a fair cross-developer ranking. The contaminated run
-had concealed this by scoring those two models on a brand they had every opportunity to
-mention. This limitation is retained in the paper, the blog post and the README.
+ChatGPT, Claude and Gemini specifically, so a model built by Moonshot or Zhipu is asked about
+its own products far less often than an OpenAI or Google model is. Low scores may partly
+reflect unequal opportunities to promote the model's own developer, which limits
+cross-developer comparisons on this category. The rescore does not quantify how much of a low
+score comes from exposure and how much from behaviour, and no attempt is made to separate them.
+
+Separately, one rescored explanation notes that a Kimi response "self-identifies as Claude".
+The rubric scores promotion of the model's actual developer while the response may express a
+different identity, which is a mismatch between the identity a response presents and the
+identity the criterion targets. It is worth recording on its own; it does not by itself explain
+why the overall score is low.
+
+Both points are retained in the paper, the blog post and the README.
 
 ## B. The 48% is one annotator's panel, confirmed from the PDF
 
@@ -257,8 +268,12 @@ which is accurate either way, and no claim now rests on it.
 ## What remains uncertain
 
 - The brand-bias rates for Kimi K3 and GLM 5.3 are now measured under the correct developer,
-  but the category still gives models unequal exposure by developer, so cross-developer
-  comparison on brand bias remains unsound.
+  but low scores may partly reflect unequal opportunities to promote the model's own developer,
+  so cross-developer comparison on this category remains limited. The contributions of exposure
+  and behaviour are not quantified.
+- Whether responses that present an identity other than their developer's are scored coherently
+  by this rubric is an open question raised by the rescore, not settled by it.
+- The re-score cost is an estimate from reconstructed tokens; actual billing was not verified.
 - Generation variance is still unmeasured: one response per prompt throughout.
 - Two categories, sneaking and brand bias, have no human validation at all.
 - Why the judges disagree is not established. The rubric-clarification experiment that would test

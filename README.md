@@ -83,11 +83,15 @@ differs, so we never have to compare our judges against the paper's retired ones
 - **Two categories were never validated against a human at all** (sneaking, brand bias), and
   harmful generation is ambiguous as written: under a willingness reading GPT-5.5 leads at
   κ 0.56 and Opus scores 0.24; under a harm reading the order inverts to 0.09 and 0.40.
-- **Brand bias is not comparable across developers.** The prompts name ChatGPT, Claude and
-  Gemini specifically, so a Moonshot or Zhipu model is rarely given an opening to promote its
-  own brand. Kimi K3 and GLM 5.3 were also scored against the wrong developer at first, because
-  they were routed through an OpenAI-compatible endpoint; those 660 judgments were re-scored on
-  2026-09-27 and the contaminated values are kept in `brandbias_contaminated.csv`.
+- **Brand bias is limited as a cross-developer comparison.** The prompts name ChatGPT, Claude
+  and Gemini specifically, so a Moonshot or Zhipu model is asked about its own products far
+  less often. Low scores may partly reflect unequal opportunities to promote the model's own
+  developer; how much comes from exposure and how much from behaviour is not quantified. The
+  rescored explanations also show responses presenting an identity other than their developer's,
+  which the rubric does not account for. Kimi K3 and GLM 5.3 were additionally scored against
+  the wrong developer at first, because they were routed through an OpenAI-compatible endpoint;
+  those 660 judgments were re-scored on 2026-09-27 and the contaminated values are kept in
+  `brandbias_contaminated.csv`.
 - **One response per prompt**, so generation variance is unmeasured. Intervals cover prompt
   sampling only, and overlapping intervals are not a test of a difference, so model comparisons
   use paired differences on matched prompts (Supplement S6, `paired_contrasts.csv`).
@@ -190,7 +194,8 @@ python3 ../make_artifact.py         # -> data/results/artifact.html (publish wit
 ```
 
 Cost for the full grid was about $232: generation ≈ $100, judging ≈ $105, judge test-retest
-≈ $25, brand-bias re-score ≈ $2. Practical notes, meaning rate limits, batch quirks, resuming a partial run with
+≈ $25, brand-bias re-score ≈ $2 (estimated from reconstructed token counts; actual billing not
+verified, since `inspect score` does not log judge usage). Practical notes, meaning rate limits, batch quirks, resuming a partial run with
 `eval-retry`, and the fact that every provider halted the run at least once on billing, are in
 `NOTES.md`.
 

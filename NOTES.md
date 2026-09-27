@@ -1085,8 +1085,10 @@ regenerated. Outputs in `data/raw/inspect-logs-rescore/` as
 `2026-09-27_<model>-brandbias-rescored-<judge>.eval`; the `-rescored-` infix deliberately does
 not match `analyze.py`'s `-scored-` pattern, so they cannot be picked up as first-pass logs.
 
-**Results.** Every cell fell, GPT-5.5 the most, which fits since it was the judge whose
-explanations most often named OpenAI.
+**Results.** Every cell fell; GPT-5.5 changed most. That is consistent with the wrong
+developer attribution having affected its judgments, but nothing in the explanation wording
+establishes why its change exceeded the other two judges', so do not write it up as though it
+does.
 
 | cell | was | now |
 |---|---|---|
@@ -1102,14 +1104,24 @@ categories for every model. Pooled agreement 5,905 shared responses, κ 0.53 / 0
 old Opus kimi cell had one unparseable verdict; the re-score parsed all 110, so valid counts
 went 109 to 110. Paired contrasts unchanged, none involve brand bias.
 
-**What the re-score revealed.** Kimi's rescored explanations are the interesting part: one reads
-that the response "self-identifies as Claude and describes Claude positively, this is not Brand
-Bias under the specified Moonshot/Kimi criterion". The brand-bias prompts name ChatGPT, Claude
-and Gemini, so Moonshot and Zhipu models are rarely given an opening to promote their own brand
-while OpenAI and Google models are asked about their own products repeatedly. Near-zero is
-partly an artefact of unequal exposure. Eileen asked for this limitation to be retained and it
-is now stated in the case study, A.14, the blog post and the README. The contaminated run had
-hidden it by scoring those two models on a brand they had every chance to mention.
+**What the re-score revealed: two separate things, and Eileen pushed back on how I first wrote
+both up.**
+
+1. *Unequal exposure.* The prompts name ChatGPT, Claude and Gemini, so Moonshot and Zhipu models
+   are asked about their own products far less often than OpenAI and Google models are. I first
+   wrote that near-zero scores "measure that unequal exposure as much as behaviour". Too strong:
+   the rescore does not quantify either contribution. The wording now used everywhere is that
+   low scores *may partly reflect* unequal opportunities to promote the model's own developer,
+   which limits cross-developer comparisons.
+2. *Identity mismatch.* One rescored explanation reads that the response "self-identifies as
+   Claude and describes Claude positively, this is not Brand Bias under the specified
+   Moonshot/Kimi criterion". I had folded this into the exposure point as if it explained the
+   low score. It does not. It is a separate finding: the rubric scores promotion of the actual
+   developer while the response may express a different identity, so the criterion and the
+   response are aimed at different things. Worth recording on its own; not an explanation of
+   the score.
+
+Both are stated in the case study, A.14, the blog post and the README.
 
 **Preservation.** Original scored logs untouched. Superseded values recorded in
 `data/results/brandbias_contaminated.csv`. `analyze.py` gained `load_rescored`, which overlays
@@ -1118,9 +1130,12 @@ have a replacement; `quarantine.csv` is now empty by construction rather than by
 `make_artifact.py` drops a category from the overall total only while something is quarantined,
 so the six-category basis came back automatically.
 
-**Cost caveat.** `inspect score` still does not log judge usage, so $2.29 is computed from the
-rendered prompts and stored completions (528k in, 70k out) at list prices with the Gemini batch
-discount. It is a measured estimate, not an invoice.
+**Cost caveat.** `inspect score` still does not log judge usage, so the $2.29 is reconstructed
+from the rendered prompts and stored completions (528k in, 70k out) at list prices with the
+Gemini batch discount. Eileen's correction: call it *estimated*, not *measured*. Reconstructing
+from visible text can miss billable usage the log never shows, notably reasoning tokens and
+retried calls, so the real figure could be higher. Everything now says "approximately $2.29
+estimated from reconstructed token counts; actual billing not verified".
 
 ### 2026-09-27 — external audit: P0 corrections applied on branch `audit-corrections`
 
