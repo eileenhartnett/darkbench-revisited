@@ -11,7 +11,7 @@ A BlueDot Impact Technical AI Safety course project by **Eileen Hartnett**.
 ## Read the project
 
 - **Blog post:** the main narrative, approximately 2,000 words, provided separately with the BlueDot submission. This repository contains the technical report, analyses, and supporting evidence.
-- [**Full technical report**](https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15): methods, results, interactive charts, and supplementary tables. [Markdown source](docs/METHODS_PAPER.md).
+- [**Full technical report**](docs/METHODS_PAPER.md): methods, results, and supplementary tables. An interactive HTML build with live charts is available on request; it is not rendered from this repository.
 - [**Reproduction guide**](docs/REPRODUCING.md): recompute statistics, rebuild the report, or rerun generation and scoring.
 - [**Correction history**](docs/CORRECTIONS.md): issues identified during review and how they were addressed. [Research notes](docs/NOTES.md) record decisions and changes throughout the project.
 
