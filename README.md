@@ -1,81 +1,59 @@
 # DarkBench Revisited
 
-**What happens when you re-run a benchmark whose scores come from an LLM, and then test the
-LLM doing the scoring?**
+**What can a benchmark replication tell us about the models doing the scoring?**
 
-A replication of **DarkBench** (Kran et al., *Benchmarking Dark Patterns in Large Language
-Models*, arXiv [2503.10728](https://arxiv.org/abs/2503.10728), ICLR 2025) on nine current
-models and three 2024 models that are still served, scored by three current LLM judges. The
-interesting part turned out not to be the leaderboard. It was what the judges did when I
-checked them: asked the same question twice, compared against each other, and compared against
-my own labels under two readings of an ambiguous category.
+DarkBench tests for six categories of potentially manipulative chatbot behaviour, using an LLM to judge each response. I ran its 660 prompts on nine current models and three historical models, with three current LLM judges scoring every response.
 
-Course project for BlueDot Impact's AI safety course.
+The project began as a replication and became an investigation of the evaluation itself: whether judges repeat their decisions, whether they agree with one another, and how their agreement with human labels depends on what the scoring definition means.
 
-## Read it
+A BlueDot Impact Technical AI Safety course project by **Eileen Hartnett**.
 
-- **Blog post**, the main narrative, about 2,000 words, on the BlueDot submission page. It is
-  not versioned here; this repository holds the analyses, the technical report and the
-  evidence behind them.
-- **[Full technical report](https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15)**,
-  rendered, with live charts and fifteen supplements. Source:
-  [`docs/METHODS_PAPER.md`](docs/METHODS_PAPER.md).
-- **[How to reproduce it](docs/REPRODUCING.md)**, offline recomputation, rebuilds, and the paid
-  path.
-- **[Correction history](docs/CORRECTIONS.md)**, every finding from three rounds of independent
-  review, what was confirmed, and what changed. [`docs/NOTES.md`](docs/NOTES.md) is the dated
-  running log.
+## Read the project
 
-## Three things it found
+- **Blog post:** the main narrative, approximately 2,000 words, provided separately with the BlueDot submission. This repository contains the technical report, analyses, and supporting evidence.
+- [**Full technical report**](https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15): methods, results, interactive charts, and supplementary tables. [Markdown source](docs/METHODS_PAPER.md).
+- [**Reproduction guide**](docs/REPRODUCING.md): recompute statistics, rebuild the report, or rerun generation and scoring.
+- [**Correction history**](docs/CORRECTIONS.md): issues identified during review and how they were addressed. [Research notes](docs/NOTES.md) record decisions and changes throughout the project.
 
-1. **Judges repeat themselves more closely than they agree with each other.** On one common
-   mask per response set, each judge reproduced its own verdicts at κ 0.87 to 0.96, while
-   different judges agreed at κ 0.37 to 0.67. Repeat scoring and cross-judge agreement measure
-   different properties. Neither establishes that a score is valid, and neither identifies what
-   causes the disagreement.
-2. **Changing the reference standard changes which judge looks best.** Harmful generation
-   supports two readings of its one-sentence definition. Labelling the same 50 sampled
-   responses under each gives 44 positives against 12, and the judge ranking inverts: GPT-5.5
-   κ 0.56 then 0.09, Opus 0.24 then 0.40.
-3. **A historical benchmark score cannot isolate model improvement.** The paper's headline 48%
-   turns out to be one annotator's panel, not a three-judge mean; its other two panels average
-   32% and 43%. Running three still-served 2024 models through my own pipeline also changes the
-   responses and one snapshot, so the gap mixes several changes at once.
+## Three main findings
+
+1. **Judges were more consistent with themselves than with one another.** On two response sets, each judge showed high agreement with its own earlier decisions (Cohen's κ 0.87–0.96). Agreement between different judges on the same eligible responses was lower (κ 0.37–0.67). Kappa measures agreement relative to that expected from the raters' overall flagging rates. These results distinguish repeatability from agreement between judges; they do not establish correctness or explain the disagreement.
+
+2. **Which judge looked best depended on what counted as harmful.** I applied two interpretations of "harmful generation" to the same 50 sampled responses: willingness to produce potentially harmful content, and whether the output was usable as-is to cause harm. The first classified 44 responses as positive; the second classified 12. GPT-5.5 agreed most closely with my labels under the first interpretation (κ 0.56), while Opus led under the second (κ 0.40). The second interpretation used existing egregiousness labels rather than a fresh annotation pass.
+
+3. **Lower scores than the original study do not, by themselves, demonstrate model improvement.** DarkBench's headline rate of 48% comes from its GPT-4o judge; its other two judges' panels average 32% and 43%. Three historical models also scored lower in my pipeline, but I changed judges, generated fresh responses, and used a different snapshot for one model. That comparison cannot isolate how much of the decrease reflects model behaviour versus changes in evaluation.
 
 ## Scope and limitations
 
-One generated response per prompt, so generation variance is unmeasured. The prompts are a
-fixed, public, adversarial set, not a sample of deployment traffic. The three historical
-anchors are all OpenAI models. Reference labels come from one annotator with an LLM consistency
-pass, over four of six categories; sneaking and brand bias were never checked against human
-labels. Brand-bias prompts name ChatGPT, Claude and Gemini specifically, so models from other
-developers get fewer opportunities to promote their own brand, which limits cross-developer
-comparison. All model comparisons are exploratory and unadjusted, conditional on these models,
-prompts, judges and saved responses.
+Each model generated one response per prompt, so variation across repeated generations was not measured. The prompts are a fixed, public, adversarial set, not a sample of deployment use. All three historical comparison models are from OpenAI.
+
+Human-reference checks cover four of six categories and use one annotator's labels, reviewed for consistency by an LLM. The sample deliberately overrepresents judge disagreements. Sneaking and brand bias were not checked against human labels.
+
+Brand-bias prompts give developers unequal exposure: they name ChatGPT, Claude, and Gemini, but not Kimi or GLM. This limits comparisons across developers. Statistical comparisons are exploratory, without adjustment for multiple comparisons, and conditional on the selected models, prompts, judges, and saved responses.
 
 ## Quick start
 
-Recompute the statistics from the committed item-level judgments. No API keys, no cost.
+From the repository root, using Python 3.11 or later:
 
 ```bash
-python3 scripts/paired_analysis.py           # paired + anchor contrasts
-python3 scripts/make_supplements.py --check  # confirms the report's tables match the data
-python3 scripts/test_quarantine_guard.py     # regression check on the exclusion logic
+# Recompute paired model comparisons and historical-anchor contrasts
+python3 scripts/paired_analysis.py
+
+# Check that generated supplement tables match the saved data
+python3 scripts/make_supplements.py --check
+
+# Check the logic that excludes incompletely repaired scoring results
+python3 scripts/test_quarantine_guard.py
 ```
 
-That re-derives the model contrasts, the anchor contrasts and the supplement tables from
-`data/results/verdicts.csv` and `verdicts_pass2.csv`. Rebuilding the figures and HTML, and
-rebuilding `rates.csv` from the raw logs, are separate steps in
-[docs/REPRODUCING.md](docs/REPRODUCING.md).
+These commands require no API keys or model calls. They recompute the contrasts from saved judgments and run consistency checks; they do not regenerate responses or rebuild every result.
 
-## Data, provenance and license
+See the [reproduction guide](docs/REPRODUCING.md) for figure and HTML builds, raw-log requirements, and estimated costs of rerunning the experiments.
 
-All derived results are in [`data/results/`](data/results/): item-level judgments, rate tables,
-agreement statistics, contrasts, hand labels and the superseded contaminated values, kept for
-comparison. The 91 raw `.eval` logs are too large for git and live in a dated archive outside
-it, checksummed in [`data/raw-manifest.json`](data/raw-manifest.json); ask if you need them.
+## Data, provenance, and license
 
-Upstream `apartresearch/DarkBench` @ `7eef151`, vendored and frozen, with five scorer fixes in
-[`patches/darkbench-fixes.patch`](patches/darkbench-fixes.patch). The vendored code is MIT,
-© 2024 Esben Kran, see [`DarkBench/LICENSE`](DarkBench/LICENSE), retained unmodified. Analysis
-code and writing in this repository are by Eileen Hartnett.
+[**Results and supporting data**](data/results/) include item-level judgments, rate and agreement tables, statistical comparisons, and human labels. Superseded brand-bias scores are retained to document the correction.
+
+The 91 raw `.eval` logs are archived separately and available on request. Their metadata and SHA-256 checksums are recorded in [the raw-log manifest](data/raw-manifest.json).
+
+The repository includes a fixed copy of `apartresearch/DarkBench` at commit `7eef151`, with five scorer fixes documented in [the patch](patches/darkbench-fixes.patch). The upstream code is MIT-licensed, © 2024 Esben Kran; its [original license](DarkBench/LICENSE) is preserved. Analysis code and project writing are by Eileen Hartnett.
