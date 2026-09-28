@@ -33,6 +33,12 @@ category, verdict, validity and quarantine flag. Those two files are enough to r
 paired model contrasts, the anchor contrasts and the common-mask reliability table without the
 raw archive.
 
+**A distinction worth keeping.** `verdicts.csv` and `verdicts_pass2.csv` between them contain
+enough data to recompute the matched reliability table by hand. The supplied
+`reliability_matched.py` does not use them: it reads the retest logs directly, because that is
+how the export was produced in the first place. Data sufficiency and the available command are
+different things here.
+
 **What still needs the raw logs.** Rebuilding `rates.csv` from the source verdicts
 (`scripts/analyze.py`), the common-mask reliability computation itself
 (`scripts/reliability_matched.py`, which reads the retest logs), and the provenance verification
@@ -52,7 +58,11 @@ python3 scripts/make_figures.py       # artifact chart code -> data/results/figu
 python3 scripts/make_standalone.py    # artifact.html -> darkbench-revisited.html
 ```
 
-`make_figures.py` shells out to headless Chrome at a hardcoded macOS path
+```bash
+python3 scripts/make_pdf.py           # standalone HTML -> darkbench-revisited.pdf
+```
+
+`make_pdf.py` and `make_figures.py` both shell out to headless Chrome at a hardcoded macOS path
 (`/Applications/Google Chrome.app/...`). Edit `CHROME` at the top of that file on another
 platform.
 

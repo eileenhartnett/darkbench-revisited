@@ -32,6 +32,14 @@ PRINT_CSS = """
   .shell { display: block !important; max-width: none !important; }
   .reading { max-width: none !important; padding: 0 !important; }
   details.supp { border: none !important; page-break-inside: auto; }
+  /* Tables clip in print: cells are nowrap inside a horizontally scrollable wrapper, and
+     paper cannot scroll. Let them wrap and fit the page instead (closure review, finding A). */
+  .table-wrap { overflow: visible !important; border: none !important; }
+  #content table { width: 100% !important; min-width: 0 !important; table-layout: auto;
+                   font-size: 0.78rem !important; }
+  #content th, #content td { white-space: normal !important; overflow-wrap: anywhere;
+                             min-width: 0 !important; padding: 5px 7px !important; }
+  #content td:first-child, #content th:first-child { min-width: 0 !important; }
   details.supp summary { font-weight: 700; }
   details.supp summary::before { content: "" !important; }
   figure.chart, .table-wrap { page-break-inside: avoid; }

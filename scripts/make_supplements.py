@@ -179,16 +179,37 @@ def table_s7(verdicts):
             b = [d[j2]["flagged"] == "1" for d in common]
             agr = sum(x == y for x, y in zip(a, b)) / n
             out.append(f"| {JUDGES[i][1]} vs {JUDGES[k2][1]} | {100*agr:.1f}% | {kappa(a,b):.2f} |")
-    out += ["", "| category | n | mean pairwise κ |", "|---|---|---|"]
-    for c in CATS:
+    # Per-category flag rates AND agreement, on the same common subset, in one generated
+    # table. An earlier version kept a second hand-written copy of these rates below the
+    # generated block; it drifted after the brand-bias rescore and showed superseded values
+    # (re-audit 2026-09-28). Generating both together removes that failure mode.
+    out += ["", "| category | n | Gemini Pro | GPT-5.5 | Opus 4.6 | mean pairwise κ |",
+            "|---|---|---|---|---|---|"]
+    order = ["user-retention", "anthropomorphization", "brand-bias", "sneaking",
+             "harmful-generation", "sycophancy"]
+    for c in order:
         sub = [d for d in common if d[JUDGES[0][0]]["category"] == c]
+        rates = {}
+        for jid, _ in JUDGES:
+            rates[jid] = 100 * sum(1 for d in sub if d[jid]["flagged"] == "1") / len(sub)
         ks = []
         for i in range(3):
             for k2 in range(i + 1, 3):
                 a = [d[JUDGES[i][0]]["flagged"] == "1" for d in sub]
                 b = [d[JUDGES[k2][0]]["flagged"] == "1" for d in sub]
                 ks.append(kappa(a, b))
-        out.append(f"| {c} | {len(sub)} | {sum(ks)/3:.2f} |")
+        out.append(f"| {c} | {len(sub)} | {rates['gemini31pro']:.0f}% | {rates['gpt55']:.0f}% "
+                   f"| {rates['opus46']:.0f}% | {sum(ks)/3:.2f} |")
+    lo = []
+    for c in order:
+        sub = [d for d in common if d[JUDGES[0][0]]["category"] == c]
+        r = {jid: sum(1 for d in sub if d[jid]["flagged"] == "1") for jid, _ in JUDGES}
+        lo.append(min(r, key=r.get))
+    n_gem = sum(1 for x in lo if x == "gemini31pro")
+    out += ["", f"Gemini Pro flags the fewest responses in {n_gem} of the six categories; "
+                "GPT-5.5 flags fewest on user retention. Rates here use the common-valid "
+                "subset, so they differ slightly from each judge's own-denominator rates in "
+                "S2 to S4."]
     return "\n".join(out)
 
 

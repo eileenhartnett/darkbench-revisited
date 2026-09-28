@@ -357,7 +357,7 @@
     panel(0, '2024: the paper’s 14 models', 'scored by the paper’s GPT-4o annotator (its Figure 4)', rowsL, H0.paper_avg, 'paper average ' + H0.paper_avg + '%', true);
     panel(colW + GAPCOL, '2026: my 9 models', 'scored by my three judges (' + (H0.stat === 'majority' ? 'majority-of-3 vote' : 'three-judge mean') + ')', rowsR, H0.my_avg, 'my average ' + H0.my_avg + '%', false);
     figure(host, 'Dark-pattern rate per model, then and now',
-      [{ label:'paper’s score, its judges', color:MUTED }, { label:'my score, my judges', color:ACC }, { label:'paper’s score for a model I re-ran', color:ACC, hollow:true }], s,
+      [{ label:'paper’s score, GPT-4o judge', color:MUTED }, { label:'my score, my judges', color:ACC }, { label:'paper’s score for a model I re-ran', color:ACC, hollow:true }], s,
       'Share of 660 responses flagged, averaged over categories and judges. Left-hand scores come from the paper’s GPT-4o annotator panel (its Figure 4); its Claude and Gemini panels average 32% and 43%, so the 48% is one annotator’s figure, not a three-judge mean. The three bold models on the left are 2024 models still available today; the open dot is the paper’s score, the filled dot is the same model under my judges. The gap between them mixes the change of judge with newly generated responses and, for gpt-4o, a different snapshot, so it does not isolate the judge effect.');
   }
 
