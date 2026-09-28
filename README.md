@@ -59,8 +59,10 @@ differs, so we never have to compare our judges against the paper's retired ones
 3. **The 48% baseline is a single-annotator figure.** The paper's Figure 4 is cell-for-cell
    identical to the GPT-4o panel of its Figure 5; the Claude and Gemini panels average 32% and
    43%. The three 2024 models score lower in my pipeline, but I generated fresh responses, so
-   the judge effect is not isolated. Within my pipeline only the oldest model is clearly worse
-   than today's under every judge.
+   the judge effect is not isolated. Within my pipeline, measured against the equally weighted mean of
+   the nine current models, gpt-3.5-turbo and gpt-4o exceed it under all three judges and
+   gpt-4-turbo under two. Exceeding that average is not the same as exceeding every current
+   model, and all three anchors are OpenAI models.
 4. **Two model-specific results are robust:** Claude Opus 5 shows anthropomorphization at
    53 to 73% (against 6 to 15% for Sonnet 5), and Gemini 3.1 Pro shows user retention at
    85 to 93%, both under all three judges and both well outside sampling noise.
@@ -154,17 +156,35 @@ data/raw-manifest.json   SHA-256s + metadata for all 91 raw logs (archived outsi
 
 ## Reproducing
 
-### Offline: re-derive every result from saved data
+### Offline: re-derive most results from saved data
 
-No API keys, no cost, nothing downloaded. This reproduces every number in the report from the
-committed CSVs and the item-level verdict export.
+No API keys, no cost, nothing downloaded. Run in this order; each step consumes the previous
+step's output, and skipping `make_chart.py` leaves a stale category figure embedded in the HTML.
 
 ```bash
-python3 scripts/paired_analysis.py   # -> paired_contrasts.csv, judge_agreement_matched.csv
-python3 scripts/make_artifact.py     # -> data/results/artifact.html + three spot checks
-python3 scripts/make_figures.py      # -> data/results/figures/*.png, via headless Chrome
-python3 scripts/make_standalone.py   # -> data/results/darkbench-revisited.html
+python3 scripts/paired_analysis.py    # verdicts.csv -> paired_contrasts.csv,
+                                      #    judge_agreement_matched.csv, anchor_contrasts.csv
+python3 scripts/make_chart.py         # rates.csv    -> data/results/rates.svg
+python3 scripts/make_supplements.py   # CSVs         -> regenerates S1-S5 and S7 in the paper
+python3 scripts/make_artifact.py      # paper + CSVs -> artifact.html + three spot checks
+python3 scripts/make_figures.py       # artifact     -> data/results/figures/*.png
+python3 scripts/make_standalone.py    # artifact     -> darkbench-revisited.html
+python3 scripts/test_quarantine_guard.py   # regression check, no data needed
+python3 scripts/make_supplements.py --check  # fails if any generated table is stale
 ```
+
+**What regenerates from item-level data, and what does not.** `verdicts.csv` (23,760 first-pass
+judgments) and `verdicts_pass2.csv` (3,960 retest judgments) drive the paired contrasts, the
+anchor contrasts and the common-mask reliability table, so those are reproducible from CSVs
+alone. `rates.csv`, `judge_agreement.csv`, `majority_rates.csv` and the supplements are
+regenerated from the item-level export by the commands above. Two things are **not** in the
+offline path: rebuilding `rates.csv` from scratch needs the raw `.eval` logs
+(`scripts/analyze.py`), and so does `scripts/reliability_matched.py`, which reads the retest
+logs directly. Ask for the archive named in `data/raw-manifest.json` if you need either.
+
+`make_figures.py` shells out to headless Chrome at a hardcoded macOS path
+(`/Applications/Google Chrome.app/...`); edit `CHROME` at the top of that file on another
+platform.
 
 `data/results/verdicts.csv` holds all 23,760 item-level judgments (sample id, model, judge,
 category, verdict, validity, quarantine flag), so the reliability and paired analyses can be
@@ -212,8 +232,8 @@ verified, since `inspect score` does not log judge usage). Practical notes, mean
 
 ## Raw logs
 
-The 85 `.eval` logs (316 MB) are **not in git**. They are archived as a zip outside the repo,
-dated 2026-09-26, with SHA-256 checksums and per-log metadata (model, date, status, sample
+The 91 `.eval` logs are **not in git**. They are archived as a zip outside the repo,
+dated 2026-09-27, with SHA-256 checksums and per-log metadata (model, date, status, sample
 count, inspect version, role) recorded in
 [`data/raw-manifest.json`](data/raw-manifest.json). One canonical 660-sample, zero-error
 generation log per model; partial and smoke-test logs are kept and labelled as such.

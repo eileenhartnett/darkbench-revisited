@@ -58,18 +58,26 @@ QUARANTINE = {
 
 
 def quarantined(model: str, category: str) -> bool:
-    """True only where no clean replacement verdict exists.
+    """True unless *every* contaminated judgment in this cell has a replacement.
 
-    Once a cell has been re-scored under the corrected developer identity, it is no longer
-    quarantined: `load_rescored` substitutes the clean verdicts and clears the flag. The
-    contaminated verdicts stay on disk in the original scored logs and are summarised in
+    A partial rescore must not clear the exclusion. An earlier version cleared it as soon as
+    any replacement loaded, so loading one judge's 110 replacements would have released all
+    330 Kimi brand-bias judgments and let 220 contaminated verdicts back into the aggregates.
+    Coverage is now tracked per (model, judge, sample_id) and checked against the full expected
+    set before the cell is treated as repaired; see `rescore_is_complete`.
+
+    The contaminated verdicts stay on disk in the original scored logs and are summarised in
     data/results/brandbias_contaminated.csv, so the superseded numbers remain inspectable.
     """
-    return (model, category) in QUARANTINE and (model, category) not in RESCORED
+    if (model, category) not in QUARANTINE:
+        return False
+    return not REPAIRED.get((model, category), False)
 
 
-# Filled by load_rescored(); keys are the (model, category) pairs that now have clean verdicts.
-RESCORED: dict = {}
+# (model, judge, sample_id) -> True, for every judgment a rescore actually replaced.
+RESCORED_KEYS: set = set()
+# (model, category) -> True only when coverage is complete across every judge.
+REPAIRED: dict = {}
 
 
 def load_rescored(verdicts):
@@ -100,11 +108,32 @@ def load_rescored(verdicts):
                 continue
             cat = s.target
             verdicts[(model, judge)][s.id] = (cat, score.value)
+            RESCORED_KEYS.add((model, judge, s.id))
             replaced[(model, cat)] += 1
-    for (model, cat), n in sorted(replaced.items()):
-        RESCORED[(model, cat)] = n
-        print(f"rescored {model} / {cat}: {n} verdicts substituted across judges")
-    return RESCORED
+
+    # A cell counts as repaired only when every contaminated judgment has a replacement:
+    # every judge that scored the model, and every sample id in the category.
+    for (model, cat) in QUARANTINE:
+        judges = sorted({j for (m, j) in verdicts if m == model})
+        expected = {(model, j, sid)
+                    for j in judges
+                    for sid, (c, _) in verdicts[(model, j)].items() if c == cat}
+        missing = expected - RESCORED_KEYS
+        if not expected:
+            continue
+        REPAIRED[(model, cat)] = not missing
+        got = len(expected) - len(missing)
+        if missing:
+            by_judge = defaultdict(int)
+            for (_, j, _) in missing:
+                by_judge[j] += 1
+            detail = ", ".join(f"{j}: {n} missing" for j, n in sorted(by_judge.items()))
+            print(f"INCOMPLETE rescore for {model} / {cat}: {got} of {len(expected)} replaced "
+                  f"({detail}). The cell stays quarantined; partial replacement cannot clear it.")
+        else:
+            print(f"rescored {model} / {cat}: {got} of {len(expected)} verdicts replaced "
+                  f"across {len(judges)} judges; exclusion cleared")
+    return REPAIRED
 
 
 def kappa(a, b):

@@ -9,6 +9,69 @@ verified either way. All of that is recorded here.
 Work was done on branch `audit-corrections`. No raw log, hand label or previously recorded count
 was modified. No paid model API calls were made.
 
+## Second pass, 27 September 2026: independent re-audit of the corrections
+
+A second independent review checked the corrections at commit `3c99932`. It reproduced the
+rescored cells, the 20.428% headline, the pooled and matched inter-judge statistics and the
+paired contrasts, and found that several corrections had not reached the supplements, the
+figure captions or the highlighted takeaway. I verified every finding before acting on it.
+
+| Finding | Verified? | What changed |
+|---|---|---|
+| S1 to S5 and S7 still carried contaminated Kimi/GLM values | Yes, exactly | Supplements are now **generated** from the CSVs by `make_supplements.py`, with a `--check` mode that fails on drift |
+| `rates.svg` stale, omitted from the build sequence | Yes, byte-identical to pre-audit | Regenerated; build order documented; `make_chart.py` gained a quarantine guard; obsolete `rates.png` removed |
+| Reliability takeaway and κ caption still claimed causes | Yes | Takeaway and caption replaced; chart retitled "Repeat scoring and agreement between judges" |
+| "Exactly the same responses" was false | Yes: n was 657 against 660/657/659 | `reliability_matched.py` now computes **one common mask per response set** from the retest logs; S7b rewritten |
+| Overlap rule in the CI caption, 15-point rule in Lesson 6, old rule in A.6 | Yes | All three removed |
+| S12 contradicted S6 on sneaking and user retention | Yes | S12 rebuilt on cluster-bootstrap contrasts |
+| Pooled current-model Wilson whiskers treat clustered responses as independent | Yes | Whisker removed from the pooled point; cluster-aware contrasts reported instead |
+| Lesson 2 cited a gpt-4-turbo contrast never computed | Yes, absent from `paired_contrasts.csv` | Computed the contrast actually described; see below |
+| "Part real behaviour change and part blind spot" | Yes | Removed from the paper and the blog |
+| S10 used 100% precision to support a zero | Yes: all four items are anchors (HL097, HL109, HL110, HL112) | Removed; precision on the current set is undefined |
+| Lesson 5 used withdrawn weighted κ; A.7 invoked the weights | Yes | Replaced with reproducible unweighted figures; verdicts reworded |
+| Partial rescore could clear a quarantine | Yes, reproduced in isolation | Guard now tracks (model, judge, sample_id) and requires complete coverage; regression test added |
+| A.4: 49 invalids, 0.3-point bound | Yes: **48**, and the real bounds are 1.836 (cell) and 0.385 (overall) | Corrected |
+| A.11 mixed κ and Jaccard columns | Yes | Now quotes the K column only |
+| S7b Flash range, majority self-κ, 2-1 flip, A.1 "verbatim", favouritism, rewrite-experiment claims | Yes | All narrowed or corrected |
+
+### The anchor comparison, computed
+
+The report described a contrast the analysis never ran. `paired_analysis.py` now computes it:
+each anchor's overall rate minus the equally weighted mean of the nine current models' overall
+rates, per judge, resampling prompt ids **within category** so each prompt's vector of model
+outcomes stays together and the benchmark's category composition is preserved. Invalid
+judgments are dropped from both numerator and denominator, as the saved rates do.
+
+| Anchor minus the nine-model current mean | GPT-5.5 | Opus 4.6 | Gemini Pro |
+|---|---|---|---|
+| gpt-3.5-turbo | +11.9 [+8.6, +15.2] | +15.1 [+11.6, +18.7] | +14.1 [+11.0, +17.1] |
+| gpt-4-turbo | +3.6 [+1.0, +6.3] | +7.0 [+3.8, +10.3] | +0.5 [−2.0, +3.1] |
+| gpt-4o | +6.0 [+3.1, +9.0] | +11.6 [+8.3, +15.0] | +4.4 [+1.6, +7.2] |
+
+This reproduces the reviewer's independent result within Monte Carlo noise: **gpt-3.5-turbo and
+gpt-4o exceed the current-model mean under all three judges, gpt-4-turbo under two.** Exceeding
+that mean is not the same as exceeding every current model, and all three anchors are OpenAI
+models. These are exploratory and unadjusted, conditional on these models, prompts and saved
+responses.
+
+### Provenance, now verified rather than asserted
+
+The reviewer's stated verification boundary was that checksums cannot establish what was sent
+to the judges or whether responses were unchanged. Those checks need the logs, which exist
+here. `verify_rescore_provenance.py` runs them and writes `rescore_provenance.csv`: the
+rendered rubric names the real developer for both models, every scored response is
+byte-identical to the canonical generation, all six contaminated cells have replacements, and
+no verdict was unparseable. Response-content hashes and source-log identifiers are in the CSV.
+
+### Where I disagree or remain limited
+
+- The reviewer suggested relabelling the matched comparison if the exact mask could not be
+  computed. It could: the retest logs are present, so I computed it rather than relabelling.
+- Second-pass verdicts were previously unavailable outside the raw logs. They are now exported
+  to `verdicts_pass2.csv`, which removes that reproducibility limit.
+- Still unverifiable from the archive alone: nothing further. The remaining limits are
+  substantive, not evidentiary, and are listed under "What remains uncertain".
+
 ## Summary
 
 | Finding | Verdict | Effect on results |

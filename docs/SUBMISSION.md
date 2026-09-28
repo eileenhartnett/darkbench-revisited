@@ -10,7 +10,7 @@ scores over time.*
 ### Why this matters for AI safety
 
 Evaluations decide things. They are used to argue that a risk has been reduced, that a safeguard
-works, or that one model is safer to deploy than another. Almost all of the evaluations now being
+works, or that one model is safer to deploy than another. Many of the evaluations now being
 built for behavioural risks score free text, and scoring free text at scale means another model
 does the scoring. That puts a second system between the behaviour and the number. If that system
 changes, the number changes too, and a score that falls because the evaluator changed looks
@@ -43,10 +43,11 @@ Across nine models, the three judges agreed with each other on 83% to 86% of ind
 kappa 0.53 to 0.57.
 
 Those two numbers are not directly comparable, because kappa depends on the items you measure it
-on, and the first covered two models while the second covered nine. Recomputed on exactly the
-same responses the picture holds, but the size moves a lot. On the Gemini 3.8 Flash responses the
-judges agree with each other at kappa 0.37 to 0.50 while each agrees with itself at 0.87 to 0.96.
-On the GPT-5.5 responses they agree with each other at 0.58 to 0.67, against the same self range.
+on, and the first covered two models while the second covered nine. Recomputed on one common mask the picture holds, but the size moves a lot. I built one common mask per response set, the items every judge scored validly in both passes:
+657 on the Gemini 3.8 Flash responses and 653 on the GPT-5.5 responses, so both sides of each
+comparison share a denominator. On the Flash set the judges agree with each other at kappa 0.37
+to 0.50 while each agrees with itself at 0.87 to 0.96. On the GPT-5.5 set they agree with each
+other at 0.58 to 0.67, against self-agreement of 0.88 to 0.96.
 Repeatability is high on both sets. Interchangeability is lower, and how much lower depends on
 whose responses you look at.
 
@@ -54,7 +55,7 @@ whose responses you look at.
 
 The tempting conclusion is that the judges are reliable and the categories are vague. I believed
 that for a while. It does not follow. A judge can be perfectly repeatable and wrong the same way
-every time, so high self-agreement says nothing about whether the score is valid. Consistent but
+every time, so high self-agreement does not establish that the score is valid. Consistent but
 differing thresholds, shared systematic mistakes, and genuine differences in reading the category
 all remain live explanations, and nothing here separates them. Testing whether the rubric is the
 cause would mean writing each reading out explicitly and re-scoring the same responses, which I
@@ -120,8 +121,9 @@ current-model responses, which reads like a broken instrument. Run on gpt-3.5-tu
 of 110, correctly flagging a model validating crystal healing. So the judge fires. But that
 control only rules out a judge that never fires. It does not show the judge catches current
 cases, and my own labels show it does not: four current Gemini 3.1 Pro responses that I and both
-other judges marked sycophantic were missed by the Gemini judge. The zero is part real behaviour
-change and part blind spot.
+other judges marked sycophantic were missed by the Gemini judge. So its zero cannot establish that contemporary sycophancy was absent. It also does not tell me
+how much of the zero is real change and how much is missed detection, and I am not going to
+pretend it does.
 
 ![The 2024 anchors against the pooled current models, category by category, with 95% intervals.](../data/results/figures/anchors.png)
 
@@ -156,7 +158,7 @@ Where I could not, I labelled under both readings and reported both, and the jud
 inverted between them.
 
 **Keep the comparison inside one pipeline.** Published scores from a different judge, on
-responses you cannot see, are not a baseline. Running old models through your own setup costs
+responses you cannot see, are historical context rather than a directly comparable baseline. Running old models through your own setup costs
 little and is worth more than the published number.
 
 What I did not appreciate at the start is how much of an evaluation's result lives in the
