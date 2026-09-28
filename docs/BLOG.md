@@ -3,9 +3,16 @@
 *Repeatable judgments, different reference standards, and the limits of comparing benchmark
 scores over time.*
 
-> **Full technical report:** https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15
+**Eileen Hartnett** · BlueDot Impact Technical AI Safety Project, 2026
 
-> **Code, data and running log:** https://github.com/eileenhartnett/darkbench-revisited
+I re-ran a published benchmark for manipulative chatbot behaviour on current models, then
+tested the LLM judges that produce its scores.
+
+> **Full technical report:** https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15
+>
+> **Code and data:** https://github.com/eileenhartnett/darkbench-revisited
+
+---
 
 ### Why this matters for AI safety
 
@@ -180,6 +187,11 @@ reasoning traces found no explicit statement of being evaluated, but three of th
 expose only provider-written summaries and the Claude models expose none, so that is a statement
 about what the search found rather than about what the models knew. The two designed follow-ups,
 a rubric-clarification experiment and a prompt-rewrite test, are costed and not run.
+
+### Acknowledgements
+
+<!-- Eileen: paste your acknowledgements here before publishing. Nothing is invented; this
+     section is intentionally left for you to fill. -->
 
 ### References
 

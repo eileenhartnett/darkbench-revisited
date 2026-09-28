@@ -355,7 +355,7 @@ exception and the judge-dependent sensitivity.
   paired analyses can be checked without the 316 MB raw-log archive.
 - `scripts/make_figures.py` is new. The PNGs in `data/results/figures/` were produced by headless Chrome
   from the artifact's chart code but the step was never scripted, so they went stale while
-  `SUBMISSION.md` kept embedding them. It is now repeatable.
+  `docs/BLOG.md` kept embedding them. It is now repeatable.
 
 ## Audit claims not adopted as stated
 

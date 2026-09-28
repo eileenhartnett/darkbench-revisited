@@ -1066,6 +1066,40 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 — blocking JS bug, then a presentation pass
+
+**The bug was mine and it broke every chart.** The κ caption I added in the closure pass
+contained "that judge's two peer comparisons". The apostrophe closed the single-quoted
+JavaScript string, so both HTML builds failed to parse and no chart rendered. Reworded to "the
+two peer comparisons for that judge". Rebuilt and checked properly this time: `node --check` on
+every executable inline script passes (my first check falsely flagged the base64 SVG block,
+which is data, not JavaScript), and a headless render confirms four chart figures with titles
+and SVG content plus the inlined category chart. Lesson: a caption string is code.
+
+**Presentation pass.** README cut from about 2,100 words to 610: research question, links,
+three defensible findings, scope and limitations, a quick start that says what it actually
+reproduces, and data/provenance/licence. Everything operational moved to the new
+`docs/REPRODUCING.md`: environment setup, the paid generation and scoring commands,
+provider-specific notes, the cost breakdown labelled clearly as estimated rather than billed,
+raw-log availability, the five scorer fixes and upstream provenance. The exhaustive directory
+tree is gone; links replace it.
+
+`docs/SUBMISSION.md` renamed to `docs/BLOG.md` as the single canonical blog source, with
+references updated in `README.md`, `docs/CORRECTIONS.md` and `scripts/make_figures.py`. NOTES
+keeps the old name where it appears in history. The blog now opens in Notion order: title,
+name, one-sentence description, the two labelled links, then the post, then an empty
+acknowledgements section for Eileen to fill and the references.
+
+**The hosted report is stale.** Read it to check: it still carries "Only a self-consistency
+check tells the two apart" and the pre-closure Lesson 5 text. Flagged for republication, not
+republished, per instruction.
+
+Still open, and not for me to close: the acknowledgements text, and the three code-hardening
+notes on the provenance verifier (it accepts -1 as an allowed score, checks developer names
+collectively rather than per sample, and does not enforce the six-cell set). The reviewer
+classed those as nonblocking and the current export shows six complete cells with zero invalid
+scores, so they are not evidence of an error in the results.
+
 ### 2026-09-27 (final) — closure review: four remaining groups, all fixed
 
 Four groups confirmed and closed. Two worth recording properly.

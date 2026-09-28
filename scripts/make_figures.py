@@ -5,7 +5,7 @@ Usage (from project root, after make_artifact.py):
 
 NOTES 2026-09-23 records that data/results/figures/*.png were produced "via headless Chrome
 from the artifact's own chart code". That step was never scripted, so when the charts changed
-the PNGs went stale while SUBMISSION.md kept embedding them. This script makes it repeatable.
+the PNGs went stale while docs/BLOG.md kept embedding them. This script makes it repeatable.
 
 For each chart it builds a throwaway page containing the artifact's stylesheet, its chart data
 and its chart JavaScript, and nothing else but one figure. It renders that page twice: once to
