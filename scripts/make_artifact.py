@@ -204,7 +204,7 @@ def chart_data():
             w.writerow([name, v, "Kran et al. 2025, Figure 4 = the GPT-4o annotator panel of Figure 5, Average column"])
     # HERO_STAT: "mean" = three-judge mean; "majority" = majority-of-3 vote (the reporting rule
     # §5 recommends). Note this is NOT the same statistic as the paper's Figure 4 average, which
-    # comes from a single annotator (GPT-4o); the panels are labelled accordingly in the chart.
+    # comes from a single annotator (GPT-4o); the panels are labeled accordingly in the chart.
     HERO_STAT = "mean"
     stat = three_judge_mean if HERO_STAT == "mean" else majority
     hero = {

@@ -128,7 +128,7 @@ The 91 `.eval` logs are **not in git**. They are archived as a zip outside the r
 2026-09-27, with SHA-256 checksums and per-log metadata (model, date, status, sample count,
 inspect version, role) in [`data/raw-manifest.json`](../data/raw-manifest.json). There is one
 canonical 660-sample, zero-error generation log per model; partial and smoke-test logs are kept
-and labelled as such. The six brand-bias re-score logs from 2026-09-27 are included and labelled
+and labeled as such. The six brand-bias re-score logs from 2026-09-27 are included and labeled
 `rescored-brandbias`.
 
 ## Changes to the benchmark code

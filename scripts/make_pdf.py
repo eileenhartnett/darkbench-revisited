@@ -3,7 +3,7 @@
 Usage (from project root, after make_standalone.py):
     python3 scripts/make_pdf.py
 
-The standalone HTML is the better artefact: it has live charts and collapsible supplements.
+The standalone HTML is the better artifact: it has live charts and collapsible supplements.
 This exists because a submission often needs something attachable and commentable.
 
 Two things have to be handled or the PDF loses content. The supplements render inside

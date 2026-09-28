@@ -19,7 +19,7 @@ confirmed; all four fixed.
 | Markdown opening still said repeat scoring distinguishes unreliable judges from vague categories | Yes; the HTML takeaway had been corrected and the Markdown had not | Both now carry the same non-causal wording |
 | Lesson 5 cited withdrawn κ 0.85 and called the judge "working fine" | Yes | Replaced with the reproducible κ 0.70 on 29 items, plus the contemporary misses |
 | Lesson 5 asserted judge spread means a vague definition, and that more ratings would only document vagueness | Yes | Replaced: large differences are a reason to examine rubric, thresholds and responses, and this study does not identify which |
-| Abstract and HTML carried the stale pooled range 0.52 to 0.57 | Yes | Both now 0.53 to 0.57, labelled as the nine-model pooled figure |
+| Abstract and HTML carried the stale pooled range 0.52 to 0.57 | Yes | Both now 0.53 to 0.57, labeled as the nine-model pooled figure |
 | Adjacent-anchor overlap inference survived in three places | Yes, with counterexamples | Removed; see below |
 | Provenance verifier overstated what it checked | Yes, all four defects | Rewritten; see below |
 | Four README overclaims | Yes | All four replaced with the reviewer's wording |
@@ -210,7 +210,7 @@ ChatGPT, Claude and Gemini specifically, so a model built by Moonshot or Zhipu i
 its own products far less often than an OpenAI or Google model is. Low scores may partly
 reflect unequal opportunities to promote the model's own developer, which limits
 cross-developer comparisons on this category. The rescore does not quantify how much of a low
-score comes from exposure and how much from behaviour, and no attempt is made to separate them.
+score comes from exposure and how much from behavior, and no attempt is made to separate them.
 
 Separately, one rescored explanation notes that a Kimi response "self-identifies as Claude".
 The rubric scores promotion of the model's actual developer while the response may express a
@@ -232,7 +232,7 @@ points, which is the same effect this project set out to measure.
 
 **What changed.** The baseline is relabelled in the abstract, Lesson 2, the hero chart subtitle
 and caption, `paper_figure4.csv`, `scripts/make_artifact.py` and the blog post. The hero legend was also
-wrong in a second way the audit caught: its hollow marker was labelled "same model under my
+wrong in a second way the audit caught: its hollow marker was labeled "same model under my
 judges" when the code plots the *paper's* score there. Both fixed and the figure regenerated.
 
 The claim that most of the drop is the judge effect is withdrawn. I generated fresh responses
@@ -300,8 +300,8 @@ consistent and consistently wrong.
 ## F. The positive control does not validate the zero, confirmed exactly
 
 HL094, HL104, HL106 and HL115 are current `gemini-3.1-pro-preview` sycophancy responses that I
-labelled present and that both other judges flagged. The Gemini judge missed all four. Its zero
-of 990 is therefore part real behaviour change and part blind spot. "The judge works; there was
+labeled present and that both other judges flagged. The Gemini judge missed all four. Its zero
+of 990 is therefore part real behavior change and part blind spot. "The judge works; there was
 nothing in the current models for it to find" is removed from every document, and "gone",
 "absent" and "no longer useful" are replaced with near-floor rates on this prompt set, naming the
 exception and the judge-dependent sensitivity.
@@ -314,14 +314,14 @@ exception and the judge-dependent sensitivity.
   Opus 0.24 then 0.40.
 - **Label counts.** Adjudication changed **31 presence labels and 31 egregious labels, covering
   43 items on one or the other**, not "43 ratings". Also corrected: 149 items were scored, not
-  150, since HL099 was never labelled.
+  150, since HL099 was never labeled.
 - **Weighted κ.** The population-reweighted figures (accuracy 81%, precision 93%, κ 0.83 to 0.85)
   have no surviving weighting script or stratum-total table, so they are withdrawn rather than
-  restated. Every κ is now labelled as agreement with these reference labels on a stratified
+  restated. Every κ is now labeled as agreement with these reference labels on a stratified
   sample that over-represents disagreements.
 - **Majority superiority.** "Majority voting fixes accuracy" is removed. Majority is not best
   under the willingness labels, and choosing a rule on the same 150 items used to score it does
-  not establish that it generalises. The defensible claim is that it moves least between the two
+  not establish that it generalizes. The defensible claim is that it moves least between the two
   reference readings.
 - **Adjudication independence.** The consistency review was done by the Claude assistant working
   on the project, the same family as one of the three judges being scored, so the reference
@@ -384,7 +384,7 @@ which is accurate either way, and no claim now rests on it.
 - The brand-bias rates for Kimi K3 and GLM 5.3 are now measured under the correct developer,
   but low scores may partly reflect unequal opportunities to promote the model's own developer,
   so cross-developer comparison on this category remains limited. The contributions of exposure
-  and behaviour are not quantified.
+  and behavior are not quantified.
 - Whether responses that present an identity other than their developer's are scored coherently
   by this rubric is an open question raised by the rescore, not settled by it.
 - The re-score cost is an estimate from reconstructed tokens; actual billing was not verified.

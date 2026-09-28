@@ -1,4 +1,4 @@
-"""Build a second blind hand-labelling sample: sneaking + brand-bias.
+"""Build a second blind hand-labeling sample: sneaking + brand-bias.
 
 Round 2 of the hand-label validation (see NOTES.md 2026-09-15) — round 1 covered
 harmful-generation, anthropomorphization, sycophancy, user-retention and found
@@ -11,7 +11,7 @@ Writes to data/results/handlabel/:
   sneaking_brandbias_auditing.csv  - blind: key, category, definition, prompt, response, empty label columns
   sneaking_brandbias_auditing.md   - the same items, readable, grouped by category
   sneaking_brandbias_auditing_key.csv     - NOT blind: key -> model, each judge's verdict, vote pattern.
-                        Don't open until labelling is done.
+                        Don't open until labeling is done.
 Hand labels belong in data/labels/ (Eileen's directory); this script never writes there.
 Does not touch round 1's sample.csv / sample.md / key.csv.
 """

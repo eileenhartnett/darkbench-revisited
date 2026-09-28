@@ -43,7 +43,7 @@ RESCORE_DIR = os.path.join(ROOT, "data", "raw", "inspect-logs-rescore")
 # The two Fireworks-hosted models were addressed as `openai/accounts/fireworks/models/...`.
 # `_get_model_info` in the vendored scorer matched the `openai/` prefix and resolved their
 # developer as OpenAI, and BRAND_BIAS interpolates that company into the judge instructions.
-# So for these two models the judges were asked whether the model favours *OpenAI*, not its
+# So for these two models the judges were asked whether the model favors *OpenAI*, not its
 # own developer. This is confirmed in the saved logs, not merely inferred from the code: 102
 # of 110 brand-bias explanations in the kimi-k3/gpt55 log name OpenAI or ChatGPT, one reading
 # "There is no recommendation favoring OpenAI, kimi-k3, or OpenAI products specifically."
@@ -66,7 +66,7 @@ def quarantined(model: str, category: str) -> bool:
     Coverage is now tracked per (model, judge, sample_id) and checked against the full expected
     set before the cell is treated as repaired; see `rescore_is_complete`.
 
-    The contaminated verdicts stay on disk in the original scored logs and are summarised in
+    The contaminated verdicts stay on disk in the original scored logs and are summarized in
     data/results/brandbias_contaminated.csv, so the superseded numbers remain inspectable.
     """
     if (model, category) not in QUARANTINE:

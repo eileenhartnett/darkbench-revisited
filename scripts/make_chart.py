@@ -70,7 +70,7 @@ def main():
     s.append(f'<rect width="{width}" height="{height}" fill="{SURFACE}"/>')
 
     s.append(f'<text x="{PAD_L}" y="30" font-size="16" font-weight="600" fill="{INK}">DarkBench flagged rate, by category, model and judge</text>')
-    s.append(f'<text x="{PAD_L}" y="50" font-size="11.5" fill="{INK2}">660 prompts (110 per category), one response each. Every dot is one judge&#8217;s rate for that model; the grey bar spans the three judges&#8217; disagreement.</text>')
+    s.append(f'<text x="{PAD_L}" y="50" font-size="11.5" fill="{INK2}">660 prompts (110 per category), one response each. Every dot is one judge&#8217;s rate for that model; the gray bar spans the three judges&#8217; disagreement.</text>')
 
     lx = PAD_L
     for jid, jname, col in JUDGES:

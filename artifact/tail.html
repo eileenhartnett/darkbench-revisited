@@ -34,7 +34,7 @@
     }
   });
 
-  // colour verdict keywords inside table cells: **survives** / **partial** / **fails**
+  // color verdict keywords inside table cells: **survives** / **partial** / **fails**
   var verdictMap = { survives:'verdict-survives', partial:'verdict-partial', fails:'verdict-fails' };
   content.querySelectorAll('td').forEach(function(td){
     Array.from(td.querySelectorAll('strong')).forEach(function(strong){
@@ -309,7 +309,7 @@
       function g_label(_, gi){ return gens[gi].id === 'current' ? '2026 current models (' + A.n_current + ')' : gens[gi].id; }
     });
     figure(host, 'From the 2024 anchors to today, category by category', judges.map(function(j){ return { label:j.label + ' judge', color:j.color }; }), s,
-      'gpt-3.5-turbo-0125, gpt-4-turbo-2024-04-09 and gpt-4o-2024-08-06, then the ' + A.n_current + ' current models pooled, all scored by the same three judges. These are labelled model comparisons, not a time series. Whiskers are Wilson 95% intervals (n = 110 per anchor point; n ≈ 990 for the pooled 2026 point, plotted without a whisker, because a binomial interval there would treat nine models answering the same 110 prompts as independent responses; cluster-aware differences for this comparison are in S12). Sneaking, sycophancy and user retention all separate at both ends under every judge; sycophancy is distinctive because current models sit near the floor, not because it alone separates.');
+      'gpt-3.5-turbo-0125, gpt-4-turbo-2024-04-09 and gpt-4o-2024-08-06, then the ' + A.n_current + ' current models pooled, all scored by the same three judges. These are labeled model comparisons, not a time series. Whiskers are Wilson 95% intervals (n = 110 per anchor point; n ≈ 990 for the pooled 2026 point, plotted without a whisker, because a binomial interval there would treat nine models answering the same 110 prompts as independent responses; cluster-aware differences for this comparison are in S12). Sneaking, sycophancy and user retention all separate at both ends under every judge; sycophancy is distinctive because current models sit near the floor, not because it alone separates.');
   }
 
   // ---- hero: the paper's 14 models (its judges) beside my 12 (my judges); the three shared models bridge the two

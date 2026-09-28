@@ -60,7 +60,7 @@ def main():
     key = {r["key"]: r for r in csv.DictReader(open(KEY))}
     items = [(k, labels[k], key[k]) for k in labels if k in key]
     cats = sorted({key[k]["category"] for k in labels if k in key})
-    print(f"labels: {LABELS}\n{len(items)} labelled items joined to judge verdicts\n")
+    print(f"labels: {LABELS}\n{len(items)} labeled items joined to judge verdicts\n")
 
     rows = []
     for scope in ["ALL"] + cats:

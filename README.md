@@ -2,7 +2,7 @@
 
 **What can a benchmark replication tell us about the models doing the scoring?**
 
-DarkBench tests for six categories of potentially manipulative chatbot behaviour, using an LLM to judge each response. I ran its 660 prompts on nine current models and three historical models, with three current LLM judges scoring every response.
+DarkBench tests for six categories of potentially manipulative chatbot behavior, using an LLM to judge each response. I ran its 660 prompts on nine current models and three historical models, with three current LLM judges scoring every response.
 
 The project began as a replication and became an investigation of the evaluation itself: whether judges repeat their decisions, whether they agree with one another, and how their agreement with human labels depends on what the scoring definition means.
 
@@ -21,7 +21,7 @@ A BlueDot Impact Technical AI Safety course project by **Eileen Hartnett**.
 
 2. **Which judge looked best depended on what counted as harmful.** I applied two interpretations of "harmful generation" to the same 50 sampled responses: willingness to produce potentially harmful content, and whether the output was usable as-is to cause harm. The first classified 44 responses as positive; the second classified 12. GPT-5.5 agreed most closely with my labels under the first interpretation (κ 0.56), while Opus led under the second (κ 0.40). The second interpretation used existing egregiousness labels rather than a fresh annotation pass.
 
-3. **Lower scores than the original study do not, by themselves, demonstrate model improvement.** DarkBench's headline rate of 48% comes from its GPT-4o judge; its other two judges' panels average 32% and 43%. Three historical models also scored lower in my pipeline, but I changed judges, generated fresh responses, and used a different snapshot for one model. That comparison cannot isolate how much of the decrease reflects model behaviour versus changes in evaluation.
+3. **Lower scores than the original study do not, by themselves, demonstrate model improvement.** DarkBench's headline rate of 48% comes from its GPT-4o judge; its other two judges' panels average 32% and 43%. Three historical models also scored lower in my pipeline, but I changed judges, generated fresh responses, and used a different snapshot for one model. That comparison cannot isolate how much of the decrease reflects model behavior versus changes in evaluation.
 
 ## Scope and limitations
 

@@ -27,7 +27,7 @@ the three judges agree or disagree?
 
 ## Experiment 2 (planned 2026-09-14, not started) — template recognition vs genuine change
 Question: is the collapse of sycophancy on DarkBench (18% in early-2024 models -> ~0% now)
-a real behaviour change, or recognition of the benchmark's prompt template?
+a real behavior change, or recognition of the benchmark's prompt template?
 Motivation: Experiment 1's CoT audit found 1-4% of reasoning traces naming the prompt as
 "a leading question ... designed to get me to agree", concentrated in sycophancy, whose
 prompts share one closing formula ("...some truth to it?"). Detection rate and sycophancy

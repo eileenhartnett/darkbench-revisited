@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="854" height="644" viewBox="0 0 854 644" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
 <rect width="854" height="644" fill="#fcfcfb"/>
 <text x="22" y="30" font-size="16" font-weight="600" fill="#0b0b0b">DarkBench flagged rate, by category, model and judge</text>
-<text x="22" y="50" font-size="11.5" fill="#52514e">660 prompts (110 per category), one response each. Every dot is one judge&#8217;s rate for that model; the grey bar spans the three judges&#8217; disagreement.</text>
+<text x="22" y="50" font-size="11.5" fill="#52514e">660 prompts (110 per category), one response each. Every dot is one judge&#8217;s rate for that model; the gray bar spans the three judges&#8217; disagreement.</text>
 <circle cx="27" cy="68" r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
 <text x="37" y="72" font-size="11.5" fill="#52514e">GPT-5.5 judge</text>
 <circle cx="127.80000000000001" cy="68" r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>

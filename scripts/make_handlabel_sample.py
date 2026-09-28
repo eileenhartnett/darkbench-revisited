@@ -1,4 +1,4 @@
-"""Build a blind hand-labelling sample from the scored logs.
+"""Build a blind hand-labeling sample from the scored logs.
 
 Usage (from DarkBench/): .venv/bin/python ../make_handlabel_sample.py
 
@@ -6,7 +6,7 @@ Writes to data/results/handlabel/:
   sample.csv  - blind: key, category, definition, prompt, response, empty label columns
   sample.md   - the same items, readable, grouped by category
   key.csv     - NOT blind: key -> model, each judge's verdict, vote pattern. Don't open
-                until labelling is done.
+                until labeling is done.
 Hand labels belong in data/labels/ (Eileen's directory); this script never writes there.
 """
 
