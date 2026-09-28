@@ -1066,6 +1066,140 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 (final) — blog text removed from git; acknowledgement added
+
+Eileen's instruction, reversing the earlier "keep one canonical blog source in GitHub": the
+blog post and submission text should not be in the repository. `docs/BLOG.md` is now untracked
+and gitignored, kept locally as the drafting copy so its figures and links stay reproducible.
+The submission narrative lives on the BlueDot Notion page instead. README no longer links to
+it; the two prose references in CORRECTIONS and make_figures now say "the blog post" rather
+than naming a file that is not there.
+
+Worth noting for later: the repository no longer contains the narrative a reader of the README
+would most want, so the Notion page is now the only copy of it. If that page is ever lost, the
+post is gone. Eileen is aware; this is her call, not an oversight.
+
+Acknowledgement added before removal, so the local copy carries it: BlueDot Impact Technical AI
+Safety Project, with thanks to instructor Jess Bergs. No other names invented.
+
+### 2026-09-27 — blocking JS bug, then a presentation pass
+
+**The bug was mine and it broke every chart.** The κ caption I added in the closure pass
+contained "that judge's two peer comparisons". The apostrophe closed the single-quoted
+JavaScript string, so both HTML builds failed to parse and no chart rendered. Reworded to "the
+two peer comparisons for that judge". Rebuilt and checked properly this time: `node --check` on
+every executable inline script passes (my first check falsely flagged the base64 SVG block,
+which is data, not JavaScript), and a headless render confirms four chart figures with titles
+and SVG content plus the inlined category chart. Lesson: a caption string is code.
+
+**Presentation pass.** README cut from about 2,100 words to 610: research question, links,
+three defensible findings, scope and limitations, a quick start that says what it actually
+reproduces, and data/provenance/licence. Everything operational moved to the new
+`docs/REPRODUCING.md`: environment setup, the paid generation and scoring commands,
+provider-specific notes, the cost breakdown labelled clearly as estimated rather than billed,
+raw-log availability, the five scorer fixes and upstream provenance. The exhaustive directory
+tree is gone; links replace it.
+
+`docs/SUBMISSION.md` renamed to `docs/BLOG.md` as the single canonical blog source, with
+references updated in `README.md`, `docs/CORRECTIONS.md` and `scripts/make_figures.py`. NOTES
+keeps the old name where it appears in history. The blog now opens in Notion order: title,
+name, one-sentence description, the two labelled links, then the post, then an empty
+acknowledgements section for Eileen to fill and the references.
+
+**The hosted report is stale.** Read it to check: it still carries "Only a self-consistency
+check tells the two apart" and the pre-closure Lesson 5 text. Flagged for republication, not
+republished, per instruction.
+
+Still open, and not for me to close: the acknowledgements text, and the three code-hardening
+notes on the provenance verifier (it accepts -1 as an allowed score, checks developer names
+collectively rather than per sample, and does not enforce the six-cell set). The reviewer
+classed those as nonblocking and the current export shows six complete cells with zero invalid
+scores, so they are not evidence of an error in the results.
+
+### 2026-09-27 (final) — closure review: four remaining groups, all fixed
+
+Four groups confirmed and closed. Two worth recording properly.
+
+**The adjacent-anchor claim was wrong twice over.** I had written that adjacent sycophancy
+steps were too close to separate. Independent 100k paired bootstrap says four of the six
+adjacent comparisons exclude zero (gpt-3.5 over gpt-4-turbo under Opus and Gemini, gpt-4-turbo
+over gpt-4o under GPT and Gemini), reproducing the reviewer's numbers. But the deeper point is
+that the question was malformed: three different models are not repeated measurements of one
+system, so no ordering of them establishes the shape of a decline. Removed the inference rather
+than replacing it with a better-powered version of the same mistake.
+
+**The provenance verifier was checking the wrong things, and the logs had the right ones all
+along.** It rebuilt the rubric with today's resolver and called that verification; it reported
+`log.eval.model`, which is the *generating* model, as the judge; it checked six cells rather
+than 660 sample ids; it printed status without failing on it. All four confirmed. The fix came
+from actually looking at the log structure: each scored sample has two ModelEvents, and the
+second is the judge call, carrying the judge model, its config, and a request that resolves
+through `sample.attachments` to the exact text sent. So the rubric check now reads the real
+request, and only its rubric portion before the conversation delimiter, because a user prompt
+can legitimately mention OpenAI. Lesson for me: when a check is hard, confirm the data really
+lacks what you need before substituting a reconstruction for it.
+
+Also: Markdown opening takeaway brought into line with the HTML (they had drifted apart because
+the front matter is maintained in two places); withdrawn κ 0.85 and "working fine" out of
+Lesson 5; two causal assertions about rubric vagueness narrowed; pooled κ range 0.52 to 0.57
+corrected to 0.53 to 0.57 in the abstract and head.html; four README overclaims replaced;
+κ caption now explains that its dots are arithmetic means across response sets; A.13 documents
+the anchor procedure (30,000 draws, seed 20260928, within-category resampling) and the
+pooled-versus-equally-weighted estimand difference; blog now states the full-response-set
+denominator for the 36/9/2% rates and the comparator for the lower current scores.
+
+No new experiments, no API calls, no push. Stopping here for BlueDot.
+
+### 2026-09-27 (later still) — second independent re-audit: bounded correction pass
+
+A second review checked the corrections at `3c99932` and reproduced the central numbers. Its
+finding was that the repairs had not propagated into the supplements, captions and takeaway.
+Verified every claim before acting; all confirmed. Full closure table in `CORRECTIONS.md`.
+
+**Things I could check that the reviewer could not, because they had no raw logs.**
+
+1. *The exact common mask.* They suggested relabelling the matched reliability comparison as
+   "same response sets, different valid-item subsets". The retest logs are here, so I computed
+   the real thing instead: `reliability_matched.py` builds one mask per response set, the items
+   every judge scored validly in **both** passes (657 on Flash, 653 on GPT-5.5), and both
+   agreement types use it. Also exported `verdicts_pass2.csv` so the next reviewer needs no
+   raw archive.
+2. *Provenance.* `verify_rescore_provenance.py` confirms the rendered rubric named Moonshot AI
+   and Zhipu AI, that every scored response is byte-identical to the canonical generation, that
+   all six cells have replacements, and that nothing was unparseable. Response hashes and
+   source-log ids are in `rescore_provenance.csv`.
+
+**The bug that mattered.** The quarantine guard cleared exclusion at (model, category) level as
+soon as any replacement loaded. Reproduced it: loading one judge's 110 replacements released
+all 330 Kimi brand-bias judgments, leaving 220 contaminated verdicts usable. Now tracked per
+(model, judge, sample_id) with a completeness requirement, plus
+`scripts/test_quarantine_guard.py`, five cases, all passing.
+
+**The claim that did not exist.** Lesson 2 cited a gpt-4-turbo versus current-average paired
+contrast that `paired_analysis.py` never computed; the script compared gpt-4-turbo with gpt-5.5
+on user retention, a different thing. Computed the described contrast properly with a
+within-category prompt-cluster bootstrap. Result: gpt-3.5-turbo and gpt-4o exceed the
+nine-model mean under all three judges, gpt-4-turbo under two. Reproduces the reviewer's
+independent numbers within Monte Carlo noise. Note for future me: exceeding an *average* is not
+exceeding every model, and all three anchors are OpenAI.
+
+**Stopped maintaining numbers by hand.** S1 to S5 and S7 were hand-kept duplicates of generated
+values, which is why they still carried contaminated Kimi and GLM figures after the rescore.
+They are now generated by `make_supplements.py` between markers, with `--check` failing on
+drift. This is the structural fix for that whole class of error.
+
+**Also fixed.** Stale `rates.svg` regenerated and put in the documented build order, with a
+quarantine guard in `make_chart.py`; obsolete `rates.png` deleted; overlap rule out of the CI
+caption; 15-point rule out of Lesson 6; old survives/partial/fails definition out of A.6; S12
+rebuilt on cluster contrasts; pooled whiskers removed from the anchor chart; κ chart retitled
+and repointed at the common mask; positive-control decomposition and precision-based validation
+removed; withdrawn weighted κ out of Lesson 5 and A.7; A.4 corrected to 48 invalids with the
+real 1.836 and 0.385 bounds; A.11 quoting the K column only; favouritism and rewrite-experiment
+claims narrowed.
+
+No new experiments, no API calls, no push. Raw logs, original labels and superseded values
+untouched.
+
 ### 2026-09-27 (later) — directory reorganisation
 
 Twenty-two loose files at the repository root, so Eileen asked for structure. Moved with

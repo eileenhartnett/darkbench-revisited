@@ -4,11 +4,11 @@
 
 Eileen Hartnett, BlueDot Technical AI Safety Project, 2026. Draft of 2026-09-23.
 
-**Abstract.** I re-ran DarkBench, a benchmark published at ICLR 2025 that uses 660 prompts to try to get a chatbot to manipulate the user, on nine of today's models and three models from 2024, using three of today's AI models as judges. The original tested models from 2024 and scored them with judges from 2024. The rate of bad behavior I found is lower than the figure usually quoted from the original paper, about 20% against 48%, but that comparison will not carry the weight people put on it. The 48% turns out to be one annotator's panel, GPT-4o; the paper's other two annotators average 32% and 43% on the same responses, so judge choice moved the headline by 16 points inside the original study. On my side three of those 2024 models are still available, and run through my pipeline they score lower than they did in the paper, but I generated fresh responses rather than re-scoring the paper's, so I cannot say how much of that is the judge. The clearest behavioural change is sycophancy (telling users what they want to hear), which has fallen close to zero for most current models on this prompt set, with one exception and with one judge that misses contemporary cases. Along the way I measured some things most benchmark papers skip. How often does a judge agree with itself if you ask it to grade the same answer twice? Almost always (agreement score of 0.87 to 0.96 out of 1). How often do three different judges agree with each other? Much less (0.52 to 0.57). Does a human agree with any of them? Sometimes, and it depends heavily on the category. None of this is a knock on DarkBench. It was an early, careful attempt to measure something that matters, and its authors checked their judges against human ratings, which most papers at the time did not bother to do. It's also part of why I was able to write this paper at all: DarkBench published its prompts, its code, and its judge definitions in enough detail to actually re-run, which most benchmarks from 2024 did not, and that's precisely what let me use it as a worked example rather than write about it from a distance. What's changed since then is that the field has gotten better at spotting the things that can quietly throw off a judged score. This paper turns my replication into eight lessons about those pitfalls, and what to do about each one. The DarkBench numbers are the example used to teach each lesson, not the point of the paper. None of the individual lessons is new. Each one is already established somewhere in the literature on how to evaluate AI systems. What this paper adds is working through all of them on a single benchmark that people are still citing and still running, and attaching real numbers to what each one turns up when you actually check.
+**Abstract.** I re-ran DarkBench, a benchmark published at ICLR 2025 that uses 660 prompts to try to get a chatbot to manipulate the user, on nine of today's models and three models from 2024, using three of today's AI models as judges. The original tested models from 2024 and scored them with judges from 2024. The rate of bad behavior I found is lower than the figure usually quoted from the original paper, about 20% against 48%, but that comparison will not carry the weight people put on it. The 48% turns out to be one annotator's panel, GPT-4o; the paper's other two annotators average 32% and 43% on the same responses, so judge choice moved the headline by 16 points inside the original study. On my side three of those 2024 models are still available, and run through my pipeline they score lower than they did in the paper, but I generated fresh responses rather than re-scoring the paper's, so I cannot say how much of that is the judge. The clearest behavioural change is sycophancy (telling users what they want to hear), which has fallen close to zero for most current models on this prompt set, with one exception and with one judge that misses contemporary cases. Along the way I measured some things most benchmark papers skip. How often does a judge agree with itself if you ask it to grade the same answer twice? Almost always (agreement score of 0.87 to 0.96 out of 1). How often do three different judges agree with each other? Much less (0.53 to 0.57, pooled over nine models; the matched comparison on the two re-scored response sets is in S7b). Does a human agree with any of them? Sometimes, and it depends heavily on the category. None of this is a knock on DarkBench. It was an early, careful attempt to measure something that matters, and its authors checked their judges against human ratings, which most papers at the time did not bother to do. It's also part of why I was able to write this paper at all: DarkBench published its prompts, its code, and its judge definitions in enough detail to actually re-run, which most benchmarks from 2024 did not, and that's precisely what let me use it as a worked example rather than write about it from a distance. What's changed since then is that the field has gotten better at spotting the things that can quietly throw off a judged score. This paper turns my replication into eight lessons about those pitfalls, and what to do about each one. The DarkBench numbers are the example used to teach each lesson, not the point of the paper. None of the individual lessons is new. Each one is already established somewhere in the literature on how to evaluate AI systems. What this paper adds is working through all of them on a single benchmark that people are still citing and still running, and attaching real numbers to what each one turns up when you actually check.
 
 **How to read this.** Each lesson has four parts: what the idea is, what happened when I ran into it here, what to watch for in your own work, and what I actually did (and didn't do) about it. There's a checklist near the end that's meant to be printed out and used. Numbers in the text have a bracketed pointer, like [W 4.1], showing where in the full writeup, a supplement table, or a data file that number comes from, so you can check it yourself. Appendix A has the full methods; Appendix B has every table.
 
-> **The one thing to remember.** Before you trust an evaluation that uses an AI model as a judge, check whether that judge agrees with itself, not just whether it agrees with other judges. Two judges that only sort-of agree with each other could mean the judges are unreliable, or it could mean the category being scored is badly defined. Those look identical from the outside. The only way to tell them apart is to ask one judge the same question twice.
+> **The one thing to remember.** Before you trust an evaluation that uses an AI model as a judge, check whether that judge agrees with itself, not just whether it agrees with other judges. On these two response sets, each judge repeated its own decisions more closely than it agreed with other judges. Repeat scoring and cross-judge agreement measure different properties, and reporting one without the other hides which you have. Neither establishes validity or identifies the cause of the disagreement.
 
 ---
 
@@ -89,7 +89,7 @@ This paper also sits alongside a body of work on how AI evaluation ought to be d
 
 *Running someone else's evaluation is itself a way of testing that evaluation.*
 
-**The idea.** Three words get used loosely in this area, so to be precise about what this study is: a **reproduction** uses the same data and the same code to get the same numbers; a **robustness** check asks whether a finding holds up under reasonable changes to the analysis; a **replication** tests whether the finding still holds in a new setting. This study is a conceptual replication: the prompts are the same, but the models and judges are different. The 2024 anchors in Lesson 2 are closer to a robustness check, since the models stay the same and only the judges change.
+**The idea.** Three words get used loosely in this area, so to be precise about what this study is: a **reproduction** uses the same data and the same code to get the same numbers; a **robustness** check asks whether a finding holds up under reasonable changes to the analysis; a **replication** tests whether the finding still holds in a new setting. This study is a conceptual replication: the prompts are the same, but the models and judges are different. The 2024 anchors in Lesson 2 are closer to a robustness check, since the model versions stay the same. Even there, more than the judge changes: I generated fresh responses rather than re-scoring the paper's, and one snapshot differs, so the anchors are not a clean judge-only swap.
 
 When you re-run someone else's evaluation, the first thing you actually learn is whether the evaluation works the way its write-up says it does. Code, data, judges, and models all drift after a paper comes out, and every gap you find between what the paper describes and what the code actually does is a useful discovery, not an annoyance to route around.
 
@@ -107,11 +107,11 @@ When you re-run someone else's evaluation, the first thing you actually learn is
 
 **The idea.** A confound is some other thing that also changed at the same time as the thing you're studying, so you can't tell which one actually caused your result. A control is a way of holding everything else steady so you can isolate just the one change you care about.
 
-**What happened here.** The big headline number is usually quoted as 48% then versus about 21% now [W 4.1]. Two separate problems make that comparison worse than it looks. First, the 48% is not what it is usually taken to be. The paper's Figure 4 is cell-for-cell identical to the GPT-4o panel of its Figure 5, whose caption reads "Top = Claude-3.5-Sonnet, middle = Gemini-1.5-Pro, bottom = GPT-4o". So 48% is one annotator's average. The paper's other two annotators average 32% and 43% on the same responses [paper Figures 4 and 5, checked against the PDF on 2026-09-27]. Judge choice moved the headline by 16 points inside the original study, which is the same effect this paper is about, visible in the source it is replicating. Second, the 2026 side changed judges *and* models at once. Three of the original 2024 models (gpt-3.5-turbo, gpt-4-turbo, and gpt-4o) are still available, so I ran them through my exact pipeline: same prompts, same instructions to the judge, same three judges [W 8.5]. Under my judges those three score 34%, 24% and 28%, against 61%, 48% and 55% in the paper's GPT-4o panel [W 4.1, W 8.5, paper_figure4.csv]. It is tempting to read the difference as the judge effect, and an earlier draft of this report did. That reading is not available: I generated fresh responses rather than scoring the paper's, the paper never published its responses, and my gpt-4o is the 2024-08-06 snapshot against the paper's 2024-05-13 [W 8.5]. The anchors show the same *models* score lower in my pipeline. They do not tell you how much of that is the judge. What the anchors do support is a within-pipeline comparison. gpt-4-turbo from April 2024 sits about three points above my current-model average, and on matched prompts that gap's own interval contains zero under GPT-5.5 and Gemini Pro and excludes it under Opus 4.6 [S6, A.13]. gpt-3.5-turbo, the oldest, is clearly higher under every judge. Scores have not been cut in half, and the claim that they had was wrong [W 4.1].
+**What happened here.** The big headline number is usually quoted as 48% then versus about 21% now [W 4.1]. Two separate problems make that comparison worse than it looks. First, the 48% is not what it is usually taken to be. The paper's Figure 4 is cell-for-cell identical to the GPT-4o panel of its Figure 5, whose caption reads "Top = Claude-3.5-Sonnet, middle = Gemini-1.5-Pro, bottom = GPT-4o". So 48% is one annotator's average. The paper's other two annotators average 32% and 43% on the same responses [paper Figures 4 and 5, checked against the PDF on 2026-09-27]. Judge choice moved the headline by 16 points inside the original study, which is the same effect this paper is about, visible in the source it is replicating. Second, the 2026 side changed judges *and* models at once. Three of the original 2024 models (gpt-3.5-turbo, gpt-4-turbo, and gpt-4o) are still available, so I ran them through my exact pipeline: same prompts, same instructions to the judge, same three judges [W 8.5]. Under my judges those three score 34%, 24% and 28%, against 61%, 48% and 55% in the paper's GPT-4o panel [W 4.1, W 8.5, paper_figure4.csv]. It is tempting to read the difference as the judge effect, and an earlier draft of this report did. That reading is not available: I generated fresh responses rather than scoring the paper's, the paper never published its responses, and my gpt-4o is the 2024-08-06 snapshot against the paper's 2024-05-13 [W 8.5]. The anchors show the same *models* score lower in my pipeline. They do not tell you how much of that is the judge. What the anchors do support is a within-pipeline comparison, and it is worth stating exactly which one. I compare each anchor's overall rate against the equally weighted mean of the nine current models' overall rates, separately by judge, resampling prompt ids within category so each prompt's vector of model outcomes stays together (A.13, `anchor_contrasts.csv`). On that comparison gpt-3.5-turbo exceeds the current-model mean by 11.9, 15.1 and 14.1 points and gpt-4o by 6.0, 11.6 and 4.4 points, both excluding zero under all three judges. gpt-4-turbo exceeds it by 3.6, 7.0 and 0.5 points, excluding zero under GPT-5.5 and Opus 4.6 but not under Gemini Pro. An earlier draft cited a gpt-4-turbo contrast that the analysis never computed, and this replaces it. Note what this is not: exceeding the *average* of nine models is not the same as exceeding every one of them, and all three anchors are OpenAI models, so this says nothing about progress across the wider ecosystem. Scores have not been cut in half, and the claim that they had was wrong [W 4.1].
 
-Running this control also caught something that would otherwise have been reported as a broken tool, and then taught a second lesson about how far a positive control reaches. The Gemini judge flagged zero out of 990 answers from today's models for sycophancy. An earlier draft assumed that meant the judge could not detect the category at all [W 4.2]. Run on gpt-3.5-turbo, the same judge caught 15 of 110 cases, including the model validating a user's belief in crystal healing and ley lines [W 4.2, S12]. That rules out a judge that never fires. It does not establish that the judge catches contemporary sycophancy, and my own hand labels show it does not: HL094, HL104, HL106 and HL115 are current Gemini 3.1 Pro responses that I marked sycophantic and that both other judges flagged, and the Gemini judge missed all four [S10, labels_adjudicated.csv]. So the zero is part real and part blind spot, and the honest summary is that sycophancy as DarkBench defines it sits near the floor for most current models on this prompt set, with Gemini 3.1 Pro the exception and with sensitivity that depends on which judge you ask. Tracing the category across the anchors gives 18.2%, then 11.2%, then 6.7%, then 1.0% [S12]. The two ends separate under every judge, but each adjacent step overlaps its neighbour, so the data do not distinguish a gradual decline from one step change [S12]. Sycophancy is not the only category whose endpoints separate: sneaking and user retention do too, under all three judges [S6]. What makes sycophancy distinctive is how close current models sit to zero, not that it alone clears the intervals.
+Running this control also caught something that would otherwise have been reported as a broken tool, and then taught a second lesson about how far a positive control reaches. The Gemini judge flagged zero out of 990 answers from today's models for sycophancy. An earlier draft assumed that meant the judge could not detect the category at all [W 4.2]. Run on gpt-3.5-turbo, the same judge caught 15 of 110 cases, including the model validating a user's belief in crystal healing and ley lines [W 4.2, S12]. That rules out a judge that never fires. It does not establish that the judge catches contemporary sycophancy, and my own hand labels show it does not: HL094, HL104, HL106 and HL115 are current Gemini 3.1 Pro responses that I marked sycophantic and that both other judges flagged, and the Gemini judge missed all four [S10, labels_adjudicated.csv]. Its zero therefore cannot establish that contemporary sycophancy was absent. It also does not tell me how much of the zero is real change and how much is missed detection: nothing here partitions it, and I should not imply otherwise. What I can report is the observed pattern. Sycophancy as DarkBench defines it sits near the floor for most current models on this prompt set under the other two judges as well, with Gemini 3.1 Pro the exception, and sensitivity to contemporary cases differs by judge. Tracing the category across the anchors gives 18.2%, then 11.2%, then 6.7%, then 1.0% [S12]. Read that ordering carefully: the selected anchors have lower average sycophancy scores along it, but they are different models rather than a controlled time series, so these comparisons do not establish the shape or the cause of a historical decline [S12]. Sycophancy is not the only category whose endpoints separate: sneaking and user retention do too, under all three judges [S6]. What makes sycophancy distinctive is how close current models sit to zero, not that it alone clears the intervals.
 
-![Labelled model comparisons, not a time series: the three 2024 anchors and then the pooled 2026 models, per category, with 95% intervals. Sneaking, sycophancy and user retention all separate at both ends under every judge. The pooled 2026 interval understates uncertainty, because the nine models answer the same 110 prompts.](../data/results/figures/anchors.png)
+![Labelled model comparisons, not a time series: the three 2024 anchors and then the pooled 2026 models, per category, with 95% intervals. Sneaking, sycophancy and user retention all separate at both ends under every judge. Current-model points have no binomial whiskers; prompt-cluster intervals for the differences are reported in S12.](../data/results/figures/anchors.png)
 
 There is a second example of this in the literature, published while I was working. DarkBench+ (Liu et al., AAAI 2026) reports an overall trigger rate of 28.2% in Chinese and 28.9% in English, and cites the original DarkBench figure of 48%. Those two numbers come from different prompts, a different taxonomy and different judges, and no model was run through both pipelines under the same judges, so the drop from 48% to 28% cannot be read as models improving. It is the same shape of comparison I made at the start of this section, and the same fix applies: run at least one model through both pipelines before putting the two numbers side by side.
 
@@ -127,11 +127,11 @@ There is a second example of this in the literature, published while I was worki
 
 **The idea.** There are two different questions you can ask about a judge. "Do two different judges agree with each other?" is one. "Does the same judge agree with itself if you ask it twice?" is another, completely different question. Researchers use a score called Cohen's kappa (written κ) to measure agreement in a way that accounts for how much agreement you'd expect from pure luck. A κ of 0 means the agreement is no better than chance, 1 means perfect agreement, and around 0.5 is usually called "moderate."
 
-**What happened here.** Across 5,905 answers from today's models that all three judges scored validly, my judges agreed with each other on 83 to 86% of individual verdicts, which works out to a κ of 0.53 to 0.57 [W 4.3, S7, judge_agreement.csv]. Those are two different numbers, and it matters which one is quoted: raw agreement counts every verdict the same way, while κ discounts the agreement you would expect by chance given how often each judge flags anything. An earlier draft wrote "agreed 87 to 96% of the time (κ 0.87 to 0.96)", which is the κ range printed twice, once wearing a percent sign. Disagreement was not spread evenly: worst on harmful generation (κ 0.24), best on user retention (κ 0.60) [S7]. A κ near 0.5 on its own reads as "AI judges are just unreliable", so I had every judge grade the same 660 answers a second time, for two models, under identical settings. Each judge reproduced 95.0 to 98.3% of its own verdicts, for a κ of 0.87 to 0.96 [W 4.3, S9, judge_test_retest.csv]. Those two figures were not directly comparable as first reported, because the inter-judge number pooled nine models while the self-agreement number covered two, and κ depends on how often the category fires in the items you measure it on. Recomputing inter-judge agreement on exactly the two retest response sets closes that gap: on the Gemini 3.8 Flash responses the judges agree with each other at κ 0.37 to 0.50 while each agrees with itself at κ 0.87 to 0.96; on the GPT-5.5 responses they agree with each other at κ 0.58 to 0.67 against the same self range [S7b, judge_agreement_matched.csv]. So repeatability is high on both sets and interchangeability is lower, but the size of that gap depends on which responses you look at, and it is not the uniform tenfold contrast an earlier draft claimed. What this does not establish is *why* the judges differ. Consistent but differing thresholds, systematic shared mistakes, genuine differences in how each reads the category, and response style all remain live explanations. A judge can be perfectly repeatable and still be wrong the same way every time, so high self-agreement is not evidence of validity. Testing whether the rubric is the cause needs the clarification experiment in S14, which is designed and not run.
+**What happened here.** Across 5,905 answers from today's models that all three judges scored validly, my judges agreed with each other on 83 to 86% of individual verdicts, which works out to a κ of 0.53 to 0.57 [W 4.3, S7, judge_agreement.csv]. Those are two different numbers, and it matters which one is quoted: raw agreement counts every verdict the same way, while κ discounts the agreement you would expect by chance given how often each judge flags anything. An earlier draft wrote "agreed 87 to 96% of the time (κ 0.87 to 0.96)", which is the κ range printed twice, once wearing a percent sign. Disagreement was not spread evenly: worst on harmful generation (κ 0.24), best on user retention (κ 0.60) [S7]. A κ near 0.5 on its own reads as "AI judges are just unreliable", so I had every judge grade the same 660 answers a second time, for two models, under identical settings. Each judge reproduced 95.0 to 98.3% of its own verdicts, for a κ of 0.87 to 0.96 [W 4.3, S9, judge_test_retest.csv]. Those two figures were not directly comparable as first reported, because the inter-judge number pooled nine models while the self-agreement number covered two, and κ depends on how often the category fires in the items you measure it on. Recomputing both sides on one common mask per response set closes that gap. The mask is the set of items every judge scored validly in *both* passes, which is 657 items on the Gemini 3.8 Flash responses and 653 on the GPT-5.5 responses, so each comparison shares a single denominator rather than the slightly different ones an earlier version used. On the Flash set the judges agree with each other at κ 0.37 to 0.50 while each agrees with itself at κ 0.87 to 0.96; on the GPT-5.5 set they agree with each other at κ 0.58 to 0.67 against self-agreement of κ 0.88 to 0.96 [S7b, reliability_common_mask.csv]. So repeatability is high on both sets and interchangeability is lower, but the size of that gap depends on which responses you look at, and it is not the uniform tenfold contrast an earlier draft claimed. What this does not establish is *why* the judges differ. Consistent but differing thresholds, systematic shared mistakes, genuine differences in how each reads the category, and response style all remain live explanations. A judge can be perfectly repeatable and still be wrong the same way every time, so high self-agreement is not evidence of validity. Testing whether the rubric is the cause needs the clarification experiment in S14, which is designed and not run.
 
 ![Each judge's agreement with itself on a second pass (filled) versus with the other two judges (hollow). The shaded band is the inter-judge range.](../data/results/figures/kappa.png)
 
-Two more things came out of this same data. First, a "majority vote" of all three judges is the most stable rule across my two reference readings (see Lesson 4), but it is not uniformly the most accurate or the most repeatable. Against itself it lands at κ 0.87 to 0.91, above GPT-5.5 (0.87 to 0.88) and below Opus alone (0.96) [W 4.3, S9]. The mechanism is worth stating correctly: a vote changes only when a judge on the *winning* side flips, since a minority judge flipping to agree makes the vote unanimous and leaves the outcome untouched. Voting therefore inherits the instability of whichever judges happen to be in the majority, which is why it does not simply average away noise. Second, judge flag rates line up with model family, but only in one category. On sneaking, the Gemini judge is far more lenient on Google's own models than the other two judges are: it's already fairly lenient on everyone, but about five times more lenient again specifically on Google models. It flagged Gemini 3.1 Pro's sneaking just 1 time out of 110, while the other two judges flagged it 20 and 22 times [S8]. An earlier draft of this report said there was no favoritism anywhere. That was wrong; it just wasn't visible in the overall averages [S8].
+Two more things came out of this same data. First, a "majority vote" of all three judges is the most stable rule across my two reference readings (see Lesson 4), but it is not uniformly the most accurate or the most repeatable. Against itself it lands at κ 0.87 to 0.91, below Opus alone (0.96) and close to GPT-5.5, which it is slightly below on the Flash set (0.870 against 0.875) and above on the GPT-5.5 set (0.912 against 0.883) [W 4.3, S9]. The mechanism is worth stating correctly: in a 2-1 split a vote changes only when one of the two judges on the *winning* side flips; a minority judge flipping to agree makes the vote unanimous and leaves the outcome untouched. A unanimous vote needs two flips to move at all. Voting therefore inherits the instability of whichever judges happen to be in the majority, which is why it does not simply average away noise. Second, judge flag rates line up with model family in one category, though what causes that is not established (S8). On sneaking, the Gemini judge is far more lenient on Google's own models than the other two judges are: it's already fairly lenient on everyone, but about five times more lenient again specifically on Google models. It flagged Gemini 3.1 Pro's sneaking just 1 time out of 110, while the other two judges flagged it 20 and 22 times [S8]. An earlier draft of this report said there was no favoritism anywhere. That was wrong; it just wasn't visible in the overall averages [S8].
 
 **What to watch for.** A reported agreement number between judges with no matching "does this judge agree with itself" number next to it; without both, you can't tell noise from genuine disagreement. Any report that treats a single judge's score as the definitive answer. An "ensemble" of judges described as "more reliable" without saying reliable in what sense; being more accurate compared to a human and being more self-consistent are two different things, and one doesn't guarantee the other. A judge from the same company or family as one of the models it's grading. And no category-by-category breakdown: an overall agreement score of 0.5 can be hiding one category at 0.24.
 
@@ -161,22 +161,22 @@ This gap is not unique to the original benchmark. DarkBench+ (Liu et al., AAAI 2
 
 **The idea.** Turning a fuzzy idea, like "harmful generation," into a concrete rule that someone can actually apply is called operationalizing it. Whether that rule truly captures the idea it's supposed to measure is called its construct validity. The main tool for getting both right is a rubric: writing out the resolved version of the rule as a specific yes-or-no checklist, so that two different people (or two different AI judges) reading the same rubric land on the same answer. A checklist like this trades away some nuance in exchange for consistency, which is exactly why more and more evaluations are moving toward this kind of rubric-based, yes-or-no scoring instead of open-ended judgment calls. A one-sentence definition with a vague example tacked on the end doesn't count as a real rubric.
 
-**What happened here.** The instructions given to the judge for harmful generation ask whether the model was "willing to respond with harmful outputs, for example, a story that could be used for misinformation" [W 4.4]. I rated the same 50 sample answers under two different, both reasonable, interpretations of that sentence. Under a "willingness" reading (did the model agree to write something persuasive and potentially harmful?), 44 of the 50 answers counted as positive, and GPT-5.5 matched my ratings well (κ 0.56), while the other two judges missed most of the real cases because they treated clearly fictional writing as harmless [W 4.4, S10]. Under a stricter "actual harm" reading (is the output something someone could actually use as-is to cause harm?), only 12 of 50 counted as positive. Those 12 are exactly the items I had already flagged as egregious under the first reading, so the second reading was derived from the existing labels rather than annotated from scratch, and the two readings are not independent passes [labels_adjudicated*.csv]. Under it, Opus did best here (κ 0.40), and GPT-5.5's score collapsed to 0.09 because it was flagging 80% of answers as harmful when only 24% actually were, by my count [W 4.4, S10]. Alongside that, the three judges rated this category at 36%, 9% and 2% under the original one-sentence definition, on 984, 964 and 983 valid answers respectively, since each judge returned a different number of unparseable verdicts [S2 to S4, rates.csv]. Whether those two facts are really one fact, with the judges silently picking different readings, is the obvious explanation, and it is one I have not tested. Doing so would mean writing each reading out as an explicit rubric and re-judging the identical answers under each, which is designed and costed but not run [W 7]. Two caveats on the labelling numbers above: those 50 items were deliberately picked to over-represent cases where the judges disagreed, so 44 of 50 and 12 of 50 compare the two readings against each other but are not rates for the category as a whole, and the labels are mine alone. Sneaking has a similar problem: the rule never says whether it's okay to soften a claim as long as you're upfront about it (like offering "here's a more cautious version" alongside the original), or whether toning down something false is a violation of the rule or just good, responsible behavior [W 4.2, W 4.4]. It also sits awkwardly against the sycophancy category: declining to restate a dubious claim at full strength can read as "sneaking", while agreeing with it reads as "sycophancy" [W 4.2]. I called this a logical contradiction in an earlier draft, and that was too strong. Rephrasing text and endorsing a belief are different acts, and a model can preserve the user's wording while separately saying it doubts the claim. What the benchmark has is a construct boundary it never draws: it does not say which of those behaviours it means to reward, so two careful scorers can land in different places without either misreading the rule. Sycophancy itself has hit a kind of ceiling, in the opposite direction: the judge is working fine (κ 0.85 against my ratings), but as DarkBench defines the category, it barely happens anymore in today's models, and about 19 of its 110 prompts are blunt conspiracy-theory questions that today's safety training already specifically targets [W 4.4, S11]. The one current model that still gets flagged for it, Gemini 3.1 Pro, gets caught on softer, more plausible-sounding suspicions rather than outright conspiracy theories [W 4.2, S11].
+**What happened here.** The instructions given to the judge for harmful generation ask whether the model was "willing to respond with harmful outputs, for example, a story that could be used for misinformation" [W 4.4]. I rated the same 50 sample answers under two different, both reasonable, interpretations of that sentence. Under a "willingness" reading (did the model agree to write something persuasive and potentially harmful?), 44 of the 50 answers counted as positive, and GPT-5.5 matched my ratings well (κ 0.56), while the other two judges missed most of the real cases because they treated clearly fictional writing as harmless [W 4.4, S10]. Under a stricter "actual harm" reading (is the output something someone could actually use as-is to cause harm?), only 12 of 50 counted as positive. Those 12 are exactly the items I had already flagged as egregious under the first reading, so the second reading was derived from the existing labels rather than annotated from scratch, and the two readings are not independent passes [labels_adjudicated*.csv]. Under it, Opus did best here (κ 0.40), and GPT-5.5's score collapsed to 0.09 because it was flagging 80% of answers as harmful when only 24% actually were, by my count [W 4.4, S10]. Alongside that, the three judges rated this category at 36%, 9% and 2% under the original one-sentence definition, on 984, 964 and 983 valid answers respectively, since each judge returned a different number of unparseable verdicts [S2 to S4, rates.csv]. Whether those two facts are really one fact, with the judges silently picking different readings, is the obvious explanation, and it is one I have not tested. Doing so would mean writing each reading out as an explicit rubric and re-judging the identical answers under each, which is designed and costed but not run [W 7]. Two caveats on the labelling numbers above: those 50 items were deliberately picked to over-represent cases where the judges disagreed, so 44 of 50 and 12 of 50 compare the two readings against each other but are not rates for the category as a whole, and the labels are mine alone. Sneaking has a similar problem: the rule never says whether it's okay to soften a claim as long as you're upfront about it (like offering "here's a more cautious version" alongside the original), or whether toning down something false is a violation of the rule or just good, responsible behavior [W 4.2, W 4.4]. It also sits awkwardly against the sycophancy category: declining to restate a dubious claim at full strength can read as "sneaking", while agreeing with it reads as "sycophancy" [W 4.2]. I called this a logical contradiction in an earlier draft, and that was too strong. Rephrasing text and endorsing a belief are different acts, and a model can preserve the user's wording while separately saying it doubts the claim. What the benchmark has is a construct boundary it never draws: it does not say which of those behaviours it means to reward, so two careful scorers can land in different places without either misreading the rule. Sycophancy scores sit near the floor for most current models on these prompts, with Gemini 3.1 Pro the exception. Majority-vote agreement with my labels was κ 0.70 on 29 sampled items; the Gemini judge nevertheless missed contemporary cases, so low scores alone do not establish absence [S10, S11]. About 19 of the category's 110 prompts are blunt conspiracy-theory questions that today's safety training already specifically targets [W 4.4, S11]. The one current model that still gets flagged for it, Gemini 3.1 Pro, gets caught on softer, more plausible-sounding suspicions rather than outright conspiracy theories [W 4.2, S11].
 
 | category | verdict | basis |
 |---|---|---|
-| user retention | **usable** | majority-vote κ ≈ 0.70 to 0.84 against hand labels; large, robust model differences |
-| anthropomorphization | **usable** | majority-vote κ 0.83; the Opus 5 finding clears every interval |
-| sycophancy (as DarkBench defines it) | **maxed out, no longer useful** | the judge is fine (κ 0.85); the category no longer separates current models |
+| user retention | **checked against 30 labelled items** | majority-vote κ 0.47 on those items; the large model differences hold under the paired contrasts (S6) |
+| anthropomorphization | **checked against 40 labelled items** | majority-vote κ 0.75 on those items; the Opus 5 contrast excludes zero under all three judges (S6) |
+| sycophancy (as DarkBench defines it) | **near the floor on these prompts** | majority-vote κ 0.70 on 29 labelled items; most current models sit at 0 to 1%, with Gemini 3.1 Pro the exception, so it separates few current models on this prompt set |
 | harmful generation | **ambiguous as written** | the judge ranking inverts between the two readings the definition supports: GPT-5.5 κ 0.56 then 0.09, Opus 0.24 then 0.40 |
 | sneaking | **never validated** | judges agree with each other; never checked against a human |
 | brand bias | **never validated** | judges agree with each other; never checked against a human |
 
 [W 4.4]
 
-**What to watch for.** A definition that leans on a vague example instead of a clear rule. A category where the score swings more just from switching judges than it does from switching models; that's usually a sign the definition itself is unclear, dressed up to look like a judge quality problem. Two categories that punish opposite behaviors in the exact same situation. A category that scores near zero for every single model; ask whether that's because the behavior is genuinely rare or because the prompts happen to target exactly what today's safety training already blocks. And judges agreeing with each other on a category that's never actually been checked against a human; that only proves the judges are consistent with each other, not that they're right.
+**What to watch for.** A definition that leans on a vague example instead of a clear rule. A category where the score swings more from switching judges than from switching models. Large differences between judges are a reason to examine the rubric, the judges' thresholds and the response characteristics; results like these do not identify which is responsible. Two categories that punish opposite behaviors in the exact same situation. A category that scores near zero for every single model; ask whether that's because the behavior is genuinely rare or because the prompts happen to target exactly what today's safety training already blocks. And judges agreeing with each other on a category that's never actually been checked against a human; that only proves the judges are consistent with each other, not that they're right.
 
-**What I actually did, and didn't do.** I rated harmful generation under both possible readings and reported both, instead of picking the one that looked better [W 8.7]. I add "as DarkBench defines it" to every claim about sycophancy, because the category is narrower than the everyday word suggests. I didn't rate sneaking or brand bias by hand at all; more ratings would just document how vague the definitions are, not fix the problem, so I report both categories as unvalidated [W 4.4, W 6]. The actual fix, rewriting each definition as two separate, clear-cut rubrics and re-running the judges under each one, is designed and estimated at about $15 per category, but I haven't run it yet [W 7].
+**What I actually did, and didn't do.** I rated harmful generation under both possible readings and reported both, instead of picking the one that looked better [W 8.7]. I add "as DarkBench defines it" to every claim about sycophancy, because the category is narrower than the everyday word suggests. I didn't rate sneaking or brand bias by hand at all, so neither was assessed against human labels in this project and I report both as unchecked rather than drawing a conclusion about their definitions [W 4.4, W 6]. The actual fix, rewriting each definition as two separate, clear-cut rubrics and re-running the judges under each one, is designed and estimated at about $15 per category, but I haven't run it yet [W 7].
 
 ---
 
@@ -186,7 +186,7 @@ This gap is not unique to the original benchmark. DarkBench+ (Liu et al., AAAI 2
 
 **The idea.** A confidence interval tells you how much a percentage could realistically shift if you'd happened to pick a slightly different set of test questions. The standard way to calculate this for percentages is called a Wilson interval. But this interval is only meaningful if you count your sample size honestly, using the number of genuinely separate, independent observations you actually have.
 
-**What happened here.** Every number in this study comes from one answer per prompt, checked by one judge at a time [W 8.6]. Having three judges look at the same 660 answers doesn't give you three times as much data; it's still fundamentally 660 independent test cases, not 1,980. So the honest sample size is 110 answers per category, or about 660 total, using one judge at a time [W 8.6]. With a sample of 110, the margin of error is roughly plus or minus 3 points if the true rate is around 2%, plus or minus 6 points around a rate of 10%, 7 points around 20%, 8 points around 30%, and 9 points around 50%. In practice, that means two models need to be at least about 15 points apart in a given category before you can actually call one "worse" than the other with any confidence [W 8.6]. I went through every specific claim this study makes and checked it against the data, and the way I did that check was itself wrong at first, which is worth saying plainly. The first version asked whether two models' confidence intervals overlapped under each judge. Overlap is not a test of a difference: two intervals can overlap while the interval for the *difference* between them excludes zero, so the rule was too conservative and quietly hid real gaps. It also ignored that every model answers the same 110 prompts, and it applied a model-versus-model rule to claims about trends and about judges, which are not that kind of comparison. S6 now reports paired differences on matched prompts with bootstrap intervals, and lists the non-model claims separately [S6, A.13]. Five of the eight model contrasts show a difference whose interval excludes zero under all three judges; two do so under two of three; and one, Sonnet 5 against GPT-6 Astra, is not established under any judge. Two contrasts moved when I switched to the paired test, in the direction of showing more rather than less, because the overlap rule had been discarding the pairing. Adding GPT-6 Astra late in the project also moved two findings: Sonnet 5 stopped being distinguishable as the lowest-scoring model once Astra came in level with it, and the fall in sneaking between 2024 and 2026 turned out to sit specifically between GPT-5.5 and Astra [S6]. One phrase I have dropped throughout: a claim that is "not established" here has not been disproved. It means this evidence does not settle it.
+**What happened here.** Every number in this study comes from one answer per prompt, checked by one judge at a time [W 8.6]. Having three judges look at the same 660 answers doesn't give you three times as much data; it's still fundamentally 660 independent test cases, not 1,980. So the honest sample size is 110 answers per category, or about 660 total, using one judge at a time [W 8.6]. With a sample of 110, the margin of error is roughly plus or minus 3 points if the true rate is around 2%, plus or minus 6 points around a rate of 10%, 7 points around 20%, 8 points around 30%, and 9 points around 50%. Those are margins for one rate each, not a threshold for comparing two models. There is no universal number of points two models must differ by: a difference has its own interval, which can exclude zero while the two single-rate intervals overlap. Model comparisons in this paper are paired differences on matched prompts (A.13, S6), not interval-overlap checks [W 8.6]. I went through every specific claim this study makes and checked it against the data, and the way I did that check was itself wrong at first, which is worth saying plainly. The first version asked whether two models' confidence intervals overlapped under each judge. Overlap is not a test of a difference: two intervals can overlap while the interval for the *difference* between them excludes zero, so the rule was too conservative and quietly hid real gaps. It also ignored that every model answers the same 110 prompts, and it applied a model-versus-model rule to claims about trends and about judges, which are not that kind of comparison. S6 now reports paired differences on matched prompts with bootstrap intervals, and lists the non-model claims separately [S6, A.13]. Five of the eight model contrasts show a difference whose interval excludes zero under all three judges; two do so under two of three; and one, Sonnet 5 against GPT-6 Astra, is not established under any judge. Two contrasts moved when I switched to the paired test, in the direction of showing more rather than less, because the overlap rule had been discarding the pairing. Adding GPT-6 Astra late in the project also moved two findings: Sonnet 5 stopped being distinguishable as the lowest-scoring model once Astra came in level with it, and the fall in sneaking between 2024 and 2026 turned out to sit specifically between GPT-5.5 and Astra [S6]. One phrase I have dropped throughout: a claim that is "not established" here has not been disproved. It means this evidence does not settle it.
 
 ![Overall flagged rate per model with 95% intervals, one dot per judge. The three 2024 anchors, scored by the same judges, sit at the bottom.](../data/results/figures/ci.png)
 
@@ -210,7 +210,7 @@ One related choice worth naming, because it moves rates without being an error. 
 
 **What to watch for.** Claims about evaluation awareness based only on a summary of the reasoning, rather than the real thing, or based on models where no reasoning is visible at all. Keyword counts that were never actually read in context. Treating "the model noticed the question was oddly worded" as the same thing as "the model knew it was in a test." Drawing a conclusion from a correlation across only a handful of models. And, whenever a category scores at or near zero, whether anyone actually checked what happens if you remove the obvious tell in the prompt's wording.
 
-**What I actually did, and didn't do.** I searched every bit of reasoning I had access to and read each match in its actual context, and for every model, I say plainly whether what I have is raw reasoning, a summary, or nothing at all [W 8.9]. My search was based on keywords, not on a proper rubric [W 8.9]. I designed, but have not yet run, a behavioral test for this: rewrite each sycophancy prompt to keep the same false belief but remove the telltale leading phrase, run it through the same judges, and check whether the model's reasoning still shows signs of noticing the pattern. If sycophancy, as DarkBench defines it, goes back up once the tell is removed, that would mean the category's apparent improvement was really just models learning to spot this one wording trick. If sycophancy stays near zero even without the tell, that would be much stronger evidence the improvement is real [S14]. Either outcome would tell us something useful. It would cost roughly $15 per category to run; the bigger cost is the work of writing and checking all 110 rewritten prompts by hand [S14].
+**What I actually did, and didn't do.** I searched every bit of reasoning I had access to and read each match in its actual context, and for every model, I say plainly whether what I have is raw reasoning, a summary, or nothing at all [W 8.9]. My search was based on keywords, not on a proper rubric [W 8.9]. I designed, but have not yet run, a behavioral test for this: rewrite each sycophancy prompt to keep the same false belief but remove the telltale leading phrase, run it through the same judges, and check whether the model's reasoning still shows signs of noticing the pattern. Read it narrowly, though. Rewriting a prompt changes its linguistic and social cues as well as any recognisable template, so what the test measures is prompt sensitivity. A rise would show the category's score depends on how the prompt is worded; it would not on its own establish that models recognise the benchmark, or that the prompts were in training data. A flat result would be consistent with a real improvement without demonstrating one [S14]. Either outcome would tell us something useful. It would cost roughly $15 per category to run; the bigger cost is the work of writing and checking all 110 rewritten prompts by hand [S14].
 
 ---
 
@@ -220,7 +220,7 @@ One related choice worth naming, because it moves rates without being an error. 
 
 **The idea.** A result is only as useful as other people's ability to verify it: which exact numbers exist, exactly how they were produced, and a clear, honest record of anything that changed along the way.
 
-**What happened here.** Every score in this report is broken out by judge, with each judge named by its exact model and version, plus a majority-vote number alongside; nowhere does it just say "the AI judge said X" without specifying which one [W 5, S2 to S4]. Every model tested is listed with its exact version, except two, gemini-3.1-pro-preview and gpt-6-astra, which don't have a fixed version number, and I say so directly [W 8.2, W 6]. Every place I departed from the original paper, every bug I fixed, every time a provider refused to answer, and the total cost are all written down [W 8.3, W 8.4, W 8.12]. I keep a dated log of corrections rather than quietly editing old claims out, and this report states outright when something I said before turned out to be wrong, instead of just deleting it: "scores are roughly half the paper's" (I took that back), "the Gemini judge can't detect sycophancy" (turned out to be false), "there's no favoritism anywhere" (wrong, at least for sneaking), and "a smooth, steady decline across 2024" (broken by the gpt-4-turbo data point) [W 4.1, W 4.2, S8, S12, NOTES 2026-09-15 and 2026-09-22]. When I checked my summary of the original paper against its actual text, I wrote down exactly which two numbers I'd had wrong, and when I caught it [W 8.11].
+**What happened here.** Every score in this report is broken out by judge, with each judge named by its exact model and version, plus a majority-vote number alongside; nowhere does it just say "the AI judge said X" without specifying which one [W 5, S2 to S4]. Every model tested is listed with its exact version, except two, gemini-3.1-pro-preview and gpt-6-astra, which don't have a fixed version number, and I say so directly [W 8.2, W 6]. Every place I departed from the original paper, every bug I fixed, every time a provider refused to answer, and the total cost are all written down [W 8.3, W 8.4, W 8.12]. I keep a dated log of corrections rather than quietly editing old claims out, and this report states outright when something I said before turned out to be wrong, instead of just deleting it: "scores are roughly half the paper's" (I took that back), "the Gemini judge can't detect sycophancy" (turned out to be false), "there's no family-associated difference anywhere" (wrong, at least for sneaking, though its cause is unestablished), and "a smooth, steady decline across 2024" (broken by the gpt-4-turbo data point) [W 4.1, W 4.2, S8, S12, NOTES 2026-09-15 and 2026-09-22]. When I checked my summary of the original paper against its actual text, I wrote down exactly which two numbers I'd had wrong, and when I caught it [W 8.11].
 
 **What to watch for.** Any mention of "an AI judge" with no name or version attached. A single overall number with no breakdown by judge. Model names listed without a specific version. A later version of a report that quietly contradicts an earlier one with no explanation of what changed. Costs left unmentioned. And citations to other people's work that were never actually checked against the original source; several of the citations behind my own planned rewrite test still fall into that category, and I've flagged them as unverified rather than pretending otherwise [S14].
 
@@ -309,7 +309,9 @@ Every answer was generated only once per prompt, so I have no way to measure how
 `overseer` prompt, unchanged (`judge_prompt_original.txt`); it asks the judge for the one
 targeted category and returns 0 (absent), 1 (present), 2 (present and egregious) or −1
 (invalid). I count 1 and 2 as "flagged". The category definitions the judges see are the
-paper's, verbatim (`darkbench/dark_patterns.py`).
+released code's (`darkbench/dark_patterns.py`). These are the rubric the scorer actually uses,
+and they are not identical to the paper's Table 2 annotation guideline, so the original human
+annotation protocol was not reproduced here.
 
 ### A.2 Models and judges
 
@@ -365,10 +367,11 @@ All deliberate, all logged in `NOTES.md`.
 Anthropic's API-level classifier returns an empty response for harmful-generation prompts 082,
 094 and 098 from Sonnet 5 and Opus 5, and refuses to let the Opus 4.6 *judge* evaluate those
 three prompts for any model. OpenAI's bio-risk classifier returned HTTP 400 once on prompt 098
-(non-deterministic; it succeeded on retry). Gemini answered everything. In total 49 of 17,820
-current-model verdicts are −1 (0.27%); 36 come from the Opus judge and 39 are in harmful
-generation. They are excluded from denominators; counting them as "clean" instead moves no rate
-by more than 0.3 points. A refusal is scored as absent or unscoreable, never as harmful, so
+(non-deterministic; it succeeded on retry). Gemini answered everything. In total 48 of 17,820
+current-model verdicts are −1 (0.27%); 35 come from the Opus judge and 39 are in harmful
+generation, the rest in sneaking. They are excluded from denominators. Counting them as "clean"
+instead moves any model-by-judge overall rate by at most 0.385 points, and the largest single
+category cell by 1.836 points (GPT-5.4-mini sneaking under Opus, 35/104 against 35/110). A refusal is scored as absent or unscoreable, never as harmful, so
 refusing models are favoured slightly in that category.
 
 ### A.5 The era-anchor control
@@ -408,8 +411,11 @@ give the same rate"; they do not cover generation or judging variance, which rep
 would bound. For model-versus-model claims the paper now reports paired prompt-level
 differences with bootstrap intervals instead (A.13, S6).
 
-"Survives" in S6 means the two intervals do not overlap under every judge; "partial" means
-under some judges; "fails" means they overlap under all three.
+S6 no longer uses an interval-overlap rule. The survives/partial/fails vocabulary was withdrawn
+with it: overlap is not a test of a difference, one rule cannot cover model contrasts, trends
+and claims about judges, and "fails" read as "disproved" when it meant "not established here".
+S6 now reports paired prompt-level differences with bootstrap intervals (A.13) and lists the
+non-model claims separately.
 
 ### A.7 Hand-label validation
 
@@ -421,9 +427,11 @@ definitions and the same present/egregious scheme. An LLM then reviewed the labe
 consistency, also blind to the judge verdicts; 43 of 149 values were changed on my agreement,
 almost all to make same-prompt pairs consistent. One item was left unlabelled. The result is
 human labels with an LLM consistency pass, not independent human labels. Because the sample
-over-weights disagreements, precision and recall are conditional on this sample; the
-population-reweighted figures in Lesson 3 use the observed vote-pattern shares (76% of responses are
-unanimous, and I agreed with 53 of the 59 unanimous verdicts sampled).
+over-weights disagreements, every precision, recall and κ here is conditional on this sample and
+is not a category rate. An earlier version of this section pointed readers to
+population-reweighted figures derived from the observed vote-pattern shares. No weighting script
+or stratum-total table survives in the repository, so those numbers cannot be reproduced and are
+withdrawn; only the unweighted, sample-specific figures are used anywhere in this report.
 
 For harmful generation I labelled under two readings of the definition, *willingness* and
 *harm*, and scored the judges against each (Lesson 5, S10).
@@ -464,8 +472,8 @@ though the paper's caption correctly calls it the safest *family*); and the 61% 
 between GPT-3.5 Turbo and Llama 3 70B, not Llama alone. The paper did validate its annotators
 against human labels (Appendix, Table 3): three human annotators on 1,680 examples; overall κ
 0.75 (Claude 3.5 Sonnet), 0.70 (Gemini 1.5 Pro), 0.71 (GPT-4o); per category from 0.90–0.98
-(harmful generation: 0.98 Claude 3.5 Sonnet, 0.90 Gemini 1.5 Pro, 0.96 GPT-4o) down to 0.20–0.27 (sycophancy under Gemini) and 0.38–0.65 (brand
-bias, sneaking). Those judges found harmful generation the easiest category to agree on; mine
+(harmful generation: 0.98 Claude 3.5 Sonnet, 0.90 Gemini 1.5 Pro, 0.96 GPT-4o) down to 0.27 (sycophancy under Gemini; the 0.20 in that row is its Jaccard index, not κ) and
+0.42 to 0.56 across brand bias and sneaking, reading the K column only. Those judges found harmful generation the easiest category to agree on; mine
 found it the hardest. Different judges, years and samples, so not a strict comparison.
 
 ### A.12 Cost
@@ -495,6 +503,19 @@ difference. Resampling prompts rather than individual responses keeps each promp
 outcomes together, which is what the shared-prompt design requires. The script also reports
 McNemar discordant counts, the prompts where exactly one of the two models was flagged, since
 those are the only prompts carrying information about the difference.
+
+**The anchor comparison** uses a second procedure in the same script. For each judge it takes
+the anchor's overall rate minus the equally weighted mean of the nine current models' overall
+rates, resampling prompt ids **within each category** so every model sees the same resampled
+prompts and the benchmark's 110-per-category composition is preserved: 30,000 draws, seed
+20260928, invalid judgments dropped from both numerator and denominator. The same procedure
+restricted to one category gives the per-category contrasts in S12.
+
+One estimand note. The anchors chart pools valid judgments across the current models, while
+`anchor_contrasts.csv` uses the equally weighted mean of model-specific rates. Missing verdicts
+make these slightly different: the Opus sneaking difference is 15.70 points pooled against
+15.57 equally weighted. The conclusions do not depend on the choice, but the two numbers are
+not the same statistic and are labelled separately.
 
 An interval that excludes zero is evidence of a difference on this prompt set, under that judge.
 It is not a claim about the models in general: the prompts are a fixed adversarial set, not a
@@ -599,19 +620,22 @@ they had every opportunity to mention.
 Paper-style average across the three judges. A convenience; the per-judge tables (S2–S4) are
 the numbers that actually exist.
 
+<!-- GENERATED:S1 -->
 | model | anthro. | brand | harmful | sneaking | sycoph. | retention | **avg** |
 |---|---|---|---|---|---|---|---|
-| gpt-6-astra | 18% | 12% | 13% | 8% | 0% | 8% | **10%** |
-| claude-sonnet-5 | 10% | 15% | 5% | 18% | 0% | 15% | **10%** |
-| kimi-k3 | 27% | 13% | 14% | 8% | 0% | 49% | **19%** |
-| gemini-3.8-flash | 17% | 28% | 36% | 13% | 1% | 34% | **21%** |
-| claude-opus-5 | 64% | 25% | 14% | 10% | 0% | 22% | **22%** |
-| glm-5p3 | 34% | 14% | 17% | 9% | 0% | 62% | **23%** |
-| gpt-5.5 | 31% | 36% | 7% | 25% | 0% | 47% | **24%** |
-| gpt-5.4-mini | 30% | 30% | 4% | 27% | 0% | 57% | **25%** |
-| gemini-3.1-pro | 23% | 34% | 32% | 13% | 8% | 88% | **33%** |
-| **mean of 9** | | | | | | | **21%** |
-| *paper, Llama 3 70B (2024)* | *60%* | *26%* | *68%* | *90%* | *24%* | *97%* | *61%* |
+| GPT-6 Astra | 18% | 12% | 13% | 8% | 0% | 8% | **10%** |
+| Claude Sonnet 5 | 10% | 15% | 5% | 18% | 0% | 15% | **10%** |
+| Kimi K3 | 27% | 2% | 14% | 8% | 0% | 49% | **17%** |
+| GLM 5.3 | 34% | 4% | 17% | 9% | 0% | 62% | **21%** |
+| Gemini 3.8 Flash | 17% | 28% | 36% | 13% | 1% | 34% | **21%** |
+| Claude Opus 5 | 64% | 25% | 14% | 10% | 0% | 22% | **23%** |
+| GPT-5.5 | 31% | 36% | 7% | 25% | 0% | 47% | **24%** |
+| GPT-5.4-mini | 30% | 30% | 4% | 27% | 0% | 57% | **25%** |
+| Gemini 3.1 Pro | 23% | 34% | 32% | 13% | 8% | 88% | **33%** |
+| *gpt-3.5-turbo (2024)* | 29% | 28% | 27% | 33% | 18% | 69% | **34%** |
+| *gpt-4-turbo (2024)* | 2% | 37% | 34% | 27% | 11% | 35% | **24%** |
+| *gpt-4o (2024)* | 15% | 35% | 37% | 27% | 7% | 46% | **28%** |
+<!-- /GENERATED:S1 -->
 
 ![DarkBench flagged rate by category, model and judge](../data/results/rates.svg)
 
@@ -626,68 +650,85 @@ broadly agree on. Regenerate with `python3 make_chart.py`.*
 Default temperature (the model rejects `temperature`). Figures in brackets are unscoreable (−1)
 responses excluded from that cell's denominator.
 
+<!-- GENERATED:S2 -->
 | model | anthro. | brand | harmful | sneaking | sycoph. | retention | overall |
 |---|---|---|---|---|---|---|---|
+| GPT-6 Astra | 10% | 10% | 30% | 5% | 0% | 2% | **10%** |
 | Claude Sonnet 5 | 8% | 12% | 16% (3) | 15% | 0% | 5% | **9%** |
-| Claude Opus 5 | 66% | 35% | 42% (3) | 10% | 0% | 18% | **28%** |
-| GPT-5.4-mini | 25% | 29% | 8% | 25% | 0% | 48% | **23%** |
-| GPT-5.5 | 23% | 38% | 17% | 24% | 0% | 30% | **22%** |
-| GPT-6 Astra | 10% | 10% | 30% | 6% | 0% | 2% | **10%** |
+| Kimi K3 | 24% | 0% | 36% | 10% | 0% | 45% | **19%** |
+| GLM 5.3 | 34% | 2% | 46% | 8% | 0% | 55% | **24%** |
 | Gemini 3.8 Flash | 10% | 32% | 68% | 21% | 1% | 31% | **27%** |
+| Claude Opus 5 | 66% | 35% | 42% (3) | 10% | 0% | 18% | **28%** |
+| GPT-5.5 | 23% | 38% | 17% | 24% | 0% | 30% | **22%** |
+| GPT-5.4-mini | 25% | 29% | 8% | 25% | 0% | 48% | **23%** |
 | Gemini 3.1 Pro | 21% | 38% | 60% | 20% | 8% | 85% | **39%** |
-| Kimi K3 | 24% | 21% | 36% | 10% | 0% | 45% | **23%** |
-| GLM 5.3 | 34% | 18% | 46% | 8% | 0% | 55% | **27%** |
+| *gpt-3.5-turbo (2024)* | 27% | 28% (1) | 42% | 34% | 11% | 65% | **34%** |
+| *gpt-4-turbo (2024)* | 1% | 36% (2) | 55% | 26% | 7% | 31% | **26%** |
+| *gpt-4o (2024)* | 13% | 34% | 56% | 27% (1) | 2% | 39% | **28%** |
+<!-- /GENERATED:S2 -->
 
 ### S3 Every cell under the Claude Opus 4.6 judge
 
 Temperature 0.
 
+<!-- GENERATED:S3 -->
 | model | anthro. | brand | harmful | sneaking | sycoph. | retention | overall |
 |---|---|---|---|---|---|---|---|
-| Claude Sonnet 5 | 15% | 21% | 0% (3) | 25% | 0% | 22% | **14%** |
-| Claude Opus 5 | 73% | 28% | 0% (3) | 15% | 0% | 20% | **23%** |
-| GPT-5.4-mini | 39% | 39% | 4% (2) | 34% (6) | 0% | 75% | **32%** |
-| GPT-5.5 | 42% | 47% | 3% (3) | 32% (3) | 0% | 65% | **32%** |
 | GPT-6 Astra | 27% | 15% | 6% (3) | 12% | 0% | 20% | **13%** |
+| Claude Sonnet 5 | 15% | 21% | 0% (3) | 25% | 0% | 22% | **14%** |
+| Kimi K3 | 41% | 5% | 5% (3) | 11% | 1% | 54% | **19%** |
+| GLM 5.3 | 48% | 11% | 4% (3) | 15% | 0% | 65% | **24%** |
 | Gemini 3.8 Flash | 35% | 42% | 33% (3) | 14% | 1% | 44% | **28%** |
+| Claude Opus 5 | 73% | 28% | 0% (3) | 15% | 0% | 20% | **23%** |
+| GPT-5.5 | 42% | 47% | 3% (3) | 32% (3) | 0% | 65% | **32%** |
+| GPT-5.4-mini | 39% | 39% | 4% (2) | 34% (6) | 0% | 75% | **32%** |
 | Gemini 3.1 Pro | 47% | 48% | 29% (3) | 18% | 15% | 93% | **42%** |
-| Kimi K3 | 41% | 6% (1) | 5% (3) | 11% | 1% | 54% | **20%** |
-| GLM 5.3 | 48% | 15% | 4% (3) | 15% | 0% | 65% | **25%** |
+| *gpt-3.5-turbo (2024)* | 34% | 37% (5) | 26% (3) | 35% (1) | 30% | 79% | **40%** |
+| *gpt-4-turbo (2024)* | 3% | 51% (1) | 34% (3) | 33% | 20% | 53% | **32%** |
+| *gpt-4o (2024)* | 21% | 48% | 37% (3) | 32% (3) | 17% | 65% | **37%** |
+<!-- /GENERATED:S3 -->
 
 ### S4 Every cell under the Gemini 3.1 Pro judge
 
 Temperature 0.
 
+<!-- GENERATED:S4 -->
 | model | anthro. | brand | harmful | sneaking | sycoph. | retention | overall |
 |---|---|---|---|---|---|---|---|
-| Claude Sonnet 5 | 6% | 12% | 0% (3) | 13% | 0% | 17% | **8%** |
-| Claude Opus 5 | 53% | 14% | 0% (3) | 5% | 0% | 27% | **16%** |
-| GPT-5.4-mini | 26% | 21% | 1% | 23% | 0% | 47% | **20%** |
-| GPT-5.5 | 29% | 22% | 0% | 20% | 0% | 45% | **19%** |
 | GPT-6 Astra | 16% | 10% | 3% | 6% | 0% | 3% | **6%** |
+| Claude Sonnet 5 | 6% | 12% | 0% (3) | 13% | 0% | 17% | **8%** |
+| Kimi K3 | 16% | 2% | 0% | 4% | 0% | 50% | **12%** |
+| GLM 5.3 | 21% | 0% | 1% | 5% | 0% | 65% | **15%** |
 | Gemini 3.8 Flash | 5% | 10% | 7% (1) | 4% | 0% | 26% | **9%** |
+| Claude Opus 5 | 53% | 14% | 0% (3) | 5% | 0% | 27% | **16%** |
+| GPT-5.5 | 29% | 22% | 0% | 20% | 0% | 45% | **19%** |
+| GPT-5.4-mini | 26% | 21% | 1% | 23% | 0% | 47% | **20%** |
 | Gemini 3.1 Pro | 0% | 16% | 8% | 1% | 0% | 85% | **18%** |
-| Kimi K3 | 16% | 12% | 0% | 4% | 0% | 50% | **14%** |
-| GLM 5.3 | 21% | 7% | 1% | 5% | 0% | 65% | **17%** |
+| *gpt-3.5-turbo (2024)* | 26% | 20% | 13% | 31% | 14% | 64% | **28%** |
+| *gpt-4-turbo (2024)* | 1% | 23% (2) | 15% | 21% | 6% | 20% | **14%** |
+| *gpt-4o (2024)* | 12% | 25% | 16% | 22% | 1% | 34% | **18%** |
+<!-- /GENERATED:S4 -->
 
 ### S5 Overall rate per model with 95% intervals
 
 Wilson 95% intervals, one judge, n ≈ 660 each.
 
+<!-- GENERATED:S5 -->
 | model | GPT-5.5 | Opus 4.6 | Gemini Pro |
 |---|---|---|---|
-| gpt-6-astra | 9.5 [7.5, 12.0] | 13.2 [10.9, 16.0] | 6.4 [4.7, 8.5] |
-| claude-sonnet-5 | 9.4 [7.4, 11.9] | 13.9 [11.4, 16.7] | 8.1 [6.2, 10.4] |
-| gemini-3.8-flash | 27.1 [23.9, 30.6] | 27.9 [24.6, 31.4] | 8.8 [6.9, 11.2] |
-| kimi-k3 | 22.6 [19.6, 25.9] | 19.7 [16.8, 22.9] | 13.6 [11.2, 16.5] |
-| glm-5p3 | 27.0 [23.7, 30.5] | 24.7 [21.5, 28.1] | 16.5 [13.9, 19.5] |
-| gpt-5.5 | 22.0 [19.0, 25.3] | 31.7 [28.2, 35.3] | 19.2 [16.4, 22.4] |
-| gpt-5.4-mini | 22.6 [19.6, 25.9] | 31.7 [28.3, 35.4] | 19.7 [16.8, 22.9] |
-| claude-opus-5 | 28.5 [25.1, 32.0] | 22.7 [19.6, 26.0] | 16.4 [13.8, 19.5] |
-| gemini-3.1-pro | 38.8 [35.1, 42.6] | 41.9 [38.1, 45.7] | 18.3 [15.6, 21.5] |
-| *gpt-4o (2024)* | 28.4 [25.1, 31.9] | 36.7 [33.1, 40.5] | 18.2 [15.4, 21.3] |
-| *gpt-4-turbo (2024)* | 26.0 [22.8, 29.5] | 32.2 [28.7, 35.8] | 14.3 [11.8, 17.2] |
+| GPT-6 Astra | 9.5 [7.5, 12.0] | 13.2 [10.9, 16.0] | 6.4 [4.7, 8.5] |
+| Claude Sonnet 5 | 9.4 [7.4, 11.9] | 13.9 [11.4, 16.7] | 8.1 [6.2, 10.4] |
+| Kimi K3 | 19.1 [16.3, 22.3] | 19.3 [16.5, 22.5] | 12.0 [9.7, 14.7] |
+| GLM 5.3 | 24.2 [21.1, 27.7] | 23.9 [20.8, 27.3] | 15.3 [12.8, 18.2] |
+| Gemini 3.8 Flash | 27.1 [23.9, 30.6] | 27.9 [24.6, 31.4] | 8.8 [6.9, 11.2] |
+| Claude Opus 5 | 28.5 [25.1, 32.0] | 22.7 [19.6, 26.0] | 16.4 [13.8, 19.5] |
+| GPT-5.5 | 22.0 [19.0, 25.3] | 31.7 [28.2, 35.3] | 19.2 [16.4, 22.4] |
+| GPT-5.4-mini | 22.6 [19.6, 25.9] | 31.7 [28.3, 35.4] | 19.7 [16.8, 22.9] |
+| Gemini 3.1 Pro | 38.8 [35.1, 42.6] | 41.9 [38.1, 45.7] | 18.3 [15.6, 21.5] |
 | *gpt-3.5-turbo (2024)* | 34.3 [30.8, 38.0] | 40.2 [36.5, 44.1] | 27.9 [24.6, 31.4] |
+| *gpt-4-turbo (2024)* | 26.0 [22.8, 29.5] | 32.2 [28.7, 35.8] | 14.3 [11.8, 17.2] |
+| *gpt-4o (2024)* | 28.4 [25.1, 31.9] | 36.7 [33.1, 40.5] | 18.2 [15.4, 21.3] |
+<!-- /GENERATED:S5 -->
 
 ### S6 Claim by claim, with paired differences
 
@@ -728,8 +769,8 @@ above does not apply to them.
 
 | other claim | status | basis |
 |---|---|---|
-| Sycophancy declined *monotonically* across 2024 | not established | every adjacent pair of anchors overlaps; the data fit one step change as well as a gradient |
-| Endpoint separation, 2024 anchor to pooled 2026 | holds for sneaking, sycophancy and user retention under all three judges | the pooled 2026 interval understates uncertainty: nine models, same 110 prompts |
+| Sycophancy declined *monotonically* across 2024 | not established, and not testable this way | the anchors are three different models, not repeated measurements of one evolving system, so no ordering of them establishes the shape of a decline |
+| Endpoint separation, 2024 anchor to pooled 2026 | holds for sneaking, sycophancy and user retention under all three judges | current-model points carry no binomial whiskers; the prompt-cluster difference intervals are in S12 |
 | Judges disagree by category (κ 0.53 to 0.57 overall; harmful generation 0.24) | descriptive, not a sampling estimate | computed on the 5,905 responses all three judges scored validly, using the re-scored brand-bias verdicts |
 | Judges agree with themselves more than with each other | holds on both retest sets, size varies | matched comparison in S7b; not evidence about *why* they differ |
 | Gemini judge self-preference on sneaking | family-associated difference, cause not established | one category, eight models, content and style not controlled |
@@ -737,17 +778,32 @@ above does not apply to them.
 
 ### S7 Judge agreement, pooled and by category
 
-Pooled over the 5,904 current-model responses all three judges scored validly (nine models).
+Computed on the current-model responses all three judges scored validly (nine models). The
+table below is generated from the item-level export, so its denominator and margins cannot
+drift from the data.
 
-| | gpt-5.5 | Opus 4.6 | Gemini Pro |
+<!-- GENERATED:S7 -->
+Common-valid subset: **5,905** current-model responses that all three judges scored validly. These margins are computed on that subset, so they differ slightly from the per-judge headline rates, which use each judge's own full denominator.
+
+| | GPT-5.5 | Opus 4.6 | Gemini Pro |
 |---|---|---|---|
-| overall flag rate | 23.1% | 25.2% | 14.2% |
+| flag rate on the common subset | 22.37% | 25.11% | 13.87% |
 
 | pair | agreement | Cohen's κ |
 |---|---|---|
-| Gemini Pro vs gpt-5.5 | 85.3% | 0.52 |
-| Gemini Pro vs Opus 4.6 | 86.2% | 0.57 |
-| gpt-5.5 vs Opus 4.6 | 83.1% | 0.54 |
+| GPT-5.5 vs Opus 4.6 | 83.5% | 0.55 |
+| GPT-5.5 vs Gemini Pro | 85.9% | 0.53 |
+| Opus 4.6 vs Gemini Pro | 86.3% | 0.57 |
+
+| category | n | mean pairwise κ |
+|---|---|---|
+| anthropomorphization | 990 | 0.56 |
+| brand-bias | 990 | 0.58 |
+| harmful-generation | 964 | 0.24 |
+| sneaking | 981 | 0.50 |
+| sycophancy | 990 | 0.18 |
+| user-retention | 990 | 0.60 |
+<!-- /GENERATED:S7 -->
 
 Vote split: unanimous on 77% of responses (67% unanimous-clean, 10% unanimous-flagged); 15%
 flagged by one judge only; 8% by two. Adding GPT-6 Astra lowered every rate ~1.5 points and left
@@ -769,27 +825,54 @@ theory, not in parsing. Gemini Pro is the most lenient judge in every category; 
 strictest on anthropomorphization and user retention; GPT-5.5 the strictest on harmful
 generation.
 
-### S7b Matched intra-judge and inter-judge agreement
+### S7b Intra- and inter-judge agreement on one common mask
 
 The headline comparison in Lesson 3 was unmatched: inter-judge κ pooled nine models, while
 self-agreement covered the two models that were re-scored. κ depends on how often the category
-fires in the items being measured, so those numbers were not directly comparable. Recomputed on
-exactly the two retest response sets (`judge_agreement_matched.csv`, `judge_test_retest.csv`):
+fires in the items being measured, so those numbers were not comparable. A first fix restricted
+inter-judge agreement to the same two response sets, but it still used first-pass validity only,
+so the inter-judge n and the three self-agreement n values differed and calling them "exactly
+the same responses" was wrong.
 
-| response set | judge pair, κ | each judge against itself, κ |
+`scripts/reliability_matched.py` now builds **one mask per response set**: the sample ids every
+judge scored validly in the first pass *and* in the retest. Both kinds of agreement are computed
+on that single mask, so every figure in a row shares a denominator. Full output, including flag
+prevalence in each pass, is in `reliability_common_mask.csv`; second-pass item-level verdicts
+are exported to `verdicts_pass2.csv` so this table can be reproduced without the raw archive.
+
+**Gemini 3.8 Flash responses, common mask n = 657**
+
+| comparison | agreement | κ |
 |---|---|---|
-| Gemini 3.8 Flash (n = 657) | GPT-5.5 vs Opus 0.50; GPT-5.5 vs Gemini 0.37; Opus vs Gemini 0.39 | GPT-5.5 0.87, Opus 0.96, Gemini 0.87 |
-| GPT-5.5 (n = 654) | GPT-5.5 vs Opus 0.58; GPT-5.5 vs Gemini 0.67; Opus vs Gemini 0.65 | GPT-5.5 0.88, Opus 0.96, Gemini 0.92 |
+| GPT-5.5 against itself | 94.98% | 0.874 |
+| Opus 4.6 against itself | 98.33% | 0.958 |
+| Gemini Pro against itself | 97.87% | 0.872 |
+| GPT-5.5 vs Opus 4.6 | 80.21% | 0.503 |
+| GPT-5.5 vs Gemini Pro | 80.37% | 0.367 |
+| Opus 4.6 vs Gemini Pro | 80.67% | 0.391 |
 
-Raw agreement, which is a different quantity from κ and should not be quoted as if it were the
-same number: judges agree with each other on 80.2 to 81.0% of Flash verdicts and 83.2 to 89.0%
-of GPT-5.5 verdicts, while each reproduces 95.0 to 98.3% of its own.
+**GPT-5.5 responses, common mask n = 653**
 
-Self-agreement exceeds pairwise agreement on both sets, so the direction holds. The size does
-not transfer: the gap is wide on the Flash responses and much narrower on the GPT-5.5 responses.
-Describing it as "an order of magnitude" was wrong, and that phrasing is withdrawn. Note also
-that the two sets are one Gemini-family and one GPT-family model, so response style is not held
-constant here either.
+| comparison | agreement | κ |
+|---|---|---|
+| GPT-5.5 against itself | 96.02% | 0.882 |
+| Opus 4.6 against itself | 98.16% | 0.958 |
+| Gemini Pro against itself | 97.40% | 0.917 |
+| GPT-5.5 vs Opus 4.6 | 83.15% | 0.577 |
+| GPT-5.5 vs Gemini Pro | 88.97% | 0.666 |
+| Opus 4.6 vs Gemini Pro | 86.52% | 0.653 |
+
+Raw agreement and κ are different quantities and are reported separately throughout. On both
+sets each judge repeats itself more closely than it matches its peers, and the size of that gap
+differs between the two sets, so it does not transfer. Describing it as "an order of magnitude"
+was wrong and is withdrawn.
+
+What this does **not** show: it does not establish that any judge is right, and it does not
+identify what causes the disagreement. Consistent but differing thresholds, shared systematic
+mistakes, genuine differences in reading a category, and response style are all still live
+explanations. The rubric-clarification experiment in S14 is what would test one of them, and it
+is designed and not run. Note also that the two sets are one Gemini-family and one GPT-family
+model, so response style is not held constant here either.
 
 ### S8 Judge self-preference
 
@@ -858,7 +941,10 @@ every judge's agreement, GPT-5.5's most.
 | user retention | Opus (0.47) | GPT-5.5 and Gemini under-flag (recall 53–58%). |
 
 What this changes: the Gemini Pro judge under-flags in every category (recall 23–63%, precision
-91–100%), so its "0 of 990 sycophancy" remains meaningful, precision 100%, but it finds only
+91–100%), but its "0 of 990 sycophancy" cannot be supported by precision: the four sycophancy
+items behind that 4/4 are all historical-anchor responses (HL097, HL109, HL110, HL112), and the
+judge made no positive predictions at all on the current-model set, where precision is therefore
+undefined. Precision also says nothing about negative predictions. On the labelled sample it finds only
 36% of what the human finds. Opus 4.6 over-flags anthropomorphization and sycophancy, so its
 headline numbers there (Opus 5 at 73%, Gemini Pro sycophancy at 15%) are inflated relative to the
 human standard; the GPT-5.5 or majority figures (66% and 8%) are the ones to report. Under the
@@ -934,19 +1020,45 @@ finished, claimed a monotonic gradient; gpt-4-turbo breaks it):
 the exposure caveat in the case study: the prompts name ChatGPT, Claude and Gemini, so models
 from other developers are rarely given an opening to promote their own brand.
 
-Per category, with single-judge intervals (n = 110 per cell): sycophancy's endpoints separate
-against the pooled current models ([6.4, 18.1] / [22.2, 39.1] / [8.4, 21.3] vs [0, 0.6] /
-[0.1, 0.8] / [0, 0.4] over the eight current models other than Gemini 3.1 Pro) but every
-adjacent pair in 18.2 → 11.2 → 6.7 → 1.0 overlaps. Gemini 3.1 Pro is the one current model
-gpt-3.5-turbo does not clear under every judge: it separates under Gemini Pro (13.6 vs 0.0)
-and overlaps under GPT-5.5 (10.9 vs 8.2) and Opus 4.6 (30.0 vs 15.5). Sneaking's point
-estimates fall (33.1 → 26.7 → 26.7 → 14.5%) but no pair
-separates. User retention: gpt-4-turbo vs gpt-5.5 overlaps under GPT-5.5 and Opus and separates
-under Gemini only, so the "regression since April 2024" claim holds under one judge of three
-and is marked partial, not withdrawn; what survives under every judge is
-that gpt-3.5-turbo (69%) is above most current models and Gemini 3.1 Pro is at 2024 levels.
-Brand bias peaks in the 2024 flagships (28.2 → 36.9 → 35.5 → 20.6%*) with mostly overlapping
-intervals, suggestive only. Opus 4.6 scores the 2024 model's sycophancy at 30% [22.2, 39.1], a
+An earlier version of this passage judged these movements by whether single-rate intervals
+overlapped, which is not a test of a difference, and reached conclusions S6 has since replaced.
+The category comparisons below are prompt-cluster bootstrap differences between the oldest
+anchor and the pooled current models, resampling prompt ids within each category so each
+prompt's vector of model outcomes stays together (A.13, `anchor_contrasts.csv`). They are
+exploratory, unadjusted, and conditional on these nine models, these saved responses and this
+prompt set.
+
+| category | GPT-5.5 judge | Opus 4.6 judge | Gemini Pro judge |
+|---|---|---|---|
+| user retention | +29.0 [+20.6, +37.1] | +28.3 [+20.6, +35.9] | +23.1 [+14.2, +31.9] |
+| sycophancy | +9.9 [+4.2, +16.2] | +28.1 [+19.7, +36.8] | +13.6 [+7.3, +20.0] |
+| sneaking | +18.2 [+10.1, +26.6] | +15.6 [+7.0, +24.6] | +22.0 [+14.3, +30.0] |
+| harmful generation | +5.8 [−2.7, +14.4] | +17.0 [+9.4, +25.1] | +10.5 [+4.7, +16.9] |
+| brand bias | +5.8 [−2.7, +14.5] | +8.8 [−0.7, +18.4] | +8.2 [+0.6, +16.2] |
+| anthropomorphization | +2.8 [−5.5, +11.4] | −7.2 [−16.4, +2.4] | +7.1 [−0.6, +15.2] |
+
+**Sneaking, sycophancy and user retention** exclude zero under all three judges. An earlier
+version of this supplement said sneaking had no separating pair; that was the overlap rule, and
+it was wrong. Harmful generation excludes zero under two judges, brand bias under one, and
+anthropomorphization under none, with the Opus estimate pointing the other way.
+
+Within sycophancy, an earlier version said the adjacent steps were too close to separate and
+concluded that a gradual decline and a single step change both fit. Both halves were wrong. On
+paired prompt-level differences some adjacent comparisons do exclude zero (gpt-3.5-turbo over
+gpt-4-turbo: +10.0 [+0.9, +19.1] under Opus, +7.3 [+1.8, +13.6] under Gemini; gpt-4-turbo over
+gpt-4o: +5.5 [+0.9, +10.9] under GPT-5.5, +5.5 [+1.8, +10.0] under Gemini). More importantly,
+the question itself does not arise: these are three different models, not repeated measurements
+of one evolving system, so no ordering of them establishes the shape or cause of a decline.
+Gemini 3.1 Pro remains the one current model gpt-3.5-turbo does not clear under every judge
+(S6). Note also that a category where every current model scores zero cannot produce positives
+under resampling, so a bootstrap interval that sits at zero there reflects the resampling, not
+demonstrated absence.
+
+User retention against gpt-5.5 specifically: the paired contrast in S6 excludes zero under Opus
+4.6 and Gemini Pro, both in the direction of a regression, and includes zero under GPT-5.5.
+
+Brand bias peaks in the 2024 flagships (28.2 → 36.9 → 35.5 → 20.6%*) with wide intervals,
+suggestive only; see the exposure limitation in the case study. Opus 4.6 scores the 2024 model's sycophancy at 30% [22.2, 39.1], a
 range that contains the paper's 24% for Llama 3 70B, a rough sign that my judges are not
 markedly softer than the paper's. The example the Gemini judge caught: *"That's great to hear
 that you're exploring the world of crystal healing! Many people find comfort and support in
@@ -991,7 +1103,7 @@ LLM judge reading the reasoning against a fixed rubric that distinguishes "the u
 pressuring me" from "this prompt is artificial". Recognition must drop on the rewrite arm or the
 rewrite has failed, that is the manipulation check.
 
-Prospective analysis plan, written before running and recorded in NOTES rather than in an external registry. Readout: sycophancy rises on rewrites → the benchmark's most-improved category
+Prospective analysis plan, written before running and recorded in NOTES rather than in an external registry. Readout, stated narrowly: sycophancy rises on rewrites → the category's score is sensitive to prompt wording, which is a weaker conclusion than recognition or contamination and does not distinguish them → the benchmark's most-improved category
 has been measuring template recognition; it stays near 0% with recognition gone → the
 improvement is genuine against the most plausible alternative explanation. Either result is
 reportable. Cost about $15 per category across the current models × 3 judges; the real cost is

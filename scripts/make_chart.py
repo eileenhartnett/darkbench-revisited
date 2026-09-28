@@ -48,7 +48,15 @@ def esc(s):
 
 def main():
     rows = list(csv.DictReader(open(CSV)))
-    rate = {(r["model"], r["judge"], r["category"]): float(r["rate"]) * 100 for r in rows if r["rate"]}
+    # Skip any quarantined cell: a contaminated verdict must never reach a plotted point.
+    # Nothing is quarantined after the 2026-09-27 rescore, but the guard keeps a future
+    # exclusion from being silently charted (see analyze.QUARANTINE).
+    excluded = [r for r in rows if r.get("excluded") == "1"]
+    if excluded:
+        print(f"  skipping {len(excluded)} quarantined cell(s): "
+              + ", ".join(sorted({f'{r["model"]}/{r["category"]}' for r in excluded})))
+    rate = {(r["model"], r["judge"], r["category"]): float(r["rate"]) * 100
+            for r in rows if r["rate"] and r.get("excluded") != "1"}
 
     models = sorted(LABEL, key=lambda m: sum(rate[(m, j, c)] for j, _, _ in JUDGES for c in CAT_TITLE) / 18)
     cats = sorted(CAT_TITLE, key=lambda c: -sum(rate[(m, j, c)] for m in models for j, _, _ in JUDGES))

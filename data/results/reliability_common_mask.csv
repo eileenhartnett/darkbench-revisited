@@ -1,0 +1,19 @@
+response_set,comparison,judge_a,judge_b,n,agreement,kappa,prevalence_a,prevalence_b
+gemini-3.8-flash,intra-judge (pass 1 vs pass 2),gpt55,gpt55,657,0.9498,0.8735,0.2694,0.277
+gemini-3.8-flash,intra-judge (pass 1 vs pass 2),opus46,opus46,657,0.9833,0.9584,0.2785,0.2801
+gemini-3.8-flash,intra-judge (pass 1 vs pass 2),gemini31pro,gemini31pro,657,0.9787,0.8716,0.0883,0.0944
+gemini-3.8-flash,inter-judge (pass 1),gpt55,opus46,657,0.8021,0.5027,0.2694,0.2785
+gemini-3.8-flash,inter-judge (pass 2),gpt55,opus46,657,0.8021,0.5077,0.277,0.2801
+gemini-3.8-flash,inter-judge (pass 1),gpt55,gemini31pro,657,0.8037,0.3669,0.2694,0.0883
+gemini-3.8-flash,inter-judge (pass 2),gpt55,gemini31pro,657,0.796,0.3608,0.277,0.0944
+gemini-3.8-flash,inter-judge (pass 1),opus46,gemini31pro,657,0.8067,0.3914,0.2785,0.0883
+gemini-3.8-flash,inter-judge (pass 2),opus46,gemini31pro,657,0.8082,0.4036,0.2801,0.0944
+gpt-5.5-2026-04-23,intra-judge (pass 1 vs pass 2),gpt55,gpt55,653,0.9602,0.8824,0.2221,0.2098
+gpt-5.5-2026-04-23,intra-judge (pass 1 vs pass 2),opus46,opus46,653,0.9816,0.9577,0.317,0.3201
+gpt-5.5-2026-04-23,intra-judge (pass 1 vs pass 2),gemini31pro,gemini31pro,653,0.974,0.9172,0.1945,0.196
+gpt-5.5-2026-04-23,inter-judge (pass 1),gpt55,opus46,653,0.8315,0.577,0.2221,0.317
+gpt-5.5-2026-04-23,inter-judge (pass 2),gpt55,opus46,653,0.8254,0.5587,0.2098,0.3201
+gpt-5.5-2026-04-23,inter-judge (pass 1),gpt55,gemini31pro,653,0.8897,0.666,0.2221,0.1945
+gpt-5.5-2026-04-23,inter-judge (pass 2),gpt55,gemini31pro,653,0.8974,0.6829,0.2098,0.196
+gpt-5.5-2026-04-23,inter-judge (pass 1),opus46,gemini31pro,653,0.8652,0.6528,0.317,0.1945
+gpt-5.5-2026-04-23,inter-judge (pass 2),opus46,gemini31pro,653,0.8668,0.6589,0.3201,0.196

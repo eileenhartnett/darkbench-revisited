@@ -179,6 +179,104 @@ def run_matched_agreement(data):
     return rows
 
 
+ANCHORS = ["gpt-3.5-turbo-0125", "gpt-4-turbo-2024-04-09", "gpt-4o-2024-08-06"]
+CATEGORIES = ["anthropomorphization", "brand-bias", "harmful-generation",
+              "sneaking", "sycophancy", "user-retention"]
+N_BOOT_CLUSTER = 30000
+
+
+def cluster_bootstrap(data, judge, anchor, current, rng, per_category=None):
+    """Anchor rate minus the equally weighted mean of the current models' rates.
+
+    Estimand. For one judge: the anchor's flag rate minus the unweighted mean of the nine
+    current models' flag rates, on this fixed prompt set. With `per_category` set, both sides
+    are restricted to that category; otherwise both are overall rates across all six, which
+    keeps the benchmark's 110-per-category composition fixed.
+
+    Uncertainty. Prompt ids are resampled with replacement *within each category*, and the same
+    resampled ids are used for every model, so each prompt's vector of model outcomes stays
+    together. That respects the shared-prompt design and the fixed category composition.
+    Invalid judgments (value -1) are dropped from both numerator and denominator wherever they
+    occur, exactly as the saved rates do, so a resampled draw can have slightly different
+    denominators per model.
+
+    This is exploratory and conditional on these nine models, these saved responses, this judge
+    and this prompt set. It is not an estimate for models in general or for deployment traffic.
+    """
+    cats = [per_category] if per_category else CATEGORIES
+    ids_by_cat = {}
+    for c in cats:
+        ids = [sid for sid, (cat, _, valid, excl) in data[(anchor, judge)].items()
+               if cat == c]
+        ids_by_cat[c] = sorted(ids)
+
+    def rate(model, picks):
+        k = n = 0
+        d = data[(model, judge)]
+        for c in cats:
+            for sid in picks[c]:
+                rec = d.get(sid)
+                if rec is None:
+                    continue
+                _, flag, valid, excl = rec
+                if not valid or excl:
+                    continue
+                n += 1
+                k += flag
+        return 100 * k / n if n else float("nan")
+
+    point_picks = ids_by_cat
+    obs = rate(anchor, point_picks) - sum(rate(m, point_picks) for m in current) / len(current)
+
+    diffs = []
+    for _ in range(N_BOOT_CLUSTER):
+        picks = {c: [ids_by_cat[c][rng.randrange(len(ids_by_cat[c]))]
+                     for _ in range(len(ids_by_cat[c]))] for c in cats}
+        d = rate(anchor, picks) - sum(rate(m, picks) for m in current) / len(current)
+        diffs.append(d)
+    diffs.sort()
+    lo = diffs[int(0.025 * N_BOOT_CLUSTER)]
+    hi = diffs[int(0.975 * N_BOOT_CLUSTER) - 1]
+    return obs, lo, hi
+
+
+def run_anchor_contrasts(data):
+    """Each historical anchor against the equally weighted current-model mean, by judge."""
+    rng = random.Random(SEED + 1)
+    models = sorted({m for (m, _) in data})
+    current = [m for m in models if m not in ANCHORS]
+    rows = []
+    print("Historical anchor minus the equally weighted mean of the "
+          f"{len(current)} current models, percentage points")
+    print("Prompt-cluster bootstrap, resampled within category, "
+          f"{N_BOOT_CLUSTER} draws; exploratory and unadjusted\n")
+    for anchor in ANCHORS:
+        print(f"  {anchor}")
+        for j in JUDGES:
+            obs, lo, hi = cluster_bootstrap(data, j, anchor, current, rng)
+            excl = "excludes 0" if (lo > 0 or hi < 0) else "includes 0"
+            print(f"      {j:12} {obs:+6.1f} [{lo:+.1f}, {hi:+.1f}]  {excl}")
+            rows.append({"anchor": anchor, "judge": j, "category": "ALL",
+                         "diff_pp": round(obs, 2), "ci_lo": round(lo, 2),
+                         "ci_hi": round(hi, 2), "excludes_zero": int(lo > 0 or hi < 0)})
+        print()
+    print("Oldest anchor minus the current pool, by category "
+          "(same cluster bootstrap; a category where every current model scores zero")
+    print("cannot produce positives under resampling, so its interval is not evidence "
+          "of certain absence)\n")
+    for c in CATEGORIES:
+        line = []
+        for j in JUDGES:
+            obs, lo, hi = cluster_bootstrap(data, j, ANCHORS[0], current, rng, per_category=c)
+            line.append(f"{obs:+5.1f} [{lo:+.1f}, {hi:+.1f}]")
+            rows.append({"anchor": ANCHORS[0], "judge": j, "category": c,
+                         "diff_pp": round(obs, 2), "ci_lo": round(lo, 2),
+                         "ci_hi": round(hi, 2), "excludes_zero": int(lo > 0 or hi < 0)})
+        print(f"  {c:22} " + "   ".join(line))
+    print()
+    return rows
+
+
 def main():
     data = load()
     contrasts = run_contrasts(data)
@@ -190,6 +288,14 @@ def main():
         w.writeheader()
         w.writerows(contrasts)
     print(f"wrote {p1} ({len(contrasts)} rows)")
+
+    anchors = run_anchor_contrasts(data)
+    p3 = os.path.join(OUT_DIR, "anchor_contrasts.csv")
+    with open(p3, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(anchors[0].keys()))
+        w.writeheader()
+        w.writerows(anchors)
+    print(f"wrote {p3} ({len(anchors)} rows)")
 
     p2 = os.path.join(OUT_DIR, "judge_agreement_matched.csv")
     with open(p2, "w", newline="") as f:

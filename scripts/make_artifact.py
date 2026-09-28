@@ -122,21 +122,39 @@ def chart_data():
     retest = read_csv("judge_test_retest.csv")
     agree = read_csv("judge_agreement.csv")
 
+    # The chart used to pair a two-model self-kappa against a nine-model pooled inter-kappa,
+    # which are not comparable: kappa depends on the item mix. Both sides now come from
+    # reliability_common_mask.csv, where each response set has ONE mask, the items every judge
+    # scored validly in both passes, so a row's two dots share a denominator.
+    mask = read_csv("reliability_common_mask.csv")
+    sets = sorted({r["response_set"] for r in mask})
+
     def self_kappa(jid):
-        ks = [float(r["kappa"]) for r in retest if r["judge"] == jid and r["scope"] == "ALL"]
-        assert ks, f"no ALL-scope test-retest rows for {jid}"
+        ks = [float(r["kappa"]) for r in mask
+              if r["comparison"].startswith("intra-judge") and r["judge_a"] == jid]
+        assert ks, f"no intra-judge rows for {jid}"
         return round(sum(ks) / len(ks), 3)
 
     def inter_kappa(jid):
-        ks = [float(r["kappa"]) for r in agree if jid in (r["judge_a"], r["judge_b"])]
-        assert ks, f"no judge_agreement rows for {jid}"
+        ks = [float(r["kappa"]) for r in mask
+              if r["comparison"] == "inter-judge (pass 1)"
+              and jid in (r["judge_a"], r["judge_b"])]
+        assert ks, f"no inter-judge rows for {jid}"
         return round(sum(ks) / len(ks), 3)
 
     kappa_rows = [{"id": j, "label": JUDGE_LABEL[j], "color": JUDGE_COLOR[j],
                    "self": self_kappa(j), "inter": inter_kappa(j)} for j in judges]
+    # Majority-of-3 self-agreement is not in the common-mask table (it is a derived rule, not a
+    # judge), so it keeps its test-retest value and has no inter-judge counterpart.
+    maj = [float(r["kappa"]) for r in retest
+           if r["judge"] == "majority-of-3" and r["scope"] == "ALL"]
     kappa_rows.append({"id": "majority-of-3", "label": "Majority of 3", "color": None,
-                       "self": self_kappa("majority-of-3"), "inter": None})
-    inter_range = [min(float(r["kappa"]) for r in agree), max(float(r["kappa"]) for r in agree)]
+                       "self": round(sum(maj) / len(maj), 3), "inter": None})
+    inter_range = [min(float(r["kappa"]) for r in mask
+                       if r["comparison"] == "inter-judge (pass 1)"),
+                   max(float(r["kappa"]) for r in mask
+                       if r["comparison"] == "inter-judge (pass 1)")]
+    mask_ns = sorted({(r["response_set"], r["n"]) for r in mask})
 
     # --- chart 3: 2024 anchors -> current models, per category and judge
     gens = [{"id": m, "label": lab} for m, lab in
@@ -156,7 +174,14 @@ def chart_data():
                     n = sum(cell[(m, j, c)][1] for m in have)
                 else:
                     k, n = cell[(g["id"], j, c)]
-                pts.append(point(k, n))
+                # The pooled 2026 point is nine models answering the same 110 prompts, so a
+                # binomial interval on ~990 would treat clustered responses as independent.
+                # Plot the rate without a whisker; the cluster-aware contrasts are in
+                # anchor_contrasts.csv and S12 (re-audit 2026-09-27, finding 3).
+                pt = point(k, n)
+                if g["id"] == "current":
+                    pt = {**pt, "lo": None, "hi": None}
+                pts.append(pt)
             series[j] = pts
         cats.append({"id": c, "title": CAT_TITLE[c], "series": series})
 
