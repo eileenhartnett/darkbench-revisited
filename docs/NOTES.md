@@ -1066,6 +1066,36 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 — submission assembled: Google Doc, report PDF, private repo
+
+Eileen's plan: Google Doc for the blog so reviewers can comment, PDF for the technical report,
+repository private until BlueDot feedback, public release afterwards. Hosting changes deferred.
+
+One thing to correct in my own record: she read me as hesitant about publishing. I was not.
+What I flagged was that the hosted artifact had gone stale and that its links were private by
+default, so a reviewer following them would get the wrong content or none. Her plan handles
+both, and it is a reasonable sequencing decision on its own terms.
+
+Built `scripts/make_pdf.py`. Two things had to be handled or the PDF would silently lose
+content: the fourteen supplements live in `<details>` elements and print collapsed, and the
+sticky sidebar repeats on every page. The script injects a print stylesheet and opens every
+`<details>` before driving headless Chrome. Result: 51 pages, supplements expanded, S1 showing
+the corrected Kimi 2% and GLM 4% brand bias. Charts rasterise in print; the HTML keeps them
+interactive, which is why both formats go in the bundle.
+
+Google Doc created in Eileen's Drive with the full blog, acknowledgements and references. The
+three figures could not be embedded through the Drive API, so the text carries explicit
+`[FIGURE n: insert <file> here]` markers and numbered captions for manual insertion.
+
+Changed the blog's links block for review: the technical report is now "attached as a PDF"
+rather than pointing at the stale artifact URL, and the repository line says private with
+access on request. That removes the last live pointer to the stale hosted page.
+
+Submission folder at `~/Desktop/bluedot-submission/`: report PDF, interactive HTML, and the
+three figures named in insertion order.
+
+Still open: which reviewer emails need Drive and GitHub access. Not inventing any.
+
 ### 2026-09-27 (final) — blog text removed from git; acknowledgement added
 
 Eileen's instruction, reversing the earlier "keep one canonical blog source in GitHub": the
