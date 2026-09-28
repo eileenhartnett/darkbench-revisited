@@ -14,7 +14,9 @@ Course project for BlueDot Impact's AI safety course.
 
 ## Read it
 
-- **[Blog post](docs/BLOG.md)**, the main narrative, about 2,000 words.
+- **Blog post**, the main narrative, about 2,000 words, on the BlueDot submission page. It is
+  not versioned here; this repository holds the analyses, the technical report and the
+  evidence behind them.
 - **[Full technical report](https://claude.ai/code/artifact/5dabf49b-2002-4bb0-a994-5f850f54bb15)**,
   rendered, with live charts and fifteen supplements. Source:
   [`docs/METHODS_PAPER.md`](docs/METHODS_PAPER.md).

@@ -1066,6 +1066,22 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 (final) — blog text removed from git; acknowledgement added
+
+Eileen's instruction, reversing the earlier "keep one canonical blog source in GitHub": the
+blog post and submission text should not be in the repository. `docs/BLOG.md` is now untracked
+and gitignored, kept locally as the drafting copy so its figures and links stay reproducible.
+The submission narrative lives on the BlueDot Notion page instead. README no longer links to
+it; the two prose references in CORRECTIONS and make_figures now say "the blog post" rather
+than naming a file that is not there.
+
+Worth noting for later: the repository no longer contains the narrative a reader of the README
+would most want, so the Notion page is now the only copy of it. If that page is ever lost, the
+post is gone. Eileen is aware; this is her call, not an oversight.
+
+Acknowledgement added before removal, so the local copy carries it: BlueDot Impact Technical AI
+Safety Project, with thanks to instructor Jess Bergs. No other names invented.
+
 ### 2026-09-27 — blocking JS bug, then a presentation pass
 
 **The bug was mine and it broke every chart.** The κ caption I added in the closure pass

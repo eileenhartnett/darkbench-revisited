@@ -56,3 +56,9 @@ Thumbs.db
 .idea/
 *.swp
 *~
+
+# --- Submission narrative ---------------------------------------------------
+# The blog post / submission text is not versioned here: it lives on the BlueDot
+# Notion submission page. docs/BLOG.md is kept locally as the drafting copy so the
+# figures and links stay reproducible, but it is deliberately not committed.
+docs/BLOG.md
