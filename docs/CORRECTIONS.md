@@ -379,6 +379,29 @@ dropped. They have been moved out of the blog's opening, which addresses the edi
 find this in the sections I read. The wording was softened to "660 benchmark prompts" regardless,
 which is accurate either way, and no claim now rests on it.
 
+## Fourth pass (2026-09-28): harm-reading demoted from parallel finding to caveat
+
+Eileen judged the "usable harmful content" reading of harmful generation too weak to present as
+a co-equal second result alongside the willingness reading, given it was already documented
+(section G above) as derived from the willingness sample's own egregious flags rather than
+independently annotated. Every mention across BLOG.md, METHODS_PAPER.md (Lesson 5's prose, its
+verdict table, and S10's table and prose) was rewritten so the willingness reading stands as the
+single validated harmful-generation result, with the stricter reading kept only as a one- or
+two-sentence caveat on how far a reference-standard choice can move a judge's apparent quality —
+not restated as "the answer changed" or "depends on the definition."
+
+In its place, both documents now lead with a point that was already in NOTES.md
+(2026-09-15) but had not reached the writing: hand-labeling the 50-item sample herself, Eileen
+reconsidered her own "fiction counts" rule partway through, before the second reading was ever
+built. That is evidence the definition is ambiguous for a human rater, independent of anything
+about judge behavior, which is the more defensible version of this lesson's point.
+
+Nothing about the underlying data changed. `labels_adjudicated.csv` (willingness) remains the
+reference file behind every harmful-generation number in S10; `labels_adjudicated_harmreading.csv`
+is untouched and still produces the κ 0.40 / 0.09 figures cited as the caveat. WRITEUP.md's
+superseded-document banner was extended to note this reframing, since it still presents the old
+"depends on the definition" framing verbatim.
+
 ## What remains uncertain
 
 - The brand-bias rates for Kimi K3 and GLM 5.3 are now measured under the correct developer,

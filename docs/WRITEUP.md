@@ -13,8 +13,11 @@ Eileen Hartnett — BlueDot Technical AI Safety Project, 2026. Draft of 2026-09-
 > mean; the brand-bias cells for Kimi K3 and GLM 5.3 are contaminated and quarantined, so every
 > aggregate below that includes them is superseded; interval overlap is not a test of a
 > difference, so §3b's survives/partial/fails verdicts are replaced by paired contrasts in S6
-> of the methods paper; and "only sycophancy" separates is wrong, since sneaking and user
-> retention do too. See `CORRECTIONS.md` for the full list.
+> of the methods paper; "only sycophancy" separates is wrong, since sneaking and user
+> retention do too; and harmful generation's "depends on the definition" framing below is
+> superseded as of 2026-09-28 — the methods paper treats the willingness reading as the sole
+> validated result and the stricter reading as a caveat, not a second finding. See
+> `CORRECTIONS.md` for the full list.
 
 **How to read this.** Sections 1–7 make the argument with four charts and two small tables.
 Section 8 (Methods) says exactly how everything was done. The Supplements (S1–S14) hold every

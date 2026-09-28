@@ -2021,3 +2021,44 @@ Open items before writeup: hand-label a sample from the harmful-generation and
 anthropomorphization disagreements (charter's validation step); read Opus 5 anthropomorphization
 samples; decide whether to add epochs for noise (09-05 flip finding); Experiment 2 (rewrites)
 still deferred. Spend ≈ $185 total.
+
+### 2026-09-28 — harm-reading demoted from parallel finding to caveat, in BLOG.md and METHODS_PAPER.md
+Eileen judged the "usable harmful content" reading of harmful generation (2026-09-15, above) too
+weak to keep presenting as a co-equal second result: it was built by filtering the willingness
+sample's own egregious flags, not by annotating the 50 items again, so it was never an
+independent second pass. Rewrote every mention in BLOG.md and METHODS_PAPER.md (Lesson 5's prose
+and verdict table, S10's table and prose, and the "what I actually did" line) so the willingness
+reading stands as the sole validated harmful-generation result, with the stricter reading kept
+to one or two caveat sentences (κ 0.40/0.09, non-independent) rather than a "the answer changed
+depending on definition" framing. In its place, both documents now lead with the point that was
+already in the 2026-09-15 entry but hadn't reached the writing: Eileen reconsidered her own
+"fiction counts" rule partway through hand-labeling, before the second reading existed — evidence
+the definition is ambiguous for a human rater, not only for a judge. No data changed:
+`labels_adjudicated.csv` (willingness) and `labels_adjudicated_harmreading.csv` (the caveat
+figures) are both untouched. WRITEUP.md's superseded-document banner was extended to flag that
+its own "depends on the definition" framing is now superseded. Full detail in CORRECTIONS.md,
+"Fourth pass."
+
+### 2026-09-28 (later) — brand-bias/Kimi-GLM section cut from BLOG.md, kept in the full report
+Eileen's call: the developer-identity bug and its "unequal opportunity to promote your own
+products" framing isn't a DarkBench design flaw worth a blog headline — it's what happens when
+you extend a benchmark's fixed-brand prompts to a model family the prompts never named, which is
+specific to running this replication rather than a general lesson about LLM judges. Removed the
+"Correcting the scorer exposed a problem with the prompts" section from BLOG.md entirely and
+trimmed the "Where this sits" summary sentence that referenced it. Left METHODS_PAPER.md
+untouched — A.14 and the WRITEUP/CORRECTIONS coverage of the bug, the re-score, and the
+unequal-exposure limitation all stay, since Eileen wants this addressed in the full report, just
+not the blog. Google Doc recreated to match (old doc trashed, same pattern as other blog
+updates).
+
+### 2026-09-28 (later still) — blog fully rewritten, new title
+Eileen supplied a full replacement blog text and it was written to BLOG.md verbatim (house-style
+formatting applied: headers, bold/italic, straight quotes, en-dashes). New title "What Changes
+When You Rerun an AI Benchmark?", new subtitle. Notably reintroduces the Kimi/GLM brand-bias
+prompt-coverage point cut earlier today, now folded into a new "What this means for running
+newer models on existing benchmarks" section as a general lesson rather than a bug-fix narrative
+(no mention of the scorer bug itself, the 102/110 explanations, or "an external review found") —
+Eileen's call, not something to second-guess. The harmful-generation section keeps both readings
+with the non-independence caveat stated inline, closer to the original structure than the
+"Fourth pass" edit. Did not touch METHODS_PAPER.md; this was scoped to the blog only. Google Doc
+recreated to match (old doc trashed).
