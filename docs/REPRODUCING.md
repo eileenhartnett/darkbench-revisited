@@ -49,8 +49,8 @@ named in `data/raw-manifest.json`.
 
 `artifact.html` and `darkbench-revisited.html` are build products and are not tracked in git, so
 a fresh checkout will not have them. Run the chain below to generate them. The tracked report
-files are the Markdown source (`docs/METHODS_PAPER.md`) and the PDF snapshot
-(`data/results/darkbench-revisited.pdf`); everything here rebuilds from those and the committed
+files are the Markdown source (`docs/METHODS_PAPER.md`) and the PDF technical report
+(`report/darkbench-revisited.pdf`); everything here rebuilds from those and the committed
 CSVs, with no API keys and no model calls.
 
 Run in this order. Each step consumes the previous step's output, and skipping `make_chart.py`
@@ -66,7 +66,7 @@ python3 scripts/make_standalone.py    # artifact.html -> darkbench-revisited.htm
 ```
 
 ```bash
-python3 scripts/make_pdf.py           # standalone HTML -> darkbench-revisited.pdf
+python3 scripts/make_pdf.py           # standalone HTML -> report/darkbench-revisited.pdf
 ```
 
 `make_pdf.py` and `make_figures.py` both shell out to headless Chrome at a hardcoded macOS path

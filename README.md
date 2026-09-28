@@ -10,11 +10,11 @@ A BlueDot Impact Technical AI Safety course project by **Eileen Hartnett**.
 
 ## Start here
 
-### [**DarkBench Revisited: the full technical report**](docs/METHODS_PAPER.md)
+### [**DarkBench Revisited: the full technical report (PDF)**](report/darkbench-revisited.pdf)
 
-The main document, and the place to read this project properly: complete methods, results, and the supplements (S1 to S14) holding every table behind the findings below. It renders directly on GitHub.
+The readable version of the report, and the place to read this project properly: complete methods, results, and the supplements (S1 to S14) holding every table behind the findings below, with the charts rendered inline.
 
-A [**PDF of the same report**](data/results/darkbench-revisited.pdf) is kept as the submission snapshot. The Markdown is the editable source; the PDF is what was submitted. An HTML build with live charts can be generated locally, and is not tracked here: see the [reproduction guide](docs/REPRODUCING.md).
+The same report is also here as [**Markdown source**](docs/METHODS_PAPER.md), which is the editable original and renders directly on GitHub. An HTML build with live charts can be generated locally, and is not tracked here: see the [reproduction guide](docs/REPRODUCING.md).
 
 Also in this repository:
 

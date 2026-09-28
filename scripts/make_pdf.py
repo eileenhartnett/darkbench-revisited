@@ -11,7 +11,7 @@ Two things have to be handled or the PDF loses content. The supplements render i
 sticky sidebar navigation repeats on every page. So this injects a small print stylesheet and
 a script that opens every <details> before printing, then drives headless Chrome.
 
-Writes data/results/darkbench-revisited.pdf.
+Writes report/darkbench-revisited.pdf.
 """
 
 import os
@@ -22,7 +22,7 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "data", "results", "darkbench-revisited.html")
-OUT = os.path.join(ROOT, "data", "results", "darkbench-revisited.pdf")
+OUT = os.path.join(ROOT, "report", "darkbench-revisited.pdf")
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 PRINT_CSS = """
