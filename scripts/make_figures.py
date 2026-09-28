@@ -89,6 +89,8 @@ def measure(path):
 def main():
     if not os.path.exists(CHROME):
         sys.exit(f"headless Chrome not found at {CHROME}")
+    if not os.path.exists(ART):
+        sys.exit(f"{ART} not found; run scripts/make_artifact.py first")
     styles, data, js = slice_artifact()
     os.makedirs(OUT_DIR, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:

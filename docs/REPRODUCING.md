@@ -47,8 +47,15 @@ named in `data/raw-manifest.json`.
 
 ## Offline: rebuild the figures and HTML
 
+`artifact.html` and `darkbench-revisited.html` are build products and are not tracked in git, so
+a fresh checkout will not have them. Run the chain below to generate them. The tracked report
+files are the Markdown source (`docs/METHODS_PAPER.md`) and the PDF snapshot
+(`data/results/darkbench-revisited.pdf`); everything here rebuilds from those and the committed
+CSVs, with no API keys and no model calls.
+
 Run in this order. Each step consumes the previous step's output, and skipping `make_chart.py`
-leaves a stale category figure embedded in the HTML.
+leaves a stale category figure embedded in the HTML. The scripts that read `artifact.html` will
+tell you to run `make_artifact.py` first if it is missing.
 
 ```bash
 python3 scripts/make_chart.py         # rates.csv -> data/results/rates.svg

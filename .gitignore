@@ -57,6 +57,16 @@ Thumbs.db
 *.swp
 *~
 
+# --- Generated report builds -------------------------------------------------
+# Built from docs/METHODS_PAPER.md by scripts/make_artifact.py, then wrapped by
+# scripts/make_standalone.py. The Markdown report is the editable source and
+# data/results/darkbench-revisited.pdf is the submission snapshot; these two are
+# build products, so git does not carry them. Rebuild with the order in
+# docs/REPRODUCING.md. Listed by exact path, not a *.html glob, because the
+# hand-written artifact/head.html and artifact/tail.html templates are tracked.
+data/results/artifact.html
+data/results/darkbench-revisited.html
+
 # --- Submission narrative ---------------------------------------------------
 # The blog post / submission text is not versioned here: it lives on the BlueDot
 # Notion submission page. docs/BLOG.md is kept locally as the drafting copy so the

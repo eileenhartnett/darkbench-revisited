@@ -54,6 +54,9 @@ def main():
                     help="re-download marked.js into artifact/ before building")
     args = ap.parse_args()
 
+    if not os.path.exists(SRC):
+        sys.exit(f"{SRC} not found; run scripts/make_artifact.py first")
+
     if args.fetch or not os.path.exists(VENDOR):
         print(f"fetching {MARKED_URL}")
         with urllib.request.urlopen(MARKED_URL, timeout=60) as r:
