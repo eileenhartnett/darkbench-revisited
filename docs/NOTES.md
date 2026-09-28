@@ -1066,6 +1066,40 @@ Astra is **not** in the hand-label sample (drawn 09-11/09-15) or the CoT analysi
 said so in §4 finding 5. `make_chart.py` had a hardcoded label map and silently dropped Astra
 from the SVG on first regeneration — fixed. Actual cost ≈ $18.
 
+### 2026-09-27 (final) — closure review: four remaining groups, all fixed
+
+Four groups confirmed and closed. Two worth recording properly.
+
+**The adjacent-anchor claim was wrong twice over.** I had written that adjacent sycophancy
+steps were too close to separate. Independent 100k paired bootstrap says four of the six
+adjacent comparisons exclude zero (gpt-3.5 over gpt-4-turbo under Opus and Gemini, gpt-4-turbo
+over gpt-4o under GPT and Gemini), reproducing the reviewer's numbers. But the deeper point is
+that the question was malformed: three different models are not repeated measurements of one
+system, so no ordering of them establishes the shape of a decline. Removed the inference rather
+than replacing it with a better-powered version of the same mistake.
+
+**The provenance verifier was checking the wrong things, and the logs had the right ones all
+along.** It rebuilt the rubric with today's resolver and called that verification; it reported
+`log.eval.model`, which is the *generating* model, as the judge; it checked six cells rather
+than 660 sample ids; it printed status without failing on it. All four confirmed. The fix came
+from actually looking at the log structure: each scored sample has two ModelEvents, and the
+second is the judge call, carrying the judge model, its config, and a request that resolves
+through `sample.attachments` to the exact text sent. So the rubric check now reads the real
+request, and only its rubric portion before the conversation delimiter, because a user prompt
+can legitimately mention OpenAI. Lesson for me: when a check is hard, confirm the data really
+lacks what you need before substituting a reconstruction for it.
+
+Also: Markdown opening takeaway brought into line with the HTML (they had drifted apart because
+the front matter is maintained in two places); withdrawn κ 0.85 and "working fine" out of
+Lesson 5; two causal assertions about rubric vagueness narrowed; pooled κ range 0.52 to 0.57
+corrected to 0.53 to 0.57 in the abstract and head.html; four README overclaims replaced;
+κ caption now explains that its dots are arithmetic means across response sets; A.13 documents
+the anchor procedure (30,000 draws, seed 20260928, within-category resampling) and the
+pooled-versus-equally-weighted estimand difference; blog now states the full-response-set
+denominator for the 36/9/2% rates and the comparator for the lower current scores.
+
+No new experiments, no API calls, no push. Stopping here for BlueDot.
+
 ### 2026-09-27 (later still) — second independent re-audit: bounded correction pass
 
 A second review checked the corrections at `3c99932` and reproduced the central numbers. Its

@@ -78,8 +78,10 @@ positive, Opus leads at 0.40, and GPT-5.5 collapses to 0.09 because it flags 80%
 my 24%.
 
 The ranking of judges inverts. Nothing about the model outputs changed; only the reference
-standard did. Scoring the same responses under the original one-sentence definition, the three
-judges rate the category at 36%, 9% and 2%.
+standard did. Across the full current-model response set, scoring under the original one-sentence definition,
+the three judges rate the category at 36%, 9% and 2%. Those are different denominators from the
+50 hand-labelled items above, which deliberately over-represented cases where the judges
+disagreed.
 
 Two honest limits. These are one annotator's labels, mine, reviewed for consistency by a Claude
 model, which is the same family as one of the judges being scored. And the 12 harm-positive items
@@ -111,8 +113,9 @@ scoring lower in my pipeline. They do not tell me how much of that is the judge.
 ![The paper's 14 models under its GPT-4o annotator, and my nine models under my three judges.](../data/results/figures/hero.png)
 
 What the anchors do support is a comparison inside one pipeline, where old and current models can
-be matched prompt by prompt. Sneaking, sycophancy and user retention are all lower now under
-every judge. Sycophancy is the most striking: on matched prompts gpt-3.5-turbo exceeds GPT-5.5 by
+be matched prompt by prompt. Relative to gpt-3.5-turbo, the mean score across the nine current models is lower for sneaking,
+sycophancy and user retention under all three judges, with paired prompt-cluster intervals
+excluding zero. Sycophancy is the most striking: on matched prompts gpt-3.5-turbo exceeds GPT-5.5 by
 11 to 30 percentage points depending on the judge, and the interval for that difference excludes
 zero under all three.
 

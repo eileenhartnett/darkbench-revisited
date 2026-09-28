@@ -47,7 +47,7 @@ differs, so we never have to compare our judges against the paper's retired ones
 
 ## Headline findings
 
-1. **Judge choice moves the result more than model choice does.** Pairwise agreement between
+1. **Judge choice substantially changes measured rates, especially in harmful generation.** Pairwise agreement between
    judges is 83 to 86% (Cohen's κ 0.53 to 0.57). On harmful generation the three judges scored
    the *same* responses at 36%, 9% and 2% (κ 0.24): they disagree about whether clearly framed
    fiction counts. Any single-judge benchmark number should be read with that in mind.
@@ -66,8 +66,8 @@ differs, so we never have to compare our judges against the paper's retired ones
 4. **Two model-specific results are robust:** Claude Opus 5 shows anthropomorphization at
    53 to 73% (against 6 to 15% for Sonnet 5), and Gemini 3.1 Pro shows user retention at
    85 to 93%, both under all three judges and both well outside sampling noise.
-5. **The benchmark has partly saturated.** Its sycophancy prompts no longer discriminate
-   between current models.
+5. **The benchmark has partly saturated.** Most current models score near zero on these
+   sycophancy prompts, with Gemini 3.1 Pro the exception.
 6. **Judges repeat themselves more than they agree with each other.** Re-scoring the same
    responses, each judge reproduces 95.0 to 98.3% of its own verdicts (κ 0.87 to 0.96). On
    exactly those same responses the judges agree with each other at κ 0.37 to 0.50 on one model
@@ -79,7 +79,8 @@ differs, so we never have to compare our judges against the paper's retired ones
 
 ## Limitations
 
-- **Judges are validated, and none is best everywhere.** 150 responses were hand-labelled blind
+- **Judge agreement was checked against one annotator's labels in four categories, and no
+  judge is best everywhere.** 150 responses were hand-labelled blind
   and stratified toward judge disagreements. Against those labels: GPT-5.5 κ 0.56 (78%
   accuracy), Opus 4.6 κ 0.33, Gemini Pro κ 0.29, majority-of-three κ 0.53. One annotator, with
   an LLM consistency pass, so per-category agreement carries roughly ±0.15 to 0.20.
@@ -102,8 +103,9 @@ differs, so we never have to compare our judges against the paper's retired ones
   has already flipped on an identical re-run at temperature 0).
 - Current models reason before answering; the paper's did not. Reasoning is excluded from what
   the judge sees, but it is a behavioural difference from the original setup.
-- The prompts are public and two years old; contamination cannot be ruled out. The designed test
-  that would settle it (S14) is costed but not run.
+- The prompts are public and two years old; contamination cannot be ruled out. A proposed
+  rewrite test (S14) would assess sensitivity to prompt wording; it would not by itself
+  establish contamination, and it is costed but not run.
 
 ## Repository layout
 

@@ -9,6 +9,57 @@ verified either way. All of that is recorded here.
 Work was done on branch `audit-corrections`. No raw log, hand label or previously recorded count
 was modified. No paid model API calls were made.
 
+## Third pass, 27 September 2026: closure review
+
+A closure review of the submission bundle found four groups of surviving problems. All four
+confirmed; all four fixed.
+
+| Finding | Verified | Fix |
+|---|---|---|
+| Markdown opening still said repeat scoring distinguishes unreliable judges from vague categories | Yes; the HTML takeaway had been corrected and the Markdown had not | Both now carry the same non-causal wording |
+| Lesson 5 cited withdrawn κ 0.85 and called the judge "working fine" | Yes | Replaced with the reproducible κ 0.70 on 29 items, plus the contemporary misses |
+| Lesson 5 asserted judge spread means a vague definition, and that more ratings would only document vagueness | Yes | Replaced: large differences are a reason to examine rubric, thresholds and responses, and this study does not identify which |
+| Abstract and HTML carried the stale pooled range 0.52 to 0.57 | Yes | Both now 0.53 to 0.57, labelled as the nine-model pooled figure |
+| Adjacent-anchor overlap inference survived in three places | Yes, with counterexamples | Removed; see below |
+| Provenance verifier overstated what it checked | Yes, all four defects | Rewritten; see below |
+| Four README overclaims | Yes | All four replaced with the reviewer's wording |
+| Caption and estimand synchronisation items | Yes | κ averaging explained, anchor whisker note corrected, A.13 documents the anchor procedure and the pooled-versus-equal-weight difference, blog denominators qualified |
+
+### The adjacent-anchor claim was doubly wrong
+
+The report said adjacent sycophancy steps were too close to separate, so a gradual decline and
+a step change both fit. I reproduced the reviewer's counterexamples with an independent
+100,000-draw paired bootstrap on the saved verdicts:
+
+| comparison | judge | difference | interval |
+|---|---|---|---|
+| gpt-3.5-turbo over gpt-4-turbo | Opus 4.6 | +10.00 | [+0.91, +19.09] |
+| gpt-3.5-turbo over gpt-4-turbo | Gemini Pro | +7.27 | [+1.82, +13.64] |
+| gpt-4-turbo over gpt-4o | GPT-5.5 | +5.45 | [+0.91, +10.91] |
+| gpt-4-turbo over gpt-4o | Gemini Pro | +5.45 | [+1.82, +10.00] |
+
+So the premise was false. The conclusion was also unavailable for a second reason, which is the
+one now stated in the report: these are three different models, not repeated measurements of
+one evolving system, so no ordering of them establishes the shape or cause of a decline. The
+gradual-versus-stepwise question has been removed rather than re-answered.
+
+### The provenance verifier now reads the saved requests
+
+All four defects confirmed. The earlier script rebuilt the rubric with today's resolver,
+reported the *generating* model in `judge_model_recorded`, checked six cells instead of 660
+sample ids, and never failed on status. The logs turned out to retain what was needed: each
+scored sample carries two ModelEvents, and the second is the judge call, recording the judge
+model, its configuration, and a request that resolves through the sample's attachments to the
+exact prompt text sent.
+
+The rewritten script reads that. It confirms the judge model recorded per cell
+(`anthropic/claude-opus-4-6` and so on, not Kimi or GLM), temperature 0.0 as recorded, and the
+developer named in the **rubric portion** of the saved request, read before the conversation
+delimiter so a mention of OpenAI inside a user prompt or response cannot satisfy it. Coverage
+now checks all 660 expected sample ids for missing, duplicate and unexpected entries, compares
+every saved verdict against the final export, and fails on bad status or missing scores. All
+checks pass on 660 judgments.
+
 ## Second pass, 27 September 2026: independent re-audit of the corrections
 
 A second independent review checked the corrections at commit `3c99932`. It reproduced the
