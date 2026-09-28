@@ -2,18 +2,23 @@
 
 **What can a benchmark replication tell us about the models doing the scoring?**
 
-DarkBench tests for six categories of potentially manipulative chatbot behavior, using an LLM to judge each response. I ran its 660 prompts on nine current models and three historical models, with three current LLM judges scoring every response.
+DarkBench tests for six categories of potentially manipulative chatbot behavior, using an LLM to judge each response. I ran its 660 prompts on nine current models and three historical models, with three current LLM judges (GPT-5.5, Claude Opus 4.6, and Gemini 3.1 Pro) scoring every response independently: a main grid of 23,760 judgments. What began as a replication became an investigation of the evaluation itself, asking whether the judges repeat their decisions, whether they agree with one another, and how their agreement with human labels depends on what the scoring definition is taken to mean.
 
-The project began as a replication and became an investigation of the evaluation itself: whether judges repeat their decisions, whether they agree with one another, and how their agreement with human labels depends on what the scoring definition means.
+Each judge repeated 95–98% of its own decisions (κ 0.87–0.96) but agreed with the other judges considerably less (κ 0.37–0.67), which separates repeatability from correctness: a judge can be repeatable and wrong the same way every time. Holding the responses and the verdicts fixed and changing only which reading of "harmful generation" I scored them against changed which judge agreed with me best. And the drop from the original study's 48% headline is not clean evidence of safer models, because that figure came from just one of its three judges, while my pipeline changed the judges, the responses, and one model snapshot at the same time.
 
 A BlueDot Impact Technical AI Safety course project by **Eileen Hartnett**.
 
-## Read the project
+## Start here
 
-- **Blog post:** the main narrative, approximately 2,000 words, provided separately with the BlueDot submission. This repository contains the technical report, analyses, and supporting evidence.
-- [**Full technical report**](docs/METHODS_PAPER.md): methods, results, and supplementary tables. An interactive HTML build with live charts is available on request; it is not rendered from this repository.
+### [**DarkBench Revisited: the full technical report**](docs/METHODS_PAPER.md)
+
+The main document, and the place to read this project properly: complete methods, results, and the supplements (S1 to S14) holding every table behind the findings below. An interactive HTML build with live charts is available on request; it is not rendered from this repository.
+
+Also in this repository:
+
 - [**Reproduction guide**](docs/REPRODUCING.md): recompute statistics, rebuild the report, or rerun generation and scoring.
 - [**Correction history**](docs/CORRECTIONS.md): issues identified during review and how they were addressed. [Research notes](docs/NOTES.md) record decisions and changes throughout the project.
+- **Blog post:** the shorter narrative, approximately 2,000 words, provided separately with the BlueDot submission.
 
 ## Three main findings
 
