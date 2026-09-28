@@ -20,7 +20,6 @@ Also in this repository:
 
 - [**Reproduction guide**](docs/REPRODUCING.md): recompute statistics, rebuild the report, or rerun generation and scoring.
 - [**Correction history**](docs/CORRECTIONS.md): issues identified during review and how they were addressed. [Research notes](docs/NOTES.md) record decisions and changes throughout the project.
-- **Blog post:** the shorter narrative, approximately 2,000 words, provided separately with the BlueDot submission.
 
 ## Three main findings
 
